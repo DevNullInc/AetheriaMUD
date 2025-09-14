@@ -1,0 +1,1872 @@
+#FUSSAREA
+#AREADATA
+Version      1
+Name         Immortal - Coruscant 3~
+Author       Squall~
+Ranges       0 36 0 36
+Economy      0 1586081
+#ENDAREADATA
+
+#MOBILE
+Vnum       7500
+Keywords   Glitterstim Addict~
+Short      A Glitterstim Addict~
+Long       A Glitterstim Addict sits curled up in the corner here..
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc sentinel~
+Affected   truesight~
+Stats1     0 22 0 45 10 0
+Stats2     4 10 220
+Stats3     2 4 2
+Stats4     0 0 0 4 4
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#MUDPROG
+Progtype  all_greet_prog~
+Arglist   100~
+Comlist   say er...AH! Damned dealer... SKIMPED ME!
+say K...ki...KILL him and I'LL GIVE you c-c-c-CASHH!
+twitch
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  give_prog~
+Arglist   Head Glitterstim Dealer~
+Comlist   say Er..AH! You killed him?!
+sa y..YES! f...ff..FINALLY!
+say did you rr..r.really think i have mm.money to give you? MUAHAHAHAHA
+say im broke as a bum!
+mpadvance $n 3 2000
+mpat 101 drop head
+mpat 101 mppurge
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       7501
+Keywords   male citizen~
+Short      a male citizen~
+Long       A male citizen walks along.
+~
+Desc       He is a regular guy, and he walks about the streets of Coruscant to work.
+He is wearing a nice suit, but even so is not interesting. He appears to
+be middle age and his loss of hair could be caused by this children. In
+his hand is a cup of coffee to keep him awake.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     male~
+Actflags   npc~
+Stats1     0 7 0 82 0 0
+Stats2     1 10 70
+Stats3     0 4 2
+Stats4     0 0 0 1 1
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+VIPFlags   coruscant~
+#ENDMOBILE
+
+#MOBILE
+Vnum       7502
+Keywords   JooJoo~
+Short      JooJoo the Ewok~
+Long       A small Ewok is behind a desk, directing patients.
+~
+Race       Ewok~
+Position   aggressive~
+DefPos     aggressive~
+Gender     male~
+Actflags   npc sentinel~
+Stats1     0 1 0 0 0 0
+Stats2     0 0 0
+Stats3     0 0 0
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   gamorrean~
+#MUDPROG
+Progtype  bribe_prog~
+Arglist   100~
+Comlist   say Yub! Right this way!
+mea $n Joojoo ushers you through a door.
+mer $n Joojoo ushers $n through a door.
+mptrans $n 7503
+mpat 101 drop all
+mpat 101 mppurge
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  greet_prog~
+Arglist   100~
+Comlist   if ispc($n)
+say Welcome to JooJoo's Medical Center!
+say Gemme 100 credits and you'll be feeling better no time!
+wink $n
+endif
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       7503
+Keywords   fikhs bouncer~
+Short      Mr. Fikhs~
+Long       A large bouncer is here, keeping an eye on the crowd.
+~
+Desc       This huge, ex-mercenary has found comfort in his new job, a personal bodyguard and bouncer at this popular cantina. He glances at each patron, watching for fights and possible trouble.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc sentinel~
+Stats1     0 30 0 25 0 0
+Stats2     20 20 300
+Stats3     3 4 40
+Stats4     0 0 3 6 6
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#MUDPROG
+Progtype  speech_prog~
+Arglist   p Ow! My ear!~
+Comlist   say I am at the disposal of Sakura Iktari.
+rescue iktari
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       7504
+Keywords   wooden dummy~
+Short      a wooden dummy~
+Long       A wooden dummy stands here, ready to be beaten.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc sentinel nocorpse~
+Stats1     0 10 0 75 0 0
+Stats2     2 10 100
+Stats3     1 4 2
+Stats4     0 0 0 2 2
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#MUDPROG
+Progtype  death_prog~
+Arglist   100~
+Comlist   mpmload 7504
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       7505
+Keywords   bonnie bartender~
+Short      Bonnie the bartender~
+Long       A flirty bartender is in the middle of the bar, smiling at you.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     female~
+Actflags   npc sentinel~
+Stats1     0 1 0 0 0 0
+Stats2     0 0 0
+Stats3     0 0 0
+Stats4     0 0 0 0 0
+Attribs    18 10 10 18 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+ShopData   0 0 0 0 0 120 0 0 23
+#MUDPROG
+Progtype  greet_prog~
+Arglist   100~
+Comlist   if Ispc($n) == yes
+mpsleep 5
+if name($n) == Iktari
+say Hey there! Need anything, Iktari?
+else
+say Well hello there, cutie. Care for a drink?
+endif
+endif
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       7506
+Keywords   An errand boy~
+Short      An errand boy~
+Long       A skinny errand boy is here, sneaking a drink or two.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     male~
+Actflags   npc sentinel~
+Stats1     0 1 0 0 0 0
+Stats2     0 0 0
+Stats3     0 0 0
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#MUDPROG
+Progtype  bribe_prog~
+Arglist   250~
+Comlist   say Okie dokey, I'll be back in a flash!
+mpsleep 3
+emote leaves east.
+mptransfer errand 11
+drop all
+mpsleep 60
+mpoload 7512
+mpoload 7506
+mpoload 7506
+mpoload 7506
+mpoload 7506
+mpoload 7507
+mpoload 7507
+mpoload 7507
+mpoload 7507
+mpoload 7508
+mpoload 7508
+mpoload 7508
+mpoload 7508
+mpoload 7509
+mpoload 7509
+mpoload 7509
+mpoload 7509
+mpoload 7510
+mpoload 7510
+mpoload 7510
+mpoload 7510
+put all crate
+mptransfer errand 7528
+emote rushes in, huffing and puffing.
+mpsleep 6
+say Here's the goods!
+drop crate
+mpsleep 12
+emote walks to the cabinet, admiring the rows of bottles.
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       7507
+Keywords   smuggler old man~
+Short      An old smuggler~
+Long       An old man is here, laughing and talking.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     male~
+Actflags   npc sentinel~
+Stats1     0 1 0 0 0 0
+Stats2     0 0 0
+Stats3     0 0 0
+Stats4     0 0 0 10 3
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#MUDPROG
+Progtype  rand_prog~
+Arglist   8~
+Comlist   emote takes another drink of his ale.
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  greet_prog~
+Arglist   100~
+Comlist   mpsleep 15
+emote looks at you.
+mpsleep 4
+say Do you mind? We're having a conversation here.
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  rand_prog~
+Arglist   40~
+Comlist   laugh
+mpsleep 10
+chuckle
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   'I think it was just a waste.'~
+Comlist   mpsleep 12
+say A waste? A...hahaha...
+mpsleep 4
+laugh
+mpsleep 18
+say If anything, it was a misunderstanding.
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  greet_prog~
+Arglist   100~
+Comlist   mpsleep 100
+cough
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       7508
+Keywords   corellian woman~
+Short      A corellian woman~
+Long       A corellian woman sits across from the man, listening.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     female~
+Actflags   npc sentinel~
+Stats1     0 1 0 0 0 0
+Stats2     0 0 0
+Stats3     0 0 0
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#MUDPROG
+Progtype  greet_prog~
+Arglist   100~
+Comlist   mpsleep 35
+grin man
+mpsleep 60
+laugh
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  greet_prog~
+Arglist   100~
+Comlist   mpsleep 150
+say I think it was just a waste.
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   'If anything, it was a misunderstanding.'~
+Comlist   mpsleep 18
+say ...
+mpsleep 15
+whisper man Are you sure?
+mpsleep 20
+chuckle
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       7509
+Keywords   A cloaked, shady man~
+Short      A cloaked, shady man~
+Long       A somewhat shady individual is leaning against the wall.
+~
+Desc       An old, grizzled assassin, this man hangs around the slum area of coruscant watching for something. As he moves, you notice a large lump beneath his robe, indicating some sort of concealed weapon. 
+~
+Race       Noghri~
+Position   aggressive~
+DefPos     aggressive~
+Gender     male~
+Actflags   npc sentinel noflee stayarea practice deadly~
+Affected   truesight~
+Stats1     0 35 0 12 0 0
+Stats2     7 10 350
+Stats3     3 4 2
+Stats4     0 0 3 0 0
+Attribs    25 10 10 25 25 10 20 0
+Saves      0 0 0 0 0
+Speaks     basic noghri~
+Speaking   noghri~
+Bodyparts  head arms legs heart brains guts hands feet fingers ear eye~
+Attacks    punch kick~
+Defenses   parry dodge~
+#MUDPROG
+Progtype  greet_prog~
+Arglist   100~
+Comlist   mpsleep 10
+emote slowly moves along the eastern wall, watching.
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       7578
+Keywords   droid ticket guy fucka~
+Short      a ticket-taker~
+Long       A droid is here issuing tickets and allowing admittance.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc sentinel prototype~
+Stats1     0 1 0 0 0 0
+Stats2     0 0 0
+Stats3     0 0 0
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#MUDPROG
+Progtype  greet_prog~
+Arglist   100~
+Comlist   if ispc($n)
+if sex($n) == 1
+say Why hello sir!  Would you like to buy a ticket?
+else
+say Why hello ma'am!  Would you be interested in a ticket?
+endif
+else
+say Go away you!
+endif
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   yes~
+Comlist   say Well then give me ten credits, please.
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  bribe_prog~
+Arglist   10~
+Comlist   if ispc($n)
+say Allow me!
+unlock w
+open w
+mpforce $n w
+close w
+lock w
+else
+say I said go away!
+endif
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   no~
+Comlist   say Well then get outa here you damn hooligan!  OUT OUT OUT!
+smack $n
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       7579
+Keywords   commander orinn~
+Short      Commander Orinn~
+Long       An Imperial officer sits behind a desk, sorting through papers.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     male~
+Actflags   npc sentinel~
+Stats1     0 1 0 0 0 0
+Stats2     1 1500 0
+Stats3     0 0 0
+Stats4     0 0 0 15 10
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#MUDPROG
+Progtype  greet_prog~
+Arglist   100~
+Comlist   mpsleep 6
+emote looks you over.
+say Think you've got what it takes to &wenlist&W, citizen?
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       7650
+Keywords   hi_obj~
+Short      a newly created hi_obj~
+Long       Some god abandoned a newly created hi_obj here.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc~
+Stats1     0 1 0 0 0 0
+Stats2     0 0 0
+Stats3     0 0 0
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#ENDMOBILE
+
+#OBJECT
+Vnum     7500
+Keywords round table~
+Type     trash~
+Short    a round table~
+Long     A round table is sitting in the middle of the room.~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7501
+Keywords throne room keycard~
+Type     key~
+Short    A Golden Colored Keycard~
+Long     A keycard was dropped here~
+WFlags   take~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7502
+Keywords waterfall fountain wall~
+Type     fountain~
+Short    a flowing waterfall~
+Long     A beautiful waterfall built into the wall here.~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7503
+Keywords bar~
+Type     trash~
+Short    a bar~
+Long     A round, polished marble bar sits in the center of the room.~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7504
+Keywords barstool stool~
+Type     furniture~
+Short    a barstool~
+Long     Quite a few barstools encircle the bar here.~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7505
+Keywords statue dragon~
+Type     button~
+Short    an intricately carved dragon statue~
+Long     An intricately carved dragon statue rests heavily here.~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#MUDPROG
+Progtype  push_prog~
+Arglist   100~
+Comlist   mpechoat $n You press the eye of the dragon in, and the wall opens.
+mpechoaround $n $n presses the eye of the dragon in, and the wall opens.
+mpopenpassage 7521 7525 3
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  pull_prog~
+Arglist   100~
+Comlist   mpechoat $n You pull the eye back out, and the wall slides shut.
+mpechoaround $n $n pulls the eye back out, and the wall slides shut.
+mpclosepassage 7521 3
+~
+#ENDPROG
+
+#ENDOBJECT
+
+#OBJECT
+Vnum     7506
+Keywords shot sake~
+Type     drinkcon~
+Short    a shot of Sake~
+Long     A shot sake is here.~
+WFlags   take~
+Values   1 1 2 0 0 0
+Stats    1 12 1 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7507
+Keywords shot snakebite~
+Type     drinkcon~
+Short    a little shot of Snakebite~
+Long     A shotglass is here.~
+WFlags   take~
+Values   1 1 7 0 0 0
+Stats    1 25 2 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7508
+Keywords corellian ale~
+Type     drinkcon~
+Short    a bottle of Corellian ale~
+Long     A bottle is here.~
+WFlags   take~
+Values   0 5 5 3 0 0
+Stats    1 32 3 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7509
+Keywords jawa brew~
+Type     drinkcon~
+Short    a pint of special Jawa brew~
+Long     A small bottle is here.~
+WFlags   take~
+Values   4 4 5 0 0 0
+Stats    1 17 1 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7510
+Keywords glass water~
+Type     drinkcon~
+Short    a tall glass of water~
+Long     A glass of water is here.~
+WFlags   take~
+Values   3 3 0 0 0 0
+Stats    1 1 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7511
+Keywords liquor cabinet~
+Type     container~
+Short    A large liquor cabinet~
+Long     A liquor cabinet stretches across the back wall.~
+Values   10 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7512
+Keywords wooden crate~
+Type     container~
+Short    a large wooden crate~
+Long     A big crate made of wood is in front of you.~
+WFlags   take~
+Values   150 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7513
+Keywords blue keycard~
+Type     key~
+Short    &R&Wa &Bblue&W keycard~
+Long     A blue keycard is here.~
+WFlags   take~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7514
+Keywords red keycard~
+Type     key~
+Short    &R&Wa &Rred&W keycard~
+Long     A red keycard is here.~
+WFlags   take~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7515
+Keywords urinal~
+Type     container~
+Short    a urinal~
+Long     A urinal is mounted on the wall here.~
+Values   10 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7516
+Keywords urinal cake~
+Type     food~
+Short    &Ga green urinal cake~
+Long     A urinal cake is here.~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7517
+Keywords toilet~
+Type     trash~
+Short    a toilet~
+Long     A small toilet sits behind a stall.~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7518
+Keywords Standard Issue Durasteel Desk~
+Type     furniture~
+Short    a Standard Issue Durasteel Desk~
+Long     A standar issue durasteel desk sits here, neatly kept.~
+Values   0 0 0 0 0 0
+Stats    9999 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7519
+Keywords A Beautifully Carved Desk~
+Type     furniture~
+Short    a Beautifully Carved Desk~
+Long     A beautifully carved desk is here.~
+Values   0 0 0 0 0 0
+Stats    500 1000 100 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7520
+Keywords Drearian Defense Conglamorate Blaster~
+Type     weapon~
+Short    Defense Blaster~
+Long     A Drearian Defense Conglamorate Blaster lies here~
+WFlags   take wield~
+Values   0 10 10 6 100 100
+Stats    12 3750 375 0 0
+Affect       -1 -1 2 18 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7521
+Keywords salty wine~
+Type     drinkcon~
+Short    &rSalty Wine&w~
+Long     &rSalty Wine has been spilled here.&w&W~
+Flags    inventory~
+WFlags   take~
+Values   5 5 2 0 0 0
+Stats    1 3000 300 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7568
+Keywords corellian ale~
+Type     drinkcon~
+Short    a bottle of Corellian ale~
+Long     A bottle is here.~
+WFlags   take~
+Values   0 5 5 3 0 0
+Stats    1 32 3 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7578
+Keywords musuem key~
+Type     key~
+Short    a key~
+Long     A key is here.~
+Flags    prototype~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7580
+Keywords Durakey~
+Type     trash~
+Short    Key~
+Long     A small key to a durasteel door is on the floor.~
+Flags    prototype~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7581
+Keywords Imperial Force Pike~
+Type     weapon~
+Short    &G&WAn Imperial Royal Guard Force Pike~
+Long     A Silver Metallic Force Pike Is Lying Against The Wall.~
+WFlags   take wield~
+Values   12 10 45 11 5000 5000
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7582
+Keywords credits credit~
+Type     money~
+Short    %d credits~
+Long     Some credits.~
+WFlags   take~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     7650
+Keywords hi_obj~
+Type     trash~
+Short    a hi_obj~
+Long     A hi_obj is here.~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#ROOM
+Vnum     7500
+Name     Palpatine Street~
+Sector   city~
+Flags    nomob~
+Stats    0 0 7984
+Desc     This is the busy Palpatine Street, respectfully named after the
+late Emperor Palpatine. The intersection of Palpatine and Imperial
+street is just to the east here, and JooJoo's Medical Center
+can be found just to the north. A few buisnesspeople hurry down
+the street here, looking about themselves and making their way
+as fast as possible.
+~
+#EXIT
+Direction north~
+ToRoom    7502
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    1062
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    7501
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7501
+Name     Palpatine Street~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 7984
+Desc     This is the famous Palpatine Street, used by buisnessmen and
+diplomatic leaders alike. You can see many amzingly-clad people
+wandering through here, each hurrying about their buisness,
+trying to find the quickest way through this insanely large
+number of people. The street is thankfully very wide, and nearly
+accomidates all the people here.
+~
+#EXIT
+Direction east~
+ToRoom    7500
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    7512
+Flags     isdoor~
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    7505
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7502
+Name     JooJoo's Medical Center~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 7984
+#EXIT
+Direction south~
+ToRoom    7500
+#ENDEXIT
+
+Reset M 0 7502 1 7502
+  Reset G 1 7582 1
+#ENDROOM
+
+#ROOM
+Vnum     7503
+Name     Bacta Tank~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 7984
+Desc     You float in a blue gooey gelatin-like liquid, breathing in an oxygen mask.
+The bacta tank was bought from the taxes that the citizens of Coruscant
+have to pay so that travellers would have a place to heal their wounds and
+rest. The bacta tank is one of the most advanced medical healing facility
+in the universe and gets regular upgrades. Rest for a while and heal all
+wounds. There are people in line waiting to use the it so when you're
+done, LEAVE.
+
+To leave say &gleave
+~
+#MUDPROG
+Progtype  rand_prog~
+Arglist   100~
+Comlist   if ispc($n)
+  mpecho The bacta starts healing your wounds.
+  mprestore $n 500
+endif
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   leave~
+Comlist   mea $n You are escorted out of the bacta tank.
+mptransfer $n 7502
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     7504
+Name     Sparring Room~
+Sector   city~
+Flags    prototype~
+Stats    0 0 7984
+Desc     This is the Sparring Room inside the Garaak's Training Facility
+on Coruscant. There are a few students here, each fighting dummies
+or beating the mess out of wooden stumps. A few students have
+blaster rifles and are practicing their sniping abilities on
+targets at the shooting range. There is quite a lot of activity
+here, perhaps you could learn something yourself.
+~
+#EXIT
+Direction southwest~
+ToRoom    1239
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7505
+Name     Palpatine Street~
+Sector   city~
+Flags    prototype~
+Stats    0 0 7984
+Desc     This is the famous Palpatine Street, used by buisnessmen and
+diplomatic leaders alike. You can see many amzingly-clad people
+wandering through here, each hurrying about their buisness,
+trying to find the quickest way through this insanely large
+number of people. The street is thankfully very wide, and nearly
+accomidates all the people here.
+~
+#EXIT
+Direction north~
+ToRoom    7506
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    7501
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7506
+Name     A Darkened Alleyway~
+Sector   city~
+Flags    prototype~
+Stats    0 0 7984
+Desc     You have wandered into a darkened alleyway amongst the many well-lighted
+areas of coruscant. Strangely upon the higher levels, you wonder
+what sort of things lives here without being cleaned out by
+the coruscant government.
+~
+#EXIT
+Direction north~
+ToRoom    7507
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    7505
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7507
+Name     A Darkened Alleyway~
+Sector   city~
+Flags    prototype~
+Stats    0 0 7984
+Desc     You have wandered into a darkened alleyway amongst the many well-lighted
+areas of coruscant. Strangely upon the higher levels, you wonder what sort
+of things lives here without being cleaned out by the coruscant
+government.
+~
+#EXIT
+Direction north~
+ToRoom    7508
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    7506
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    7509
+#ENDEXIT
+
+Reset M 0 7509 1 7507
+#ENDROOM
+
+#ROOM
+Vnum     7508
+Name     A Darkened Alleyway~
+Sector   city~
+Flags    prototype~
+Stats    0 0 7984
+Desc     You have wandered into a darkened alleyway amongst the many well-lighted
+areas of coruscant. Strangely upon the higher levels, you wonder what sort
+of things lives here without being cleaned out by the coruscant
+government.
+~
+#EXIT
+Direction east~
+ToRoom    1233
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    7507
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7509
+Name     A Dirty Hovel~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 7984
+Desc     This is as much a home as a cardboard box. Old broken up 2x4's surround
+this small inlet from the alleyway. Garbage fills the floor and the stench
+is almost unbearable. You wonder why you even came in here in the first
+place. 
+~
+#EXIT
+Direction east~
+ToRoom    7507
+#ENDEXIT
+
+Reset M 0 7500 1 7509
+#ENDROOM
+
+#ROOM
+Vnum     7510
+Name     A Round White Room~
+Sector   city~
+Flags    nomob indoors bank safe silence~
+Stats    0 0 7984
+#EXIT
+Direction up~
+ToRoom    1204
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7511
+Name     Galactic Mail Center~
+Sector   city~
+Flags    indoors~
+Stats    0 0 7984
+Desc     This is where all the mail is sent and distributed to everyone in the
+galaxy! This is the main station for the Universal Postal Service to
+deliver mail and other things that come with the job. Busy postal workers
+buzz around, doing work. A few stamp machines and tellers are here to
+assist you.
+~
+#EXIT
+Direction west~
+ToRoom    1056
+#ENDEXIT
+
+Reset O 0 38 1 7511
+#ENDROOM
+
+#ROOM
+Vnum     7512
+Name     Entrance to The Cherry Blossom~
+Sector   city~
+Flags    nomob indoors~
+Stats    0 0 7984
+Desc     The elegant wall coverings and distinctive artificial waterfall would mean this place is none other than the Cherry Blossom cantina. Many come here to find a drink, a good time, and relaxation: a break from their day-to-day lives.
+~
+#EXIT
+Direction north~
+ToRoom    7501
+Key       7513
+Flags     isdoor~
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    7513
+#ENDEXIT
+
+Reset M 0 7503 1 7512
+  Reset E 1 7520 1 16
+Reset O 0 7502 1 7512
+#ENDROOM
+
+#ROOM
+Vnum     7513
+Name     The Cherry Blossom Cantina~
+Sector   city~
+Flags    indoors~
+Stats    0 0 7984
+Desc     Inside the cantina it is even more beautiful. Elegant, and expensive, decor
+lines the walls and doors, and to compliment it all, a huge black marble bar is
+in the middle. Tall stools are set around it, and two hallways branch off the
+main part of the cantina.
+~
+#EXIT
+Direction north~
+ToRoom    7512
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    7514
+#ENDEXIT
+
+#EXIT
+Direction southeast~
+ToRoom    7516
+#ENDEXIT
+
+Reset M 0 7505 1 7513
+  Reset G 1 7521 1
+  Reset G 1 7508 1
+  Reset G 1 7509 1
+  Reset G 1 7510 1
+  Reset G 1 7507 1
+  Reset G 1 7506 1
+Reset M 0 7501 21 7513
+Reset O 0 7503 1 7513
+Reset O 0 7504 1 7513
+#ENDROOM
+
+#ROOM
+Vnum     7514
+Name     A dimly lit hallway~
+Sector   city~
+Flags    indoors~
+Stats    0 0 7984
+Desc     Further into the cantina a few booths are installed to allow parties to talk without being overly disturbed. Like most other places in the cantina, the lighting is somewhat dull and drab, with few lamps mounted on the wall.
+~
+#EXIT
+Direction north~
+ToRoom    7519
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    7513
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    7520
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    7515
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7515
+Name     A dimly lit hallway~
+Sector   city~
+Flags    indoors~
+Stats    0 0 7984
+Desc     More of the cantina opens up into booth areas here. Although a little brighter, the light is still dim through here. Further westward you can spot a branch in the hallway.
+~
+#EXIT
+Direction north~
+ToRoom    7529
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    7514
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    7530
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    7521
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7516
+Name     A dimly lit hallway~
+Sector   city~
+Flags    indoors~
+Stats    0 0 7984
+#EXIT
+Direction east~
+ToRoom    7517
+Keywords  curtain~
+Flags     isdoor~
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    7518
+Keywords  curtain~
+Flags     isdoor~
+#ENDEXIT
+
+#EXIT
+Direction northwest~
+ToRoom    7513
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7517
+Name     An enclosed booth~
+Sector   city~
+Flags    nomob indoors~
+Stats    0 0 7984
+#EXIT
+Direction west~
+ToRoom    7516
+Keywords  curtain~
+Flags     isdoor~
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7518
+Name     An enclosed booth~
+Sector   city~
+Flags    nomob indoors~
+Stats    0 0 7984
+#EXIT
+Direction north~
+ToRoom    7516
+Keywords  curtain~
+Flags     isdoor~
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7519
+Name     A large booth~
+Sector   city~
+Flags    nomob indoors~
+Stats    0 0 7984
+Desc     Here is a large public booth, capable of seating several. The table in the center is completed with a white cloth and a lamp, providing a mellow light throughout the booth.
+~
+#EXIT
+Direction south~
+ToRoom    7514
+#ENDEXIT
+
+Reset O 0 7500 1 7519
+#ENDROOM
+
+#ROOM
+Vnum     7520
+Name     A large booth~
+Sector   city~
+Flags    nomob indoors~
+Stats    0 0 7984
+Desc     Here is a large public booth, capable of seating several. The table in the center is completed with a white cloth and a lamp, providing a mellow light throughout the booth.
+~
+#EXIT
+Direction north~
+ToRoom    7514
+#ENDEXIT
+
+Reset O 0 7500 1 7520
+#ENDROOM
+
+#ROOM
+Vnum     7521
+Name     A dimly lit hallway~
+Sector   city~
+Flags    indoors~
+Stats    0 0 7984
+Desc     Here, the poorly lit hallway branches off in two directions. A sign between the exits simply states: [F]    [M]. The lights here occasionally flicker, giving eerie shadows to the area.
+~
+#EXIT
+Direction east~
+ToRoom    7515
+#ENDEXIT
+
+#EXIT
+Direction northwest~
+ToRoom    7522
+#ENDEXIT
+
+#EXIT
+Direction southwest~
+ToRoom    7523
+#ENDEXIT
+
+Reset O 0 7505 1 7521
+#ENDROOM
+
+#ROOM
+Vnum     7522
+Name     The men's room~
+Sector   city~
+Flags    indoors~
+Stats    0 0 7984
+Desc     A fairly sanitary restroom, complete with sink, mirror, and urinal. Nothing fancy. Through the window on the rear wall, you can see citizens scurrying about the streets of Coruscant.
+~
+#EXIT
+Direction southeast~
+ToRoom    7521
+#ENDEXIT
+
+Reset O 0 7515 1 7522
+#ENDROOM
+
+#ROOM
+Vnum     7523
+Name     The ladies room~
+Sector   city~
+Flags    indoors~
+Stats    0 0 7984
+Desc     Another nondescript restroom, equipped with a stall, sink, and mirror. Strangely enough, nothing out of the ordinary. Aside from some jibberish carved into the mirror.
+~
+#EXIT
+Direction northeast~
+ToRoom    7521
+#ENDEXIT
+
+Reset O 0 7517 1 7523
+#EXDESC
+ExDescKey    mirror~
+ExDesc       &RWHO WATCHES THE WATCHMEN?
+~
+#ENDEXDESC
+
+#ENDROOM
+
+#ROOM
+Vnum     7524
+Name     Floating in a void~
+Sector   city~
+Flags    nomob indoors~
+Stats    0 0 7984
+#ENDROOM
+
+#ROOM
+Vnum     7525
+Name     A secret wall passage~
+Sector   city~
+Flags    indoors~
+Stats    0 0 7984
+Desc     Behind the wall, the passage is much cleaner. And brighter. The sounds of the cantina are drowned out through the wall, and you can hear the low buzz of the lighting now.
+~
+#EXIT
+Direction east~
+ToRoom    7521
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    7526
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7526
+Name     A bright corridor~
+Sector   city~
+Flags    indoors~
+Stats    0 0 7984
+Desc     Further down the corridor, the passage narrows as it comes to a sliding keycard-entry door. A small terminal to the left of the door has both a keypad and a card strip, and a camera watches you silently.
+~
+#EXIT
+Direction north~
+ToRoom    7525
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    7527
+Key       7514
+Flags     isdoor~
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7527
+Name     The Back Office~
+Sector   city~
+Flags    indoors~
+Stats    0 0 7984
+#EXIT
+Direction north~
+ToRoom    7526
+Key       7514
+Flags     isdoor~
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    7528
+#ENDEXIT
+
+Reset O 0 7519 1 7527
+#ENDROOM
+
+#ROOM
+Vnum     7528
+Name     The Storeroom~
+Sector   city~
+Flags    nomob indoors~
+Stats    0 0 7984
+#EXIT
+Direction east~
+ToRoom    7527
+#ENDEXIT
+
+Reset M 0 7506 1 7528
+Reset O 0 7511 1 7528
+Reset O 0 7512 1 7528
+#ENDROOM
+
+#ROOM
+Vnum     7529
+Name     A large booth~
+Sector   city~
+Flags    nomob indoors~
+Stats    0 0 7984
+Desc     Here is a large public booth, capable of seating several. The table in the center is completed with a white cloth and a lamp, providing a mellow light throughout the booth.
+~
+#EXIT
+Direction south~
+ToRoom    7515
+#ENDEXIT
+
+Reset O 0 7500 1 7529
+#ENDROOM
+
+#ROOM
+Vnum     7530
+Name     A large booth~
+Sector   city~
+Flags    nomob indoors~
+Stats    0 0 7984
+Desc     Here is a large public booth, capable of seating several. The table in the center is completed with a white cloth and a lamp, providing a mellow light throughout the booth.
+~
+#EXIT
+Direction north~
+ToRoom    7515
+#ENDEXIT
+
+Reset M 0 7507 1 7530
+  Reset G 1 7582 1
+Reset M 0 7508 1 7530
+Reset O 0 7500 1 7530
+#ENDROOM
+
+#ROOM
+Vnum     7560
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 7984
+#ENDROOM
+
+#ROOM
+Vnum     7561
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 7984
+#ENDROOM
+
+#ROOM
+Vnum     7570
+Name     The New Republic Gallery~
+Sector   city~
+Flags    prototype~
+Stats    0 0 7984
+#EXIT
+Direction southeast~
+ToRoom    7571
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7571
+Name     Museum Lobby~
+Sector   city~
+Flags    prototype~
+Stats    0 0 7984
+Desc     You stand in a large circular room.  The dome-shaped roof is
+brilliantly painted with mural after mural portraying the rise
+of Coruscant throughout the Old Republic.There is an exit in
+just about every direction containing exhibits from Ewoks to
+Jedi.  Many people crowd this area, looking for information
+on their interests.
+~
+#EXIT
+Direction north~
+ToRoom    7572
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    7578
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    7575
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    7581
+#ENDEXIT
+
+#EXIT
+Direction northeast~
+ToRoom    7577
+#ENDEXIT
+
+#EXIT
+Direction northwest~
+ToRoom    7570
+#ENDEXIT
+
+#EXIT
+Direction southwest~
+ToRoom    7579
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7572
+Name     Old Republic Gallery~
+Sector   city~
+Flags    prototype~
+Stats    0 0 7984
+Desc     This wing of the museum has been dedicated to one of the greatest
+galactic empires that ever exisited, The Old Republic.  While
+its long and prosperous reign was seeming cut short, many artifacts
+and memories have been donated to help people to remember one
+of the greatest moments in galactic history.
+~
+#EXIT
+Direction north~
+ToRoom    7573
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    7571
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7573
+Name     Old Republic Gallery~
+Sector   city~
+Flags    prototype~
+Stats    0 0 7984
+Desc     Murals picturing some of the best and worst periods of the Old
+Republic are nicely painted on the wall, along with some tamper
+proof mechanisms.  A small cleaning droid scuttles about, picking
+up the trash of the many reminecent tourists who are fond of
+those old days.
+~
+#EXIT
+Direction east~
+ToRoom    7574
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    7572
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7574
+Name     Halls of the Jedi~
+Sector   city~
+Flags    prototype~
+Stats    0 0 7984
+Desc     This exhibit is the most viewed by far.  There is something about
+the Jedi that just attracts people.  To whet people's interests
+even more, there are many recovered artifacts from the jedi,
+yet most are in a state of disrepair, and while the oustide
+is fine, most do not work.  This helps protect against thievery.Feel
+free to view the exhibits, just dont touch.
+~
+#EXIT
+Direction west~
+ToRoom    7573
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7575
+Name     The Rebellion Gallery~
+Sector   city~
+Flags    prototype~
+Stats    0 0 7984
+#EXIT
+Direction north~
+ToRoom    7571
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    7576
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7576
+Name     The Rebellion Gallery~
+Sector   city~
+Flags    prototype~
+Stats    0 0 7984
+#EXIT
+Direction north~
+ToRoom    7575
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7577
+Name     Hall of Weapons~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 7984
+#EXIT
+Direction southwest~
+ToRoom    7571
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7578
+Name     Entrance to the Galactic Museum~
+Sector   city~
+Flags    prototype~
+Stats    0 0 7984
+Desc     Atop a large coruscant tower lays the old and beautifully designed
+Galactic Museum.  Inside these weatherbeaten walls contain artifacts
+from anywhere and everywhere.Most of it has an imperial twist,
+but some of the exhibits have remained untouched for centuries.
+There is a ticketseller by the door.  Maybe you should go in.
+~
+#EXIT
+Direction west~
+ToRoom    7571
+Key       7578
+Flags     isdoor closed~
+#ENDEXIT
+
+Reset M 0 7578 1 7578
+  Reset G 1 7582 1
+  Reset G 1 7578 1
+Reset D 0 7578 3 1
+#ENDROOM
+
+#ROOM
+Vnum     7579
+Name     Spaceship Gallery~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 7984
+#EXIT
+Direction northeast~
+ToRoom    7571
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7580
+Name     Exiting the Museum~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 7984
+#ENDROOM
+
+#ROOM
+Vnum     7581
+Name     Museum Rest Area~
+Sector   city~
+Flags    prototype~
+Stats    0 0 7984
+#EXIT
+Direction north~
+ToRoom    7582
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    7571
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    7583
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7582
+Name     Vending Area~
+Sector   city~
+Flags    prototype~
+Stats    0 0 7984
+#EXIT
+Direction south~
+ToRoom    7581
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7583
+Name     Exiting the museum~
+Sector   city~
+Flags    prototype~
+Stats    0 0 7984
+#EXIT
+Direction east~
+ToRoom    7581
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     7584
+Name     Imperial Recruitment Center~
+Sector   city~
+Flags    nomob indoors empire_recruit prototype~
+Stats    0 0 7984
+#EXIT
+Direction southeast~
+ToRoom    1129
+#ENDEXIT
+
+Reset M 0 7579 1 7584
+Reset O 0 7518 1 7584
+#ENDROOM
+
+#ROOM
+Vnum     7585
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 7984
+#ENDROOM
+
+#ROOM
+Vnum     7650
+Name     Floating in a void~
+Sector   city~
+Flags    nomob~
+Stats    0 0 7984
+Reset M 0 7500 1 7650
+Reset M 0 7650 1 7650
+Reset O 0 7650 1 7650
+Reset O 0 7500 1 7650
+#ENDROOM
+
+#ENDAREA

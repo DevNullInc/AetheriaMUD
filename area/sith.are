@@ -1,0 +1,1264 @@
+#FUSSAREA
+#AREADATA
+Version      1
+Name         Sith Temple~
+Author       Mael~
+Ranges       0 30 0 30
+Economy      0 6250010
+#ENDAREADATA
+
+#MOBILE
+Vnum       650
+Keywords   low_mob~
+Short      a newly created low_mob~
+Long       Some god abandoned a newly created low_mob here.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc sentinel noassist prototype~
+Affected   invisible sneak hide~
+Stats1     0 1 0 0 0 0
+Stats2     0 0 0
+Stats3     0 0 0
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#ENDMOBILE
+
+#MOBILE
+Vnum       651
+Keywords   black destroyer droid~
+Short      a newly created black destroyer droid~
+Long       Black destroyer droid sits upright here
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc sentinel deadly droid~
+Affected   truesight~
+Stats1     0 1 0 -300 0 0
+Stats2     56 50 800
+Stats3     25 20 0
+Stats4     0 0 6 6 0
+Attribs    18 10 10 18 18 10 10 0
+Saves      0 0 0 0 0
+Speaks     verpine~
+Speaking   verpine~
+Resist     slash~
+Immune     blunt~
+Suscept    electricity~
+Defenses   parry dodge~
+#MUDPROG
+Progtype  death_prog~
+Arglist   100~
+Comlist   mpecho The hulking, bronzed destroyer comes to an electronic
+mpecho death, it's cannons smoking and burnt out.
+mpat 101 rem laser
+mpat 101 rem laser
+mpat 101 drop laser
+mpat 101 drop laser
+mpat 101 mppurge
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  greet_prog~
+Arglist   100~
+Comlist   if ispc($n)
+If isevil($n)
+If name($n) == Julian
+Bow $n
+Else
+Mpkill $n
+Endif
+Else
+Mpkill $n
+endif
+Else 
+Mpkill $n
+endif
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       652
+Keywords   female receptionist blonde HRD~
+Short      &ra female, blonde receptionist&w~
+Long       &ra female, blonde receptionist sits almost deathly still behind her desk.&w
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc~
+Stats1     0 1 0 0 0 0
+Stats2     0 0 0
+Stats3     0 0 0
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#MUDPROG
+Progtype  all_greet_prog~
+Arglist   100~
+Comlist   if level($n) ==30
+if frc($n) == 0
+say Why don't you.. Make an exit?
+say Before something bad happens to you.
+mpechoat $n _dch A pair of burly gamorreans show you out.
+mpechoaround $n _dch A pair of burly gamorreans show $n out.
+mptransfer $n 650
+else if frc($n) > 0
+if isgood($n)
+say Why don't you.. Make an exit?
+say Before something bad happens to you.
+mpechoat $n _dch A pair of burly gamorreans show you out.
+mpechoaround $n _dch A pair of burly gamorreans show $n out.
+mptransfer $n 650
+else
+mpechoat $n _red The receptionist gives you a slight nod
+mpechoat $n _red then waves you toward the southern door.
+mpechoaround $n _red The receptionist waves $n on.
+mptransfer $n 654
+endif
+endif
+else 
+say Why don't you.. Make an exit?
+say Before something bad happens to you.
+mpechoat $n _dch A pair of burly gamorreans show you out.
+mpechoaround $n _dch A pair of burly gamorreans show $n out.
+mptransfer $n 650
+endif
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       653
+Keywords   darth gristle rabid sith acolyte~
+Short      a newly created darth gristle rabid sith acolyte~
+Long       Some god abandoned a newly created darth gristle rabid sith acolyte here.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc prototype~
+Stats1     0 1 0 0 0 0
+Stats2     0 0 0
+Stats3     0 0 0
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#ENDMOBILE
+
+#MOBILE
+Vnum       654
+Keywords   fat headed serpent black yellow~
+Short      a fat headed serpent~
+Long       &wa fat headed serpent is coiled in the corner, displaying its &zblack&w and &Yyellow&w belly
+~
+Desc       This large, sharp scaled survivor of eons - Reptillian in nature displays
+proudly his badge of poisonous nature through coloring and hisses perhaps
+as warning or perhaps simply eager to feed. This particular species is
+obviously suited for water and carries a small hood which it puffs to make
+itself look larger, although most can take a hint.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc prototype~
+Stats1     0 1 0 0 0 0
+Stats2     1 1 103
+Stats3     0 0 0
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+Defenses   dodge~
+#MUDPROG
+Progtype  fight_prog~
+Arglist   100~
+Comlist   emote a fat headed serpent rears back and
+mpechoat $n _red strikes you on the leg.
+mpecho _red a fat headed serpent rears back and
+mpechoat $n _red strikes you on the leg.
+mpechoaround $n _red strikes $n on the leg.
+mpsleep 15
+mpechoat $n Your snakebite begins to fester and ooze
+mpechoat $n as the venom rushes towards your vitals
+mpechoat $n to snuff you like a candle.
+mpechoaround $n $n shudders and weeps like a child
+mpechoaround $n as the venom sweeps his system and
+mpechoaround $n snuffs him like a candle.
+mpdamage $n 250
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  death_prog~
+Arglist   100~
+Comlist   emote plays dead for a moment before
+mpechoat attaching itself to your calf.
+mpechoaround attaching itself to $n's calf.
+mpechoat $n Your snakebite begins to fester and ooze
+mpechoat $n as the venom rushes towards your vitals
+mpechoat $n to snuff you like a candle.
+mpechoaround $n $n shudders and weeps like a child
+mpechoaround $n as the venom sweeps his system and
+mpechoaround $n snuffs him like a candle.
+mpdamage $n 500
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       655
+Keywords   Darth Ferno~
+Short      Darth Ferno~
+Long       &W&rA solemn individual in black robes stands here, his head low.&W
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc sentinel practice~
+Stats1     0 30 0 25 0 0
+Stats2     6 10 300
+Stats3     10 10 100
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#MUDPROG
+Progtype  all_greet_prog~
+Arglist   100~
+Comlist   say Ah.. hello young one. I will teach you the ways of the darkness.
+mpsleep 10
+say Perhaps... you will learn that the illuminated path, is in
+mpecho &w&Wfact not illuminated at all... but darkened beyond the blackness
+mpecho &w&Wof infinity.
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       699
+Keywords   hi_mob~
+Short      a newly created hi_mob~
+Long       Some god abandoned a newly created hi_mob here.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc prototype~
+Stats1     0 1 0 0 0 0
+Stats2     0 0 0
+Stats3     0 0 0
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#ENDMOBILE
+
+#OBJECT
+Vnum     650
+Keywords low_obj~
+Type     trash~
+Short    a low_obj~
+Long     A low_obj is here.~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     651
+Keywords dual laser cannons~
+Type     weapon~
+Short    a dual laser cannons~
+Long     A dual laser cannons is here.~
+WFlags   wield~
+Values   100 24 6 6 2000 2000
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     652
+Keywords button 1 down~
+Type     button~
+Short    &za down button in the shape of an arrow&w~
+Long     &za self explanatory button in the shape of a downward arrow adorns the wall.&w~
+Values   0 0 0 0 0 0
+Stats    1000 0 0 0 0
+#MUDPROG
+Progtype  push_prog~
+Arglist   100~
+Comlist   mpecho _dch The floor seems to give out and the repulsorlift
+mpecho _dch begins a harrowing free fall.
+mpsleep 5
+mpecho _red Thankfully, the lift begins to slow,
+mpecho _red settling the hearts of most species to their
+mpecho _red intestines.
+mpsleeep 5
+mptrans all 652
+mpat 652 mpecho _dch The lift doors slide open silently.
+pull button
+~
+#ENDPROG
+
+#ENDOBJECT
+
+#OBJECT
+Vnum     653
+Keywords button 2 down~
+Type     button~
+Short    &za down button in the shape of an arrow&w~
+Long     &za self explanatory button in the shape of a downward arrow adorns the wall.&w~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#MUDPROG
+Progtype  push_prog~
+Arglist   100~
+Comlist   mpecho _dch As the button is pressed the lift seems to strain
+mpecho _dch against the ground beneath for a moment.
+mpecho _dch Guess that was a one way trip.
+pull button
+~
+#ENDPROG
+
+#ENDOBJECT
+
+#OBJECT
+Vnum     654
+Keywords light~
+Type     light~
+Short    a light~
+Long     A light is here.~
+WFlags   take~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     655
+Keywords idyllic disembodied marquee~
+Type     trash~
+Short    a idyllic disembodied marquee~
+Long     A idyllic disembodied marquee is here.~
+Flags    prototype~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     656
+Keywords An Up button in the shape of an Arrow~
+Type     button~
+Short    An Up Button in the shape of an Arrow~
+Long     A small up button is on the right side of door here.~
+Flags    prototype~
+Values   0 0 0 0 0 0
+Stats    1000 0 0 0 0
+#MUDPROG
+Progtype  push_prog~
+Arglist   100~
+Comlist   mpecho _dch The door slides shut immediately.
+mpsleep 5
+mpecho _blu You suddenly lose your equilibrium as the room feels as though
+mpecho _blu it is spinning, although upon sight it seems normal.
+mpsleep 15
+mpecho _blu You close your eyes, nausea settling in...
+mpsleep 10
+mpecho _blu You regain your balance, and open your eyes...
+mpsleep 5
+mptrans all 650
+mpat 650 mpforce $n look
+pull button
+~
+#ENDPROG
+
+#ENDOBJECT
+
+#OBJECT
+Vnum     699
+Keywords hi_obj~
+Type     trash~
+Short    a hi_obj~
+Long     A hi_obj is here.~
+Flags    prototype~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#ROOM
+Vnum     650
+Name     Before a Utilitarian Bunker~
+Sector   city~
+Stats    0 0 17416
+Desc     This tiny duracrete lot acts as home for what must be the smallest bunker
+in existance. Below two meters in diameter and a third of that is clearly
+taken up by reinforced wall. The pill that stands inside is quite simply a
+meat propulsion system. Transportation at its most economic. This lot,
+while looking to have once been in decent upkeep, is in quite a horrible
+form of disrepair. Sand has damaged the once new walls, and foot traffic
+is nonexistant.  In fact, were it possible to go to the opposite of the
+spectrum - This one would do quite nicely, pedestrians seem to avoid it
+like a rutting Gran.
+~
+#EXIT
+Direction north~
+ToRoom    651
+#ENDEXIT
+
+#EXIT
+Direction southwest~
+ToRoom    274
+#ENDEXIT
+
+Reset M 0 651 1 650
+  Reset E 1 651 1 18
+  Reset E 1 651 1 16
+#ENDROOM
+
+#ROOM
+Vnum     651
+Name     A Stolid, Black Repulsorlift~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 17416
+Desc     This tiny, pill shaped chamber while bearing great weight on air along
+holds little care for beauty. A discrete holo-recorder sits at the point
+of the ceiling, a crowded two and a half meters above. While humanoids
+would be hard pressed to get around themselves to push the call button. It
+might be more prudent to do with another body part. The interior is all
+finished to a high glossy black while the floor is made up of some
+utilitarian rubber slip guard.
+~
+#EXIT
+Direction south~
+ToRoom    650
+#ENDEXIT
+
+Reset O 0 652 1 651
+#ENDROOM
+
+#ROOM
+Vnum     652
+Name     A Stolid, Black Repulsorlift~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 17416
+Desc     This tiny, pill shaped chamber while bearing great weight on air along
+holds little care for beauty. A discrete holo-recorder sits at the point
+of the ceiling, a crowded two and a half meters above. While humanoids
+would be hard pressed to get around themselves to push the call button. It
+might be more prudent to do with another body part. The interior is all
+finished to a high glossy black while the floor is made up of some
+utilitarian rubber slip guard.
+~
+#EXIT
+Direction south~
+ToRoom    653
+#ENDEXIT
+
+Reset O 0 653 1 652
+#ENDROOM
+
+#ROOM
+Vnum     653
+Name     A Dismal, Stuffy Reception Hall~
+Sector   city~
+Flags    nomob indoors safe prototype~
+Stats    0 0 17416
+Desc     The walls in this tiny hole of an office, which, by the way seems totally
+out of place in this setting, are lined with meaningless trophies and
+certificates for some company that most intelligent sources would tell you
+does not exist. Nonetheless they boldly maintain their front in all
+aspects but one, everything in this office is devoid of life, from the
+tidy little paintings of buildings or, alas, mining machinery. A single
+thycus, supposedly found only in the depths of Yavin's murk dies slowly of
+water starvation in the corner while a human replacement sits passively at
+her desk. 
+~
+#EXIT
+Direction north~
+ToRoom    652
+#ENDEXIT
+
+Reset M 0 652 1 653
+#ENDROOM
+
+#ROOM
+Vnum     654
+Name     A Short, Ebony Buttressed Hall~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 17416
+Desc     This walls of this cramped hallway push inward with ebony inlays and odd
+scrimshaw, mostly depicting battle, however on occasion, drawn more
+vaguely scenes of torture and mutilation show through. All the victims
+bear the lightsaber in one picture or another and are generally depicted
+as saintly, and of course to become a saint you must die a martyr. The
+black on black detail of everything here makes it a little hard to make
+out details in this lighting, next to none. Northward a small front office
+sits acting as a guard between the pupils southward and this harsh,
+technologized existance.. Yeah, right.
+~
+#EXIT
+Direction north~
+ToRoom    653
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    665
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     655
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 17416
+Reset M 0 650 1 655
+Reset O 0 650 1 655
+#ENDROOM
+
+#ROOM
+Vnum     656
+Name     A Dusky, Insular Chamber~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 17416
+Desc     The walls of this massive chamber are all done in the same, engraved ebony
+detail while the floor is a little more than a duracrete dip to hold
+several inches of water. While it is not deep enough to wet the socks of
+most it is considered distasteful to walk across as can be seen in the
+occasional, floating passer-by. The water casts an eerie, reflected light
+off the walls, exposing like a flashbulb at times a grim scene on the
+walls or an archaic gargoyle sitting high up by the vaulted, black mosaic
+ceiling. This room seems more of a focusing chamber or temple than what
+should rightfully be kept ten stories under the ground. Just to the south
+a small, risen platform sits in an inch and a half of somewhat murky
+water.
+~
+#EXIT
+Direction east~
+ToRoom    665
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    657
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     657
+Name     A Dusky, Insular Chamber~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 17416
+Desc     The walls of this massive chamber are all done in the same, engraved ebony
+detail while the floor is a little more than a duracrete dip to hold
+several inches of water. While it is not deep enough to wet the socks of
+most it is considered distasteful to walk across as can be seen in the
+occasional, floating passer-by. The water casts an eerie, reflected light
+off the walls, exposing like a flashbulb at times a grim scene on the
+walls or an archaic gargoyle sitting high up by the vaulted, black mosaic
+ceiling. This room seems more of a focusing chamber or temple than what
+should rightfully be kept ten stories under the ground. Just to the south
+a small, risen platform sits in an inch and a half of somewhat murky
+water.
+~
+#EXIT
+Direction north~
+ToRoom    656
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    663
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    658
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     658
+Name     A Dusky, Insular Chamber~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 17416
+Desc     The walls of this massive chamber are all done in the same, engraved ebony
+detail while the floor is a little more than a duracrete dip to hold
+several inches of water. While it is not deep enough to wet the socks of
+most it is considered distasteful to walk across as can be seen in the
+occasional, floating passer-by. The water casts an eerie, reflected light
+off the walls, exposing like a flashbulb at times a grim scene on the
+walls or an archaic gargoyle sitting high up by the vaulted, black mosaic
+ceiling. This room seems more of a focusing chamber or temple than what
+should rightfully be kept ten stories under the ground. Just to the south
+a small, risen platform sits in an inch and a half of somewhat murky
+water.
+~
+#EXIT
+Direction north~
+ToRoom    657
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    659
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     659
+Name     A Dusky, Insular Chamber~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 17416
+Desc     The walls of this massive chamber are all done in the same, engraved ebony
+detail while the floor is a little more than a duracrete dip to hold
+several inches of water. While it is not deep enough to wet the socks of
+most it is considered distasteful to walk across as can be seen in the
+occasional, floating passer-by. The water casts an eerie, reflected light
+off the walls, exposing like a flashbulb at times a grim scene on the
+walls or an archaic gargoyle sitting high up by the vaulted, black mosaic
+ceiling. This room seems more of a focusing chamber or temple than what
+should rightfully be kept ten stories under the ground. Just to the south
+a small, risen platform sits in an inch and a half of somewhat murky
+water.
+~
+#EXIT
+Direction north~
+ToRoom    663
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    660
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    676
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    658
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     660
+Name     A Dusky, Insular Chamber~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 17416
+Desc     The walls of this massive chamber are all done in the same, engraved ebony
+detail while the floor is a little more than a duracrete dip to hold
+several inches of water. While it is not deep enough to wet the socks of
+most it is considered distasteful to walk across as can be seen in the
+occasional, floating passer-by. The water casts an eerie, reflected light
+off the walls, exposing like a flashbulb at times a grim scene on the
+walls or an archaic gargoyle sitting high up by the vaulted, black mosaic
+ceiling. This room seems more of a focusing chamber or temple than what
+should rightfully be kept ten stories under the ground. Just to the south
+a small, risen platform sits in an inch and a half of somewhat murky
+water.
+~
+#EXIT
+Direction north~
+ToRoom    661
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    659
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     661
+Name     A Dusky, Insular Chamber~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 17416
+Desc     The walls of this massive chamber are all done in the same, engraved ebony
+detail while the floor is a little more than a duracrete dip to hold
+several inches of water. While it is not deep enough to wet the socks of
+most it is considered distasteful to walk across as can be seen in the
+occasional, floating passer-by. The water casts an eerie, reflected light
+off the walls, exposing like a flashbulb at times a grim scene on the
+walls or an archaic gargoyle sitting high up by the vaulted, black mosaic
+ceiling. This room seems more of a focusing chamber or temple than what
+should rightfully be kept ten stories under the ground. Just to the south
+a small, risen platform sits in an inch and a half of somewhat murky
+water.
+~
+#EXIT
+Direction north~
+ToRoom    662
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    673
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    660
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    663
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     662
+Name     A Dusky, Insular Chamber~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 17416
+Desc     The walls of this massive chamber are all done in the same, engraved ebony
+detail while the floor is a little more than a duracrete dip to hold
+several inches of water. While it is not deep enough to wet the socks of
+most it is considered distasteful to walk across as can be seen in the
+occasional, floating passer-by. The water casts an eerie, reflected light
+off the walls, exposing like a flashbulb at times a grim scene on the
+walls or an archaic gargoyle sitting high up by the vaulted, black mosaic
+ceiling. This room seems more of a focusing chamber or temple than what
+should rightfully be kept ten stories under the ground. Just to the south
+a small, risen platform sits in an inch and a half of somewhat murky
+water.
+~
+#EXIT
+Direction south~
+ToRoom    661
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    665
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     663
+Name     A Stone Slab in the Center of the Vaulted Chamber~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 17416
+Desc     The corners of this stone plate curl up several inches and are slotted
+almost unnoticably, although the purpose here is obvious. Drainage.
+However, what they hope to drain.. Is guessable, rust brown tracks trail
+through black tiled grooves to the slots and let a faint smell of
+deteriorating flesh taint the air. Cool, artificial moss covers the cobble
+and meditation stones for what little comfort it affords in this cold
+stone hall. Off to the east the dorms are visible while southward the
+sounds of a feed can be heard. In the very peak of the vaulted ceiling,
+directly above this slab is an indiscrete, black on black opening, about
+as big around as a man.
+~
+#EXIT
+Direction north~
+ToRoom    665
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    661
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    659
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    657
+#ENDEXIT
+
+Reset M 0 655 1 663
+#MUDPROG
+Progtype  act_prog~
+Arglist   p begins to float in mid-air...~
+Comlist   mpechoat $n _dch The chaotic energies swirl about you
+mpechoat $n _dch leaving you displaced.
+mptransfer $n 667
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     664
+Name     Floating in a void~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 17416
+#ENDROOM
+
+#ROOM
+Vnum     665
+Name     A Dusky, Insular Chamber~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 17416
+Desc     The walls of this massive chamber are all done in the same, engraved ebony
+detail while the floor is a little more than a duracrete dip to hold
+several inches of water. While it is not deep enough to wet the socks of
+most it is considered distasteful to walk across as can be seen in the
+occasional, floating passer-by. The water casts an eerie, reflected light
+off the walls, exposing like a flashbulb at times a grim scene on the
+walls or an archaic gargoyle sitting high up by the vaulted, black mosaic
+ceiling. This room seems more of a focusing chamber or temple than what
+should rightfully be kept ten stories under the ground. Just to the south
+a small, risen platform sits in an inch and a half of somewhat murky
+water.
+~
+#EXIT
+Direction north~
+ToRoom    654
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    662
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    663
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    656
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     666
+Name     Nny's Humble Abode~
+Sector   city~
+Flags    nomob indoors hotel factory~
+Flags2   r31~
+Stats    0 0 17416
+Desc     This hovel, which seemed so shabby and small from the outside seems doubly
+shabby and small from the inside. The floors are made up of rotting oak
+planks, poorly spaced in a way that would let a careless fellow lose a
+foot between them. The house's eyes, shuttered by rotting planks and sewn
+with rusted nails let altogether too few and thin spots of sunlight into
+the haunt. The walls are all done in a crumbling white plaster which shows
+multiple scores looking unmistakably to be where someone's set fingernails
+to it. Bits of tissue and other debris coat the floor; a whole fingernail,
+a clump of hair, two teeth sticky bits of pink gum flesh still attached.
+The door to the outside world on the south wall, as a constant is firmly
+shut.  The plaster of the eastern wall is coated, nay drenched from
+ceiling to floor in a sticky, rust brown drying liquid that could only be
+blood while odd, inversed indentations make themselves apparent on it's
+surface as if it were a silk screen. Impressions of faces in horrid
+grimaces of pain along with hands, pushing weakly against the other side
+of its surface, clawing for escape.
+~
+#EXIT
+Direction south~
+ToRoom    107
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     667
+Name     In the Dusky Steeple~
+Sector   city~
+Flags    dark nomob indoors nofloor prototype~
+Stats    0 0 17416
+Desc     Above the ground which seems to spin at this height, some odd fifteen
+meters below, this steepled, subteranean room is done with almost no
+decoration in black oak. Soil pushes slowly through the time tested
+timbers in small trails and piles up on the floor to soil the shoes of
+even the most decorous passer-by. The floor, while made of the same
+slicked surface loses some of its appeal for the height wary in that there
+is a two meter hole in the floor able and willing to drop those that are
+not cautious. The dark is oppressive in here and various smells assault
+your nostrils, obvious is the soil yet something fainter, dry and dusty as
+well makes its presence known.
+~
+Reset M 0 654 1 667
+#MUDPROG
+Progtype  act_prog~
+Arglist   p feel 'injure' serpent~
+Comlist   mpechoat $n _dch The chaotic energies pass over
+mpechoat $n _dch you, leaving you displaced.
+mptransfer $n 668
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     668
+Name     flightnin'~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 17416
+#ENDROOM
+
+#ROOM
+Vnum     669
+Name     Ya Tit!~
+Sector   city~
+Flags    nomob indoors nofloor prototype~
+Stats    0 0 17416
+Desc     88 888MM:::888:M:::::::::::::::::::::::M:8888:::::::::M:
+   8 88888M:::88::M:::::::::::::::::::::::MM:88::::::::::::M
+     88888M:::88::M::::::::::*88*::::::::::M:88::::::::::::::M
+    888888M:::88::M:::::::::88@@88:::::::::M::88::::::::::::::M
+    888888MM::88::MM::::::::88@@88:::::::::M:::8::::::::::::::*8
+    88888  M:::8::MM:::::::::*88*::::::::::M:::::::::::::::::88@@
+    8888   MM::::::MM:::::::::::::::::::::MM:::::::::::::::::88@@
+     888    M:::::::MM:::::::::::::::::::MM::M::::::::::::::::*8
+     888    MM:::::::MMM::::::::::::::::MM:::MM:::::::::::::::M
+      88     M::::::::MMMM:::::::::::MMMM:::::MM::::::::::::MM
+~
+#EXIT
+Direction down~
+ToRoom    1050
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     670
+Name     survivalofthefittest~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 17416
+Reset M 0 653 1 670
+#ENDROOM
+
+#ROOM
+Vnum     671
+Name     completion 1~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 17416
+#EXIT
+Direction north~
+ToRoom    672
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     672
+Name     Masters' Chambers~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 17416
+#EXIT
+Direction south~
+ToRoom    671
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     673
+Name     A Compact Bunk Hall~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 17416
+#EXIT
+Direction north~
+ToRoom    674
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    675
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    661
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     674
+Name     A Utilitiarian Bunk House~
+Sector   city~
+Flags    nomob indoors hotel prototype~
+Stats    0 0 17416
+#EXIT
+Direction south~
+ToRoom    673
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     675
+Name     A Utilitiarian Bunk House~
+Sector   city~
+Flags    nomob indoors safe silence prototype~
+Stats    0 0 17416
+#EXIT
+Direction north~
+ToRoom    673
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     676
+Name     A Sleek Silver Elevator~
+Sector   city~
+Flags    prototype~
+Stats    0 0 17416
+Desc     You step into the elevator, uncertain of its abilities. It is round and
+very slim, the front sliding shut as you enter. The floor is curved and
+there is only a small space in which you can stand comfortably.
+~
+#EXIT
+Direction north~
+ToRoom    659
+#ENDEXIT
+
+Reset O 0 656 1 676
+#ENDROOM
+
+#ROOM
+Vnum     677
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 17416
+#EXIT
+Direction south~
+ToRoom    676
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     678
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 17416
+#ENDROOM
+
+#ROOM
+Vnum     679
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 17416
+#ENDROOM
+
+#ROOM
+Vnum     680
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 17416
+#ENDROOM
+
+#ROOM
+Vnum     681
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 17416
+#ENDROOM
+
+#ROOM
+Vnum     682
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 17416
+#ENDROOM
+
+#ROOM
+Vnum     683
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 17416
+#ENDROOM
+
+#ROOM
+Vnum     684
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 17416
+#ENDROOM
+
+#ROOM
+Vnum     685
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 17416
+#ENDROOM
+
+#ROOM
+Vnum     686
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 17416
+#ENDROOM
+
+#ROOM
+Vnum     687
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 17416
+#ENDROOM
+
+#ROOM
+Vnum     688
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 17416
+#ENDROOM
+
+#ROOM
+Vnum     689
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 17416
+#ENDROOM
+
+#ROOM
+Vnum     690
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 17416
+#ENDROOM
+
+#ROOM
+Vnum     691
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 17416
+#ENDROOM
+
+#ROOM
+Vnum     692
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 17416
+#ENDROOM
+
+#ROOM
+Vnum     693
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 17416
+#ENDROOM
+
+#ROOM
+Vnum     694
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 17416
+#ENDROOM
+
+#ROOM
+Vnum     695
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 17416
+#ENDROOM
+
+#ROOM
+Vnum     696
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 17416
+#ENDROOM
+
+#ROOM
+Vnum     697
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 17416
+#ENDROOM
+
+#ROOM
+Vnum     698
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 17416
+#ENDROOM
+
+#ROOM
+Vnum     699
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 17416
+Reset M 0 699 1 699
+Reset O 0 699 1 699
+#ENDROOM
+
+#ENDAREA

@@ -1,0 +1,4579 @@
+#FUSSAREA
+#AREADATA
+Version      1
+Name         Yavin~
+Author       Drakkar~
+Ranges       0 36 0 36
+Economy      0 4457633
+#ENDAREADATA
+
+#MOBILE
+Vnum       1850
+Keywords   imperial recruit~
+Short      imperial recruit~
+Long       An Imperial Recruit walks past.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     male~
+Actflags   npc~
+Stats1     0 1 0 0 0 0
+Stats2     0 0 0
+Stats3     0 0 0
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#ENDMOBILE
+
+#MOBILE
+Vnum       1851
+Keywords   a polished kitchen droid~
+Short      a polished kitchen droid.~
+Long       A polished kitchen droid is here.
+~
+Race       Droid~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc sentinel nokill droid~
+Stats1     0 30 0 25 0 0
+Stats2     6 10 300
+Stats3     3 4 2
+Stats4     0 0 0 6 6
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic verpine~
+Speaking   verpine~
+#MUDPROG
+Progtype  all_greet_prog~
+Arglist   100~
+Comlist   say Welcome $n, I am KD-0082, the resident head chef.
+say If you would like a RATION or CANTEEN.
+say Please just say the name and I shall get you one.
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   Ration~
+Comlist   emote goes into the freezer and brings out a ration.
+say Here you go $n.
+mpoload 1857
+drop ration
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   Canteen~
+Comlist   emote goes into the freezer and brings out a canteen.
+say Here you go $n.
+mpoload 1858
+drop canteen
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       1852
+Keywords   comm operator~
+Short      A Noghri looks very stern~
+Long       A Noghri stands here monitering transmissions
+~
+Race       Noghri~
+Position   aggressive~
+DefPos     aggressive~
+Gender     male~
+Actflags   npc sentinel stayarea practice noassist~
+Stats1     0 12 0 -39 0 0
+Stats2     2 10 120
+Stats3     1 4 2
+Stats4     0 0 0 2 2
+Attribs    11 13 11 7 9 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic noghri~
+Speaking   noghri~
+#ENDMOBILE
+
+#MOBILE
+Vnum       1853
+Keywords   engineer~
+Short      A Verpine female~
+Long       A retired engineer stands here tinkering with a comlink
+~
+Race       Verpine~
+Position   aggressive~
+DefPos     aggressive~
+Gender     female~
+Actflags   npc sentinel stayarea noassist prototype~
+Stats1     0 9 0 77 0 0
+Stats2     1 10 90
+Stats3     0 4 2
+Stats4     0 0 0 1 1
+Attribs    10 10 17 10 10 18 10 0
+Saves      0 0 0 0 0
+Speaks     basic wookiee ewok togorian~
+Speaking   basic~
+#ENDMOBILE
+
+#MOBILE
+Vnum       1854
+Keywords   A small black bird~
+Short      A small black bird~
+Long       A small black bird flys around the sky
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     male~
+Actflags   npc stayarea~
+Stats1     0 12 0 70 0 0
+Stats2     2 10 120
+Stats3     1 4 2
+Stats4     0 0 0 2 2
+Attribs    18 10 10 10 12 10 10 0
+Saves      0 0 0 0 0
+Speaks     firrerreo~
+Speaking   firrerreo~
+Attacks    bite claws~
+Defenses   dodge~
+#ENDMOBILE
+
+#MOBILE
+Vnum       1855
+Keywords   A large brown feline~
+Short      A sleek brown feline~
+Long       A sleek brown feline prowls the jungle
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc stayarea~
+Stats1     0 24 0 -174 0 0
+Stats2     4 10 240
+Stats3     2 4 2
+Stats4     0 0 0 18 20
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     coynite~
+Speaking   coynite~
+Attacks    bite claws tail~
+Defenses   dodge~
+#ENDMOBILE
+
+#MOBILE
+Vnum       1856
+Keywords   gundark~
+Short      A green-skinned fish~
+Long       A green-skinned fish with two huge flippers swims though the stream
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     male~
+Actflags   npc sentinel aggressive stayarea~
+Stats1     0 12 0 70 0 0
+Stats2     2 10 120
+Stats3     1 4 2
+Stats4     0 0 0 2 2
+Attribs    11 9 12 14 8 5 18 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+Attacks    bite tail~
+#ENDMOBILE
+
+#MOBILE
+Vnum       1857
+Keywords   A large Runyip~
+Short      A large Runyip lumbers here~
+Long       A massive shaggy-furred Runyip lumbers around
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     male~
+Actflags   npc scavenger stayarea~
+Stats1     0 20 0 -100 0 0
+Stats2     4 10 200
+Stats3     2 4 2
+Stats4     0 0 0 14 8
+Attribs    18 9 5 13 15 9 12 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#ENDMOBILE
+
+#MOBILE
+Vnum       1858
+Keywords   A small Stintaril~
+Short      A small six legged creature, with a hairless, three-pronged tail~
+Long       A small creature runs around the base of a tree
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     female~
+Actflags   npc scavenger aggressive stayarea~
+Stats1     0 12 0 70 0 0
+Stats2     2 10 120
+Stats3     1 4 2
+Stats4     0 0 8 10 8
+Attribs    8 14 13 17 15 11 13 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+Attacks    bite tail sting~
+#ENDMOBILE
+
+#MOBILE
+Vnum       1859
+Keywords   Solemn Guard Commander Din'dak Dindak~
+Short      Commander Din'dak~
+Long       A Solemn Guard in a scorched grey uniform stands here.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc sentinel guardian~
+Stats1     0 1 0 0 0 0
+Stats2     15 30 1500
+Stats3     10 15 40
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+Attacks    kick~
+Defenses   dodge~
+#MUDPROG
+Progtype  all_greet_prog~
+Arglist   100~
+Comlist   emote wipes a tear from his eye as he looks around him.
+mpsleep 15
+say We lost a lot of good men here, $n. I don't know how many more of these battles I can take.
+mpsleep 20
+say If only we could take down the empire, once and for all. Peace throughout the galaxy... but we need help.
+mpsleep 15
+emote looks at you hopefully.
+mpsleep 10
+say We could really use your help. Please, &genlist&w&W. I'll send out the forms right now.
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  act_prog~
+Arglist   p steps out of a ship.~
+Comlist   emote wipes a tear from his eye as he looks around him.
+mpsleep 15
+say We lost a lot of good men here, $n. I don't know how many more of these battles I can take.
+mpsleep 20
+say If only we could take down the empire, once and for all. Peace throughout the galaxy... but we need help.
+mpsleep 15
+emote looks at you hopefully.
+mpsleep 10
+say We could really use your help. Please, enlist. I'll send out the forms right now.
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       1860
+Keywords   Protocol Droid~
+Short      A Protocol Droid~
+Long       A Protocol Droid stands here with drinks and food
+~
+Desc       C-7DC is a Gold colored protocol droid. It looks fairly human in the most
+common characteristics. It seems to have very poor motor abilities and
+concquently a low range of movement.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc sentinel train droid~
+Affected   truesight~
+Stats1     0 1 0 0 0 0
+Stats2     15 10 0
+Stats3     3 10 0
+Stats4     0 0 2 0 0
+Attribs    10 10 10 10 10 25 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#MUDPROG
+Progtype  all_greet_prog~
+Arglist   100~
+Comlist   mpecho A protocol droid says, "Good afternoon, $n.  My name is C-7DC.  I
+mpecho am the turbolift operator.  If you need any beverages or a bite to eat
+mpecho on this trip, just ask."
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   food ration eat~
+Comlist   sa I will happily give you a ration.
+mpoload 1872
+give ration $n
+sa Please enjoy.
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   water drink canteen liquid~
+Comlist   sa I will happily give you a canteen.
+mpoload 134
+give canteen $n
+sa Please enjoy.
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       1861
+Keywords   Rebel Alliance Elite Guard~
+Short      Rebel Alliance Elite Guard~
+Long       A Rebel Alliance Elite Guard Stands Here Awaiting His Orders
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     male~
+Actflags   npc sentinel~
+Affected   truesight~
+Stats1     0 36 0 -300 0 0
+Stats2     80 22 250
+Stats3     30 22 30
+Stats4     0 0 2 40 20
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+Resist     energy paralysis~
+Attacks    punch~
+Defenses   parry dodge~
+#ENDMOBILE
+
+#MOBILE
+Vnum       1917
+Keywords   seeker sphere silver droid sith~
+Short      A Sith Seeker Droid.~
+Long       A Silver Sphere Hovers here
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc~
+Affected   truesight~
+Stats1     0 1 0 0 0 0
+Stats2     0 0 0
+Stats3     0 0 0
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#MUDPROG
+Progtype  greet_prog~
+Arglist   100~
+Comlist   If ispc($n)
+if frc($n) == 0
+mpsleep 5
+say Tracking Target.
+else 
+if frc($n) > 1
+say Target found.
+Squeal
+follow $n
+Mpsleep 20
+Emote rushes at $n and explodes!
+Mpdamage $n 300
+mpGoto 101
+mppurge
+else
+endif
+endif
+else
+endif
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       1918
+Keywords   probe droid sith black~
+Short      A Black Sith Probe Droid~
+Long       A Sith probe droid
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc~
+Affected   truesight~
+Stats1     0 1 0 0 0 0
+Stats2     0 0 0
+Stats3     0 0 0
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#MUDPROG
+Progtype  greet_prog~
+Arglist   100~
+Comlist   If ispc($n)
+Mpat 1951 say I have encountered $n
+Else
+endif
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       1926
+Keywords   lost traveler~
+Short      a lost traveler~
+Long       A lost traveler wanders about here, trying to find his way
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     male~
+Actflags   npc sentinel stayarea~
+Affected   truesight~
+Stats1     0 20 0 50 5 0
+Stats2     4 10 200
+Stats3     2 4 2
+Stats4     0 0 0 4 4
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#MUDPROG
+Progtype  give_prog~
+Arglist   package to lost traveler~
+Comlist   if ovnuminv(1171) == 1
+  gasp
+  say My sister succeeded! Oh, thank you!
+  say I am very thankful!
+  mpadvance $n 5 1000
+  mpat 101 drop package
+  mpat 101 mppurge
+endif
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       1953
+Keywords   radar scanner~
+Short      A Chandra-Fan female~
+Long       A Chadra-Fan female stands here scanning the radar for possible intruders
+~
+Race       Hapan~
+Position   aggressive~
+DefPos     aggressive~
+Gender     female~
+Actflags   npc sentinel stayarea practice noassist~
+Stats1     0 10 0 -27 0 0
+Stats2     2 10 100
+Stats3     1 4 2
+Stats4     0 0 0 2 2
+Attribs    8 16 14 9 10 18 10 0
+Saves      0 0 0 0 0
+Speaks     basic yevethan~
+Speaking   yevethan~
+#ENDMOBILE
+
+#MOBILE
+Vnum       1954
+Keywords   slicer observer~
+Short      An Ewok slicer~
+Long       An Ewok stands here observing the slicer's at work
+~
+Race       Ewok~
+Position   aggressive~
+DefPos     aggressive~
+Gender     male~
+Actflags   npc sentinel stayarea practice noassist~
+Stats1     0 10 0 -55 0 0
+Stats2     2 10 100
+Stats3     1 4 2
+Stats4     0 0 0 2 2
+Attribs    6 20 18 8 12 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic gamorrean~
+Speaking   gamorrean~
+#ENDMOBILE
+
+#MOBILE
+Vnum       1955
+Keywords   man~
+Short      A smart looking old man~
+Long       An old man stands here reading a book
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     male~
+Actflags   npc sentinel stayarea practice scholar noassist~
+Stats1     0 8 0 80 0 0
+Stats2     1 10 80
+Stats3     0 4 2
+Stats4     0 0 0 1 1
+Attribs    5 25 23 8 13 18 10 0
+Saves      0 0 0 0 0
+Speaks     wookiee twilek rodian hutt verpine coynite falleen barabel~
+Speaking   basic~
+#ENDMOBILE
+
+#MOBILE
+Vnum       1956
+Keywords   Rebel guard~
+Short      A guard in a dark uniform~
+Long       A uniformed soldier stands at attention
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     male~
+Actflags   npc sentinel noflee prototype~
+Affected   detect_invis infrared~
+Stats1     0 30 0 25 50 0
+Stats2     6 10 300
+Stats3     3 4 2
+Stats4     0 0 0 6 6
+Attribs    20 13 8 11 16 10 17 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+Attacks    punch kick~
+#MUDPROG
+Progtype  greet_prog~
+Arglist   100~
+Comlist   if ispc($n)
+If clan($n) == rebel alliance
+Salute $n
+Else
+Mpkill $n
+Endif
+Else
+endif
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  rand_prog~
+Arglist   100~
+Comlist   if ispc($n)
+If clan($n) == rebel alliance
+Else
+Mpkill $n
+Endif
+Else
+endif
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  greet_prog~
+Arglist   100~
+Comlist   say I am sorry but this facility is temporarily closed for renovation.
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       1957
+Keywords   Rebel Trooper~
+Short      Rebel Trooper~
+Long       A Rebel Trooper patrols these halls.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Specfun    spec_police~
+Gender     male~
+Actflags   npc~
+Stats1     0 1 0 -55 0 0
+Stats2     0 0 360
+Stats3     0 0 0
+Stats4     0 0 2 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#ENDMOBILE
+
+#MOBILE
+Vnum       2000
+Keywords   hi_mob~
+Short      imperial recruit~
+Long       An Imperial Recruit walks past.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     male~
+Actflags   npc~
+Stats1     0 1 0 0 0 0
+Stats2     0 0 0
+Stats3     0 0 0
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#ENDMOBILE
+
+#OBJECT
+Vnum     1850
+Keywords hi_obj~
+Type     drinkcon~
+Short    a canteen~
+Long     A small grey canteen has been drooped here.~
+WFlags   take~
+Values   40 40 0 0 0 0
+Stats    1 10 1 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     1851
+Keywords keycard~
+Type     key~
+Short    a keycard~
+Long     A keycard is here.~
+WFlags   take hold~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#EXDESC
+ExDescKey    keycard~
+ExDesc       A small black duraplast card with a magnetic strip and a microtronics chip
+inside. In small white letters on the front side the word 'Armory' is
+printed.
+~
+#ENDEXDESC
+
+#ENDOBJECT
+
+#OBJECT
+Vnum     1852
+Keywords Massive Massassi Statue~
+Type     lever~
+Short    a Massive Massassi Statue~
+Long     A Massive Massassi Statue is here.~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#EXDESC
+ExDescKey    Massive Massassi Statue~
+ExDesc       An statue carved from a dark grey rock which is indigenous to the area. It
+is in the form of a great Massassi warrior. Even though the Massassi
+people have long left the moon, their spirit still remains.
+~
+#ENDEXDESC
+
+#EXDESC
+ExDescKey    base~
+ExDesc       (The writing on the base is indistinguishable. But you notice the statue
+doesn't seem to be connected to the base?!?!)
+~
+#ENDEXDESC
+
+#MUDPROG
+Progtype  push_prog~
+Arglist   100~
+Comlist   mpechoat $n The statue moves and you notice a path open in the brush.
+mpechoaround $n $n did something to the statue and then...
+mpechoaround $n disappeared into the brush.
+mptransfer $n 1916
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  pull_prog~
+Arglist   100~
+Comlist   mpechoat $n The statue moves and you notice a path open up
+mpecharound $n $n did something to the statue and then...
+mpecharound $n disappeared into the brush.
+mptransfer $n 1916
+~
+#ENDPROG
+
+#ENDOBJECT
+
+#OBJECT
+Vnum     1853
+Keywords small crystal~
+Type     crystal~
+Short    a small crystal~
+Long     A small crystal is here.~
+Flags    hidden~
+WFlags   take~
+Values   2 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     1854
+Keywords hooded cloak~
+Type     armor~
+Short    a hooded cloak~
+Long     A hooded cloak is neatly folded on the floor here.~
+WFlags   take about~
+Values   1 1 0 0 0 0
+Stats    5 50 5 0 0
+Affect       -1 -1 1 2 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     1855
+Keywords small metal key~
+Type     key~
+Short    a small metal key~
+Long     A small metal key is here.~
+WFlags   take hold~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     1856
+Keywords round table~
+Type     trash~
+Short    a round table~
+Long     A round table is sitting in the middle of the room.~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     1857
+Keywords vaccuum-sealed ration~
+Type     food~
+Short    a vaccuum-sealed ration~
+Long     A vaccuum-sealed ration is here.~
+WFlags   take~
+Values   100 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     1858
+Keywords small travel canteen~
+Type     drinkcon~
+Short    a small travel canteen~
+Long     A small travel canteen is lying here on the ground.~
+WFlags   take~
+Values   30 30 0 0 0 0
+Stats    1 10 1 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     1859
+Keywords black bodyglove top~
+Type     armor~
+Short    a black bodyglove top~
+Long     A black bodyglove top is here.~
+Flags    bless~
+WFlags   take body~
+Values   0 20 0 0 0 0
+Stats    1 10 1 0 1
+Affect       -1 -1 20 13 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     1860
+Keywords black uniform top~
+Type     armor~
+Short    a black uniform top~
+Long     A black uniform top is here.~
+Flags    covering~
+WFlags   take body~
+Values   0 10 0 0 0 0
+Stats    1 20 2 0 10
+Affect       -1 -1 1 1 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     1861
+Keywords pair of black leather gloves~
+Type     armor~
+Short    a pair of black leather gloves~
+Long     A pair of black leather gloves is here.~
+Flags    bless~
+WFlags   take hands~
+Values   0 10 0 0 0 0
+Stats    1 10 1 0 10
+Affect       -1 -1 30 53 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     1862
+Keywords pair of black uniform pants~
+Type     armor~
+Short    a pair of black uniform pants~
+Long     A pair of black uniform pants is here.~
+Flags    bless~
+WFlags   take legs~
+Values   0 20 0 0 0 0
+Stats    1 10 1 0 10
+Affect       -1 -1 2 19 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     1863
+Keywords pair of socks~
+Type     armor~
+Short    a pair of socks~
+Long     A pair of socks is here.~
+Flags    bless~
+WFlags   take feet~
+Values   0 10 0 0 0 0
+Stats    1 10 1 0 1
+Affect       -1 -1 2 18 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     1864
+Keywords pair of action-combat boots~
+Type     armor~
+Short    a pair of action-combat boots~
+Long     A pair of action-combat boots is here.~
+WFlags   take feet~
+Values   0 1 0 0 0 0
+Stats    1 10 1 0 13
+#ENDOBJECT
+
+#OBJECT
+Vnum     1865
+Keywords black utility belt~
+Type     container~
+Short    a black utility belt~
+Long     A black utility belt is here.~
+WFlags   take waist~
+Values   100 0 0 0 0 0
+Stats    1 10 1 0 1
+#ENDOBJECT
+
+#OBJECT
+Vnum     1866
+Keywords a lightsaber clip~
+Type     container~
+Short    a lightsaber clip~
+Long     A lightsaber clip is here.~
+WFlags   take waist~
+Values   50 0 0 0 0 0
+Stats    1 10 1 0 10
+#ENDOBJECT
+
+#OBJECT
+Vnum     1867
+Keywords table~
+Type     trash~
+Short    An Oak table~
+Long     A large Oak table~
+Flags    large_size~
+Values   0 0 0 0 0 0
+Stats    150 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     1868
+Keywords monitor1~
+Type     furniture~
+Short    Viewing monitor I~
+Long     Viewing monitor I stands here~
+Flags    glow hum large_size prototype~
+Values   0 0 0 0 0 0
+Stats    1000 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     1869
+Keywords monitor2~
+Type     furniture~
+Short    Viewing monitor II~
+Long     Viewing monitor II stands here~
+Flags    glow hum large_size prototype~
+Values   0 0 0 0 0 0
+Stats    1000 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     1870
+Keywords monitor3~
+Type     furniture~
+Short    Viewing monitor III~
+Long     Viewing monitor III stands here~
+Flags    glow hum large_size prototype~
+Values   0 0 0 0 0 0
+Stats    1000 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     1871
+Keywords Storage Crate~
+Type     container~
+Short    a storage crate~
+Long     A Storage Crate Used To Store Medical Supplies~
+Values   1000 5 0 5 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     1872
+Keywords A small packaged ration~
+Type     food~
+Short    a small packaged ration~
+Long     A packaged ration is here, waiting to be eaten.~
+Flags    inventory~
+WFlags   take~
+Values   20 20 0 0 0 0
+Stats    2 5 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     1873
+Keywords blaster blastech dlt-19 assault rifle~
+Type     weapon~
+Short    a Blastech DLT-19 assault rifle~
+Long     An assault rifle was left here.~
+WFlags   take wield~
+Values   0 9 4 6 2000 2000
+Stats    12 3750 375 0 0
+Affect       -1 -1 2 18 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     1915
+Keywords Midnight Black Robe~
+Type     armor~
+Short    &zMidnight Black Robe~
+Long     &zMidnight Black Robe~
+WFlags   take about~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+Affect       -1 -1 -100 13 0
+Affect       -1 -1 -500 12 0
+Affect       -1 -1 1048576 28 0
+Affect       -1 -1 5 18 0
+Affect       -1 -1 4 28 0
+Affect       -1 -1 512 28 0
+Affect       -1 -1 8 28 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     1917
+Keywords ring obsidian black~
+Type     armor~
+Short    A Black Obsidian ring~
+Long     A Black Obsidian ring is here.~
+WFlags   take finger~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+Affect       -1 -1 -500 12 0
+Affect       -1 -1 5 18 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     1927
+Keywords Armory Key~
+Type     key~
+Short    Armory Key~
+Long     An Armory Key lays in the dirt here.~
+WFlags   take hold~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     1928
+Keywords Jail Key~
+Type     key~
+Short    Jail Key~
+Long     A Jail Key is laying in the dirt here.~
+Flags    prototype~
+WFlags   take hold~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     1929
+Keywords Corusca Gem~
+Type     crystal~
+Short    &OC&Yo&wr&Wu&ws&Yc&Oa &G&WGem~
+Long     A corusca gem is here.~
+Flags    glow burried~
+WFlags   take~
+Values   3 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     2000
+Keywords hi_obj~
+Type     drinkcon~
+Short    a canteen~
+Long     A small grey canteen has been drooped here.~
+WFlags   take~
+Values   40 40 0 0 0 0
+Stats    1 10 1 0 0
+#ENDOBJECT
+
+#ROOM
+Vnum     1850
+Name     Landing Pad~
+Sector   city~
+Flags    nomob can_land can_fly nodropall hotel republic_recruit~
+Flags2   shipyard~
+Stats    0 0 3824
+Desc     A landing pad in the middle of lush and dense vegetation. This pad is not
+more than 30 meters sqare and made from black durasteel designed to blend
+in with the jungle. The pad is also just a few feet lower than the
+uppermost canopy of the forest allowing for quite a spectacular view. In
+all directions, the moon is thickly covered with vegetaion running from
+small flowers, to large trees. Off in the distance the ancient Massassi
+temples can be seen rising out of the forest like small mountains, and
+somewhat close to the pad there are a few utilitarian buildings that
+barely make it above the trees. To the east there are stairs that lead
+down to the forest floor and in the direction of the small buildings.
+ 
+(Please read room descriptions. They hold keys that will greatly help
+you.)
+~
+#EXIT
+Direction east~
+ToRoom    1851
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    2001
+#ENDEXIT
+
+Reset M 0 1859 1 1850
+#ENDROOM
+
+#ROOM
+Vnum     1851
+Name     Durasteel Stairs~
+Sector   city~
+Stats    0 0 3824
+Desc     The stairs lead to the forest floor which is approximately 50 feet below.
+They are made from the same durasteel as the landing pad and are covered
+in posi-grip paper in order to prevent slipping. On either side of the
+steps there is a high railing and fence for safety. From here you can see
+some of the wildlife and vegetaion of the moon a little better than from
+the pad.
+~
+#EXIT
+Direction west~
+ToRoom    1850
+#ENDEXIT
+
+#EXIT
+Direction down~
+ToRoom    1852
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1852
+Name     Durasteel Stairs~
+Sector   city~
+Flags    nomob~
+Stats    0 0 3824
+Desc     The stairs continue up and down. The forest floor is only a 25 foot drop
+from here and the lower canopies of the trees have opened up to reveal the
+floor below. The floor is covered in a dense undergrowth of shrubs,
+briars,flowers, and other vegetation that can be found no where else in
+the galaxy.
+~
+#EXIT
+Direction up~
+ToRoom    1851
+#ENDEXIT
+
+#EXIT
+Direction down~
+ToRoom    1853
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1853
+Name     Forest Floor~
+Sector   forest~
+Stats    0 0 3824
+Desc     The jungle is lush here. The smell of trees and brush is strong here. It is
+quite  hard to notice a path, but you manange. Sounds from the Landing Pad
+are heard loudly  from here. The jungle is a completely gorgeous sight
+from where you are standing.  Songs from animals can be heard from all
+around. This feels like quite a peaceful  place, and quite protective
+also. The lush growth of plants provides a desent cover  for you.
+~
+#EXIT
+Direction north~
+ToRoom    1918
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    1854
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1919
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1920
+#ENDEXIT
+
+#EXIT
+Direction up~
+ToRoom    1852
+#ENDEXIT
+
+Reset M 0 1854 2 1853
+#ENDROOM
+
+#ROOM
+Vnum     1854
+Name     Jungle Path~
+Sector   forest~
+Stats    0 0 3824
+Desc     The Jungle is thick here. Sounds of birds and other beasts are heard
+loudly, some striking fear into your heart from the power-sounding tone of
+there roars. Sunlight manages to weave its way in through the lush tree
+groth and other various plants. The path you are on seems to continue
+onward, but you can not see fairly far. The fresh air from the trees is
+very refreshing, even to the most royalist of people.
+~
+#EXIT
+Direction east~
+ToRoom    1855
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1853
+#ENDEXIT
+
+#EXIT
+Direction northeast~
+ToRoom    4500
+#ENDEXIT
+
+Reset M 0 1854 2 1854
+#ENDROOM
+
+#ROOM
+Vnum     1855
+Name     Jungle Path~
+Sector   forest~
+Stats    0 0 3824
+Desc     The Jungle is thick here. Sounds of birds and other beasts are heard
+loudly, some striking fear into your heart from the power-sounding tone of
+there roars. Sunlight manages to weave its way in through the lush tree
+groth and other various plants. The path you are on seems to continue
+onward, but you can not see fairly far. The fresh air from the trees is
+very refreshing, even to the most royalist of people.
+~
+#EXIT
+Direction west~
+ToRoom    1854
+#ENDEXIT
+
+#EXIT
+Direction southeast~
+ToRoom    1856
+#ENDEXIT
+
+Reset M 0 1854 2 1855
+#ENDROOM
+
+#ROOM
+Vnum     1856
+Name     Jungle Path~
+Sector   forest~
+Flags    nomob~
+Stats    0 0 3824
+Desc     The Jungle is thick here. Sounds of birds and other beasts are heard
+loudly, some striking fear into your heart from the power-sounding tone of
+there roars. Sunlight manages to weave its way in through the lush tree
+groth and other various plants. The path you are on seems to continue
+onward, but you can not see fairly far. The fresh air from the trees is
+very refreshing, even to the most royalist of people.
+~
+#EXIT
+Direction south~
+ToRoom    1907
+Keywords  'an old path'~
+Flags     secret hidden~
+#ENDEXIT
+
+#EXIT
+Direction northeast~
+ToRoom    1857
+#ENDEXIT
+
+#EXIT
+Direction northwest~
+ToRoom    1855
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1857
+Name     Jungle Path~
+Sector   forest~
+Stats    0 0 3824
+Desc     The Jungle is extremely thick here. Sounds of birds and other beasts are
+heard loudly;, some striking fear into your heart from the power-sounding
+tone of there roars. Sunlight manages to weave its way in through the lush
+tree groth and other various plants. The path you are on seems to continue
+onward, but you can not see fairly far. The fresh air from the trees is
+very refreshing, even to the most royalist of people.
+~
+#EXIT
+Direction north~
+ToRoom    1905
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    1858
+#ENDEXIT
+
+#EXIT
+Direction southwest~
+ToRoom    1856
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1858
+Name     Jungle Path~
+Sector   forest~
+Stats    0 0 3824
+Desc     The Jungle is extremely thick here. Sounds of birds and other beasts are
+heard loudly;, some striking fear into your heart from the power-sounding
+tone of there roars. Sunlight manages to weave its way in through the lush
+tree groth and other various plants. The path you are on seems to continue
+onward, but you can not see fairly far. The fresh air from the trees is
+very refreshing, even to the most royalist of people.
+~
+#EXIT
+Direction east~
+ToRoom    1859
+Flags     isdoor pickproof~
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1857
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1859
+Name     Security Checkpoint~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1860
+Flags     isdoor closed locked~
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1902
+Flags     isdoor closed~
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1858
+Flags     isdoor~
+#ENDEXIT
+
+Reset D 0 1859 1 2
+Reset D 0 1859 2 1
+#ENDROOM
+
+#ROOM
+Vnum     1860
+Name     Main Rebel Complex~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+Desc     Standing in the entryway of the complex it feels as if you have walked into
+a totally different planet. The are no trees, no animals, not even plants
+in this facility. You stand at the intersection of the main hallway and a
+wide corridor that leads to the minor complex to the north.
+~
+#EXIT
+Direction north~
+ToRoom    1864
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    1861
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1859
+Flags     isdoor~
+#ENDEXIT
+
+Reset D 0 1860 3 0
+#ENDROOM
+
+#ROOM
+Vnum     1861
+Name     Main Corridor~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+Desc     You stand in the main corridor of the facility. This hallway leads all the
+way through the entire complex. The walls here are dark grey. The hallway
+is bare excpet for the lights mounted every 30 feet along the ceiling.
+~
+#EXIT
+Direction east~
+ToRoom    1862
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1900
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1860
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1862
+Name     Main Corridor~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+Desc     You stand in the main corridor of the facility. This hallway leads all the
+way through the entire complex. The walls here are dark grey. The hallway
+is bare excpet for the lights mounted every 30 feet along the ceiling.
+There is a workshop located south of here for Rebel engineers.
+~
+#EXIT
+Direction east~
+ToRoom    1863
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1938
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1861
+#ENDEXIT
+
+Reset M 0 1957 9 1862
+#ENDROOM
+
+#ROOM
+Vnum     1863
+Name     Main Corridor~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+Desc     You stand at the intersection of the main corridor and another wide
+corridor. There is a sign posted here directing people north to the
+conference room. You feel a slight breeze from the north.
+~
+#EXIT
+Direction north~
+ToRoom    1870
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    1895
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1897
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1862
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1864
+Name     Wide Corridor~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1865
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1860
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1865
+Name     Wide Corridor~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+#EXIT
+Direction south~
+ToRoom    1864
+#ENDEXIT
+
+#EXIT
+Direction northeast~
+ToRoom    1866
+#ENDEXIT
+
+Reset M 0 1957 9 1865
+Reset M 0 1957 9 1865
+#ENDROOM
+
+#ROOM
+Vnum     1866
+Name     Wide Corridor~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+#EXIT
+Direction northeast~
+ToRoom    1867
+#ENDEXIT
+
+#EXIT
+Direction southwest~
+ToRoom    1865
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1867
+Name     Wide Corridor~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1868
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1982
+Key       1928
+Flags     isdoor closed locked pickproof nopassdoor bashproof~
+#ENDEXIT
+
+#EXIT
+Direction southeast~
+ToRoom    1872
+#ENDEXIT
+
+#EXIT
+Direction southwest~
+ToRoom    1866
+#ENDEXIT
+
+Reset D 0 1867 2 2
+#ENDROOM
+
+#ROOM
+Vnum     1868
+Name     Short Breezeway~
+Sector   field~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1869
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1867
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1869
+Name     Minor Rebel Complex~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+Desc     This is one of the smaller buildings that makes up the Alliances
+Headquarters complex. The walls, floors, and ceilings are made from a
+combination of durasteel, duraplast, tile, and stone. This building hold
+the infirmary, barracks, chow hall, and armory. Basically the only people
+who have any business here are the Alliance soldiers, and other lower
+enlisted members.
+~
+#EXIT
+Direction east~
+ToRoom    1873
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1868
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1875
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1870
+Name     Wide Corridor~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+Desc     You stand in the wide corridor of the complex. This corridor not only leads
+to the minor complex adjacent to the main but also to the main conference
+room. There walls here are dark grey. There is a single light mounted on
+the left wall.
+~
+#EXIT
+Direction north~
+ToRoom    1871
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1863
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1871
+Name     Wide Corridor~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+Desc     You stand at the intersection of the entryway to the main conference room
+and the wide corridor. Northwest of here is the minor complex located
+adjacent to this one. 
+~
+#EXIT
+Direction east~
+ToRoom    1893
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1870
+#ENDEXIT
+
+#EXIT
+Direction northwest~
+ToRoom    1872
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1872
+Name     Wide Corridor~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+#EXIT
+Direction northwest~
+ToRoom    1867
+#ENDEXIT
+
+#EXIT
+Direction southeast~
+ToRoom    1871
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1873
+Name     Brightly Lit Corridor~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1874
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1869
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1874
+Name     Brighty Lit Corridor~
+Sector   city~
+Flags    nomob indoors~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1877
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1873
+#ENDEXIT
+
+#EXIT
+Direction southeast~
+ToRoom    1983
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1875
+Name     Brightly Lit Corridor~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1869
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1876
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1876
+Name     Brightly Lit Corridor~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1880
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    1875
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1877
+Name     Barracks~
+Sector   city~
+Flags    indoors hotel~
+Stats    0 0 3824
+Desc     The barracks are where the Rebel Allience soldiers sleep and keep their
+gear. Each soldier is required to keep all of his equipment on their
+person at all times in order to become familiar and proficient with it.
+The barracks themself are just a long room with a row of two tier bunks
+set against the wall. At the foot of each bunk there is a footlocker where
+the soldiers can keep some of their supplies. The floor is made from
+shining white tiles and the walls are made from grey durasteel.
+ 
+(You may safely quit the game from here.)
+~
+#EXIT
+Direction north~
+ToRoom    1878
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1874
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1878
+Name     Barracks~
+Sector   city~
+Flags    indoors hotel~
+Stats    0 0 3824
+Desc     The barracks are where the Rebel Allience soldiers sleep and keep their
+gear. Each soldier is required to keep all of his equipment on their
+person at all times in order to become familiar and proficient with it.
+The barracks themself are just a long room with a row of two tier bunks
+set against either wall. AT the foot of each bunk there is a footlocker
+where the soldiers can keep some of their supplies. The floor is made from
+shining white tiles and the walls are made from grey durasteel.
+ 
+(You may safely quit the game from here.)
+~
+#EXIT
+Direction north~
+ToRoom    1879
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    1981
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1877
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1879
+Name     Barracks~
+Sector   city~
+Flags    indoors hotel~
+Stats    0 0 3824
+Desc     The barracks are where the Rebel Alliance soldiers sleep and keep their
+gear. each soldier is required to keep all of his equipment on their
+person at all times in order to become familiar and proficient with it.
+The barracks themself are just a long room with arow of two tier bunks set
+against either wall. At the foot of each bunk there is a footlocker where
+the soldiers can keep some of their supplies. The walls are made from
+shining white tiles and the walls are made from grey durasteel.
+ 
+(You may safely quit the game from here.)
+~
+#EXIT
+Direction south~
+ToRoom    1878
+#ENDEXIT
+
+Reset M 0 1853 1 1879
+#ENDROOM
+
+#ROOM
+Vnum     1880
+Name     Brightly Lit Corridor~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1881
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1876
+#ENDEXIT
+
+Reset M 0 1957 9 1880
+Reset M 0 1957 9 1880
+#ENDROOM
+
+#ROOM
+Vnum     1881
+Name     Brightly Lit Corridor~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1884
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    1882
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1880
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1882
+Name     Chow Hall~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+Desc     The chow hall is a large room full of rows of tables and benches. This is
+where the Alliance members socialize and eat their meals. This is a large
+complex so in order for all members to eat, they have devised a plan of
+different eating periods. All the members are assigned to eat certain time
+periods and are here precisely when it begins.
+~
+#EXIT
+Direction east~
+ToRoom    1883
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1881
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1883
+Name     Kitchen~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+Desc     The kitchen is a large area full fo silvery looking equipment and tables
+all used to create one type of dish or another. Droids run and maintain
+the kitchen and chow hall and have become very efficient at it. They
+constantly try out new dishes in order to keep the alliances members happy
+with variety.
+~
+#EXIT
+Direction west~
+ToRoom    1882
+#ENDEXIT
+
+Reset M 0 1860 3 1883
+  Reset G 1 1872 1
+#ENDROOM
+
+#ROOM
+Vnum     1884
+Name     Brightly Lit Corridor~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1885
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1881
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1885
+Name     Brightly Lit Corridor~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1890
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    1886
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1884
+#ENDEXIT
+
+Reset M 0 1957 9 1885
+  Reset E 1 1873 1 16
+#ENDROOM
+
+#ROOM
+Vnum     1886
+Name     Infirmary~
+Sector   city~
+Flags    indoors factory~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1889
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1885
+#ENDEXIT
+
+#EXIT
+Direction northeast~
+ToRoom    1887
+#ENDEXIT
+
+#EXIT
+Direction southeast~
+ToRoom    1888
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1887
+Name     Bacta Tank~
+Sector   city~
+Flags    nomob indoors~
+Stats    0 0 3824
+#EXIT
+Direction southwest~
+ToRoom    1886
+#ENDEXIT
+
+#MUDPROG
+Progtype  rand_prog~
+Arglist   100~
+Comlist   mpecho The bacta flows around you and heals your wounds.
+mprestore $n 500
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  greet_prog~
+Arglist   100~
+Comlist   If $n != rebel alliance 
+mptrance $n 1886
+endif
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     1888
+Name     Operation Room~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+#EXIT
+Direction northwest~
+ToRoom    1886
+#ENDEXIT
+
+Reset M 0 1957 9 1888
+#ENDROOM
+
+#ROOM
+Vnum     1889
+Name     Recovery Room~
+Sector   city~
+Flags    indoors safe hotel~
+Stats    0 0 3824
+Desc     This is the Recovery room where patients can take their time and rest after
+any sort of medical treatment. There are clean, soft beds lining the walls
+and it is very quiet. At each bed there is a monitor to make sure the
+patient is functioning normally.
+ 
+(You may safely quit the game from here.)
+~
+#EXIT
+Direction west~
+ToRoom    1886
+#ENDEXIT
+
+Reset M 0 1957 9 1889
+#ENDROOM
+
+#ROOM
+Vnum     1890
+Name     Brightly Lit Corridor~
+Sector   city~
+Flags    nomob indoors~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1891
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1885
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1891
+Name     Brightly Lit Corridor~
+Sector   city~
+Flags    nomob indoors~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1892
+Key       1927
+Keywords  Vault~
+Flags     isdoor bashproof~
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1890
+#ENDEXIT
+
+Reset D 0 1891 1 0
+#ENDROOM
+
+#ROOM
+Vnum     1892
+Name     Armory~
+Sector   city~
+Flags    nomob indoors nodropall~
+Stats    0 0 3824
+#EXIT
+Direction west~
+ToRoom    1891
+Key       1851
+Flags     isdoor~
+#ENDEXIT
+
+Reset O 0 1871 1 1892
+Reset D 0 1892 3 0
+#ENDROOM
+
+#ROOM
+Vnum     1893
+Name     Small Antechamber~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+Desc     You are in the small antechamber between the main conference room and the
+rest of the complex. There is just enough room here for a guard and a
+couple of Alliance members. You better hurry into the conference room
+before the meeting starts.
+~
+#EXIT
+Direction east~
+ToRoom    1894
+Flags     isdoor~
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1871
+#ENDEXIT
+
+Reset D 0 1893 1 0
+#ENDROOM
+
+#ROOM
+Vnum     1894
+Name     Large Conference Room~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+Desc     You stand in the main conference room of the complex. Along the wall there
+are monitors for members to pull up files for others to see. There is a
+large table in the center of the room surrounded by 12 chairs. The chairs
+are dark red and bear the logo of the New Republic.
+~
+#EXIT
+Direction west~
+ToRoom    1893
+Flags     isdoor~
+#ENDEXIT
+
+Reset M 0 1955 2 1894
+Reset D 0 1894 3 0
+#ENDROOM
+
+#ROOM
+Vnum     1895
+Name     Communications Department~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1901
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1896
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1863
+#ENDEXIT
+
+Reset M 0 1852 1 1895
+#ENDROOM
+
+#ROOM
+Vnum     1896
+Name     Slicer Terminal~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1895
+#ENDEXIT
+
+Reset M 0 1954 1 1896
+#ENDROOM
+
+#ROOM
+Vnum     1897
+Name     Wide Corridor~
+Sector   city~
+Flags    nomob indoors~
+Stats    0 0 3824
+Desc     You stand in a wide corridor leading to the Rebel Landing Pad just south of
+here. The walls here are white. There is a single light mounted on either
+side of the wall every 30 feet.
+~
+#EXIT
+Direction north~
+ToRoom    1863
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1898
+Flags     isdoor closed~
+#ENDEXIT
+
+Reset D 0 1897 2 1
+#ENDROOM
+
+#ROOM
+Vnum     1898
+Name     Security Checkpoint~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+Desc     You stand in the security checkpoint of the Main Rebel Complex. Security is
+tight here to prevent any strangers from entering the complex. Be sure to
+have your Rebel ID card ready as it will be used for many things in this
+facility.
+~
+#EXIT
+Direction north~
+ToRoom    1897
+Flags     isdoor closed~
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1899
+Flags     isdoor~
+#ENDEXIT
+
+Reset M 0 1861 4 1898
+  Reset E 1 1859 1 5
+  Reset E 1 1860 1 5
+  Reset E 1 1861 1 9
+  Reset E 1 1862 1 7
+  Reset E 1 1865 1 13
+  Reset E 1 1873 1 16
+Reset M 0 1861 4 1898
+  Reset E 1 1859 1 5
+  Reset E 1 1860 1 5
+  Reset E 1 1861 1 9
+  Reset E 1 1862 1 7
+  Reset E 1 1865 1 13
+  Reset E 1 1873 1 16
+Reset M 0 1861 4 1898
+  Reset E 1 1859 1 5
+  Reset E 1 1860 1 5
+  Reset E 1 1861 1 9
+  Reset E 1 1862 1 7
+  Reset E 1 1865 1 13
+  Reset E 1 1873 1 16
+Reset M 0 1861 4 1898
+  Reset E 1 1859 1 5
+  Reset E 1 1860 1 5
+  Reset E 1 1861 1 9
+  Reset E 1 1862 1 7
+  Reset E 1 1865 1 13
+  Reset E 1 1873 1 16
+Reset D 0 1898 0 1
+Reset D 0 1898 2 0
+#ENDROOM
+
+#ROOM
+Vnum     1899
+Name     Hanger Bay~
+Sector   city~
+Flags    nomob can_land~
+Flags2   shipyard clanland~
+Stats    0 0 3824
+Desc     This is the Rebel Landing Pad adjacent to the Main Complex. The pad is very
+busy with ships arriving and departing. Technicians run to different ships
+readying them for launch. Be sure to check in at the security checkpoint
+to the north.
+~
+#EXIT
+Direction north~
+ToRoom    1898
+Flags     isdoor closed~
+#ENDEXIT
+
+Reset D 0 1899 0 1
+#ENDROOM
+
+#ROOM
+Vnum     1900
+Name     Droid Maintenance~
+Sector   city~
+Flags    nomob indoors~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1861
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1901
+Name     Radar Room~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+#EXIT
+Direction west~
+ToRoom    1895
+#ENDEXIT
+
+Reset M 0 1953 1 1901
+#ENDROOM
+
+#ROOM
+Vnum     1902
+Name     Security Office~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1859
+Flags     isdoor closed pickproof~
+#ENDEXIT
+
+Reset D 0 1902 0 1
+#ENDROOM
+
+#ROOM
+Vnum     1903
+Name     Hallway~
+Sector   city~
+Flags    nomob~
+Stats    0 0 3824
+#ENDROOM
+
+#ROOM
+Vnum     1904
+Name     Conference Room~
+Sector   city~
+Flags    nomob~
+Stats    0 0 3824
+#ENDROOM
+
+#ROOM
+Vnum     1905
+Name     Dense Undergrowth~
+Sector   forest~
+Stats    0 0 3824
+Desc     The vegitation suddenly begins to grow extreamly thick, and becomes hard to
+travel though.  The color of the plants starts to radiate a vibrant green,
+and almost glows. The trees in the area start to get taller, and even
+taller trees can be seen in the distant. Thin vines can be seen running up
+the trees, and interwind with each other. Large bushes suddenly appear,
+and make travel extreamly hard. The ground is extreamly dry, and cracks
+can be seen in the dirt around the roots of the plants.
+~
+#EXIT
+Direction north~
+ToRoom    1906
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1857
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1906
+Name     Dense Undergrowth~
+Sector   forest~
+Stats    0 0 3824
+Desc     The vegitation, in the area, begins to grow even thicker than it was
+before. The vibrant growth inhibits travel, except back though the less
+thick undergrowth. The trees are all extreamly thick in diamater, and
+tower higher than any other trees in the area. Large vines grow up the
+same trees, and seem to never end, in there twisting trails. Bushes of all
+sort seem to tower higher than normal, and are a stunning shade of green.
+~
+#EXIT
+Direction south~
+ToRoom    1905
+#ENDEXIT
+
+Reset M 0 1957 9 1906
+#ENDROOM
+
+#ROOM
+Vnum     1907
+Name     An Old Path~
+Sector   forest~
+Flags    nomob~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1856
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1908
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1908
+Name     An Old Path~
+Sector   forest~
+Flags    nomob~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1907
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1909
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1909
+Name     An Old Path~
+Sector   forest~
+Flags    nomob~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1908
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1911
+#ENDEXIT
+
+#EXIT
+Direction southwest~
+ToRoom    1910
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1910
+Name     Under a Log~
+Sector   forest~
+Flags    nomob~
+Stats    0 0 3824
+#EXIT
+Direction northeast~
+ToRoom    1909
+#ENDEXIT
+
+#EXIT
+Direction southwest~
+ToRoom    1913
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1911
+Name     An Old Path~
+Sector   forest~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1909
+#ENDEXIT
+
+#EXIT
+Direction southeast~
+ToRoom    1912
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1912
+Name     Before a Wading Pool~
+Sector   forest~
+Flags    nomob~
+Stats    0 0 3824
+#EXIT
+Direction northwest~
+ToRoom    1911
+#ENDEXIT
+
+#EXIT
+Direction southeast~
+ToRoom    1914
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1913
+Name     Dense Undergrowth~
+Sector   forest~
+Flags    nomob~
+Stats    0 0 3824
+#EXIT
+Direction northeast~
+ToRoom    1910
+#ENDEXIT
+
+#EXIT
+Direction southwest~
+ToRoom    1915
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1914
+Name     Wading Pool~
+Sector   water swim~
+Flags    nomob~
+Stats    0 0 3824
+#EXIT
+Direction down~
+ToRoom    1917
+#ENDEXIT
+
+#EXIT
+Direction northwest~
+ToRoom    1912
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1915
+Name     Dense Undergrowth~
+Sector   forest~
+Flags    nomob~
+Stats    0 0 3824
+Desc     The undergrowth of the jungle becomes so thick that one cannot see more
+than  a few inches into it and all sunlight has been blocked out long ago.
+There is a small clearing an in the clearing there is an ancient 'statue'.
+It looks somewhat menacing and gives you the chills. On the 'base' of the
+statue there seems to be some sort of writing. The only way to get back
+anywhere in the undergrwoth is to go back the way you came.
+~
+#EXIT
+Direction northeast~
+ToRoom    1913
+#ENDEXIT
+
+Reset O 0 1852 1 1915
+#ENDROOM
+
+#ROOM
+Vnum     1916
+Name     Steps of The Great Temple~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1913
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1939
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1917
+Name     Bottom of the Pool~
+Sector   ocean floor~
+Flags    nomob~
+Stats    0 0 3824
+Desc     The bottom of the pool is covered in thick layers of silt and mud. There
+are many types of underwater plants growing out of the ground and the
+walls. When you hit the bottom your foot sinks into the mud about 8
+inches.  There are a few small fish swimming around but not many because
+the pool is not that big. If there were anything under the mud, you would
+have no way of knowing.
+~
+#EXIT
+Direction up~
+ToRoom    1914
+#ENDEXIT
+
+Reset O 0 1853 1 1917
+#ENDROOM
+
+#ROOM
+Vnum     1918
+Name     Jungle Path~
+Sector   city~
+Flags    nomob~
+Stats    0 0 3824
+Desc     The Jungle is thick here. Sounds of birds and other beasts are heard
+loudly, some striking fear into your heart from the power-sounding tone of
+there roars. Sunlight manages to weave its way in through the lush tree
+groth and other various plants. The path you are on seems to continue
+onward, but you can not see fairly far. The fresh air from the trees is
+very refreshing, even to the most royalist of people.
+~
+#EXIT
+Direction north~
+ToRoom    1921
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1853
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1919
+Name     Briar Patch~
+Sector   city~
+Flags    nomob~
+Stats    0 0 3824
+Desc     The only thing visible are briar bushes that climb almost to the middle of
+the trees. Small branches seem to reach out, almost as if they wore alive.
+Some of the thorns have blood on them, and some have cloth or hair. The
+ground is extreamly moist, and tracks from animals can be seen in the mud.
+A couple of bones from an animal of some sort, long since dead, are
+skattared about the underside of the taller bushes.
+~
+#EXIT
+Direction north~
+ToRoom    1853
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1990
+Flags     hidden~
+#ENDEXIT
+
+#MUDPROG
+Progtype  rand_prog~
+Arglist   200~
+Comlist   mpechoat $n The briars puncture your clothing and skin.
+mpdamage $n 20
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     1920
+Name     Humid Jungle~
+Sector   city~
+Flags    nomob~
+Stats    0 0 3824
+Desc     The Jungle is extremely thick here. Sounds of birds and other beasts are
+heard loudly, some striking fear into your heart from the power-sounding
+tone of there roars. Sunlight manages to weave its way in through the lush
+tree groth and other various plants. The path you are on seems to continue
+onward, but you can not see fairly far. The fresh air from the trees is
+very refreshing, even to the most royalist of people.
+~
+#EXIT
+Direction east~
+ToRoom    1853
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1928
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1921
+Name     Jungle Path~
+Sector   city~
+Stats    0 0 3824
+Desc     The Jungle is thick here. Sounds of birds and other beasts are heard
+loudly, some striking fear into your heart from the power-sounding tone of
+there roars. Sunlight manages to weave its way in through the lush tree
+groth and other various plants. The path you are on seems to continue
+onward, but you can not see fairly far. The fresh air from the trees is
+very refreshing, even to the most royalist of people.
+~
+#EXIT
+Direction south~
+ToRoom    1918
+#ENDEXIT
+
+#EXIT
+Direction northwest~
+ToRoom    1922
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1922
+Name     Over a Log~
+Sector   city~
+Stats    0 0 3824
+Desc     There is a mighty-large log lying in your path. There is a way over it, and
+you manage  to make it over. Everything is as usual from here, a few birds
+and animals passing  by once in a while, Lush Jungle and moist air are all
+around you. Sounds of Beasts, birds  and a few other unidentifiable
+species are heard all around you. Some close, some distant.  This place
+has a feeling of comfort to it, a feeling of saftey, but also, a nervous 
+edge to it all.
+~
+#EXIT
+Direction northwest~
+ToRoom    1923
+#ENDEXIT
+
+#EXIT
+Direction southeast~
+ToRoom    1921
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1923
+Name     Through a Stream~
+Sector   city~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1924
+#ENDEXIT
+
+#EXIT
+Direction southeast~
+ToRoom    1922
+#ENDEXIT
+
+#MUDPROG
+Progtype  rand_prog~
+Arglist   100~
+Comlist   mpecho &BThe cold water of the stream rushes past.
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     1924
+Name     Jungle Path~
+Sector   city~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1925
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1923
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1927
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1925
+Name     Jungle Path~
+Sector   city~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1926
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1924
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1926
+Name     Jungle Path~
+Sector   city~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1927
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1925
+#ENDEXIT
+
+Reset M 0 1926 1 1926
+#ENDROOM
+
+#ROOM
+Vnum     1927
+Name     Jungle Path~
+Sector   city~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1924
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1926
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1928
+Name     Humid Jungle~
+Sector   city~
+Stats    0 0 3824
+Desc     The Jungle is extremely thick here. Sounds of birds and other beasts are
+heard loudly, some striking fear into your heart from the power-sounding
+tone of there roars. Sunlight manages to weave its way in through the lush
+tree groth and other various plants. The path you are on seems to continue
+onward, but you can not see fairly far. The fresh air from the trees is
+very refreshing, even to the most royalist of people. 
+~
+#EXIT
+Direction east~
+ToRoom    1920
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1929
+#ENDEXIT
+
+Reset M 0 1855 6 1928
+Reset M 0 1855 6 1928
+#ENDROOM
+
+#ROOM
+Vnum     1929
+Name     Humid Jungle~
+Sector   city~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1928
+#ENDEXIT
+
+#EXIT
+Direction northwest~
+ToRoom    1930
+#ENDEXIT
+
+Reset M 0 1855 6 1929
+#ENDROOM
+
+#ROOM
+Vnum     1930
+Name     A Path through the Jungle~
+Sector   city~
+Stats    0 0 3824
+#EXIT
+Direction northwest~
+ToRoom    1931
+#ENDEXIT
+
+#EXIT
+Direction southeast~
+ToRoom    1929
+#ENDEXIT
+
+Reset M 0 1855 6 1930
+#ENDROOM
+
+#ROOM
+Vnum     1931
+Name     Swampy area~
+Sector   city~
+Stats    0 0 3824
+#EXIT
+Direction west~
+ToRoom    1932
+#ENDEXIT
+
+#EXIT
+Direction southeast~
+ToRoom    1930
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1932
+Name     Swampy Area~
+Sector   city~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1931
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1933
+#ENDEXIT
+
+Reset M 0 1855 6 1932
+Reset M 0 1855 6 1932
+#ENDROOM
+
+#ROOM
+Vnum     1933
+Name     Deep in the Jungle~
+Sector   city~
+Flags    nomob~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1932
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1934
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1934
+Name     Deep in the Jungle~
+Sector   city~
+Flags    nomob~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1933
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1935
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1935
+Name     Deep in the Jungle~
+Sector   city~
+Flags    nomob~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1934
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1936
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1936
+Name     Deep in the Jungle~
+Sector   city~
+Flags    nomob~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1935
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1936
+#ENDEXIT
+
+#EXIT
+Direction northwest~
+ToRoom    1937
+#ENDEXIT
+
+#EXIT
+Direction southeast~
+ToRoom    1937
+#ENDEXIT
+
+Reset M 0 1858 1 1936
+#ENDROOM
+
+#ROOM
+Vnum     1937
+Name     Deep in the Jungle~
+Sector   city~
+Flags    nomob~
+Stats    0 0 3824
+#EXIT
+Direction northwest~
+ToRoom    1936
+#ENDEXIT
+
+#EXIT
+Direction southeast~
+ToRoom    1936
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1938
+Name     Industrial Sized Workshop~
+Sector   city~
+Flags    nomob indoors safe factory~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1862
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1939
+Name     Large Chamber~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1916
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1940
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1940
+Name     Large Chamber~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1939
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    1941
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1948
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1941
+Name     Dimly Lit Corridor~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1942
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1940
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1942
+Name     Dimly Lit Corridor~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1943
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1941
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1943
+Name     Turbolift~
+Sector   city~
+Flags    nomob indoors nomagic safe prototype~
+Stats    0 0 3824
+Desc     This modern turbolift has been added by the Rebel Alliance in what used to
+be a large stairwell. The lift enables the Rebels to easily get from one
+level to another and to transport anything they wish with ease. The lift
+itself is quite large. The walls are dark grey and the floor is black.
+Above you there is a small glowbulb radiating a dim light.  Next to the
+hatch there is a 'list' of levels and above the list there is a small
+voice activation unit. Simply speak the number of the level you wish to go
+to.
+~
+#EXDESC
+ExDescKey    list~
+ExDesc       Level List:
+(1) Ground Level / Entrance
+(2) Infirmary
+(3) Force Training
+(4) Observation Deck
+~
+#ENDEXDESC
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   1~
+Comlist   mpecho The turbolift shakes slightly as it begins moving.
+mpecho The turbolift slowly comes to a halt and the doors slide open.
+mpecho An electronic voice says: 'Level 1. Please step off.'
+mpechoat $n You step out of the turbolift.
+mpechoaround $n $n steps out of the turbolift.
+mptransfer $n 1942
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   2~
+Comlist   mpecho The turbolift shakes slightly as it begins moving.
+mpecho The turbolift slowly comes to a halt
+mpecho The doors slide open
+mpecho An electronic voice says: 'Level 2. Please step off.'
+mpechoat $n You step out of the turbolift.
+mpechoaround $n $n steps out of the turbolift.
+mptransfer $n 1944
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   3~
+Comlist   mpecho The turbolift shakes slightly as it begins moving.
+mpechp The turbolift slowly comes to a halt.
+mpecho The doors slide open.
+mpecho An electronic voice says: 'Level 3. Please step off.'
+mpechoat $n You step out of the turbolift.
+mpechoaround $n $n steps out of the lift.
+mptransfer $n 1945
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   4~
+Comlist   mpecho The turbolift shakes slightly as it begins moving.
+mpecho The turbolift slowly comes to a halt.
+mpecho The doors slide open.
+mpecho An electronic voice says: 'Level 4. Please step off.'
+mpechoat $n You step out of the turbolift.
+mpechoaround $n $n steps out of the lift.
+mptransfer $n 1946
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     1944
+Name     Level 2 Corridor~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1943
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1957
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1945
+Name     Level 3 Corridor~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1943
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1963
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1946
+Name     Level 4 Corridor~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1943
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1947
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1947
+Name     Observation Deck~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 3824
+Desc     From this large observation deck the ancient Massassi studied their
+environment and the heavens above. The view is incredible. One can stand
+here and see everything for miles and miles in every direction. The sky is
+also highly visible and at night, one can see even the faintest stars in
+the galaxy. It was from here that the Massassi formed complex theories and
+philosophies.
+~
+#EXIT
+Direction east~
+ToRoom    1946
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1948
+Name     Dimly Lit Corridor~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1940
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1949
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1949
+Name     Dimly Lit Corridor~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1948
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1950
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1950
+Name     Dimly Lit Corridor~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 3824
+Desc     The corridor leads to the east and to the west. To the south there is a
+large library where the Jedi have stored a large expanse of the knowledge
+passed down from master to apprentice. To the north there is a large
+chamber where Jedi can use the holonet in order to see whats happening in
+the rest of the galaxy.
+~
+#EXIT
+Direction north~
+ToRoom    1951
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    1949
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1953
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1969
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1951
+Name     Command Chamber~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 3824
+Desc     This room is filled with holonet terminals that can be used to  see whats
+happening in the rest of the galaxy. The terminals line the walls and
+their displays flick from one peice of information to the next. From here
+Julian can see whats going on in the galaxy and perhaps bring it up at the
+next council meeting. This is not the only means of obtaining information
+but it is the easiest. This is also the Command Station for the infamous sith "Seeker" Droids.
+~
+#EXIT
+Direction south~
+ToRoom    1950
+#ENDEXIT
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   p Release on Coruscant~
+Comlist   at 1050 mpmload 1917
+at 1050 mpecho A small sphere falls from the sky.
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   p Release on Tatooine~
+Comlist   at 250 mpmload 1917
+at 250 mpecho A small sphere falls from the sky.
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   p probe coruscant~
+Comlist   at 1050 mpmload 1918
+at 1050 mpecho A small sphere falls from the sky.
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   p probe tatooine~
+Comlist   at 250 mpmload 1918
+at 250 mpecho A small sphere falls from the sky.
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     1952
+Name     Small Dorm~
+Sector   city~
+Flags    indoors hotel prototype~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1974
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1953
+Name     Galactic Library~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 3824
+Desc     The galactic library holds almost any peice of info you could possibly
+dream up. The library itself is an enormous room with rows and rows of
+shelves containing books, datapads, parchments, computer terminals, and a
+good bit of other items. The library is open to anyone who wishes to gain
+knowledge and understanding of how all things interact and how the galaxy
+works.
+~
+#EXIT
+Direction north~
+ToRoom    1950
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1956
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1954
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1954
+Name     Galactic Library~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 3824
+Desc     The galactic library holds almost any peice of info you could possibly
+dream up. The library itself is an enormous room with rows and rows of
+shelves containing books, datapads, parchments, computer terminals, and a
+good bit of other items. The library is open to anyone who wishes to gain
+knowledge and understanding of how all things interact and how the galaxy
+works.
+~
+#EXIT
+Direction east~
+ToRoom    1953
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1955
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1955
+Name     Galactic Library~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 3824
+Desc     The galactic library holds almost any peice of info you could possible
+dream up. The library itself is an enormous room with rows and rows of
+shelves containing books, datapads, parchments, computer terminals, and a
+good bit of other items. The library is open to anyone who wishes to gain
+knowledge and understanding of how all things interact and how the galaxy
+works.
+~
+#EXIT
+Direction north~
+ToRoom    1954
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    1956
+#ENDEXIT
+
+Reset M 0 1955 2 1955
+Reset O 0 1867 1 1955
+#ENDROOM
+
+#ROOM
+Vnum     1956
+Name     Galactic Library~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 3824
+Desc     The galactic library holds almost any peice of info you could possibly
+dream up. The library itself is an enormous room with rows and rows of
+shelves containing books, datapads, parchments, computer terminals, and a
+good but of other items. The pibrary is open to anyone who wishes to gain
+knowledge and understanding of how all things interact and how the galaxy
+works.
+~
+#EXIT
+Direction north~
+ToRoom    1953
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1955
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1957
+Name     Level 2 Corridor~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1944
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1961
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1958
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1958
+Name     Level 2 Corridor~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1957
+#ENDEXIT
+
+#EXIT
+Direction northwest~
+ToRoom    1959
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1959
+Name     Infirmary~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1960
+#ENDEXIT
+
+#EXIT
+Direction northwest~
+ToRoom    1962
+#ENDEXIT
+
+#EXIT
+Direction southeast~
+ToRoom    1958
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1960
+Name     Bacta Tank~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 3824
+#EXIT
+Direction south~
+ToRoom    1959
+#ENDEXIT
+
+#MUDPROG
+Progtype  rand_prog~
+Arglist   100~
+Comlist   mprestore $n 500
+mpechoat $n The bacta flows around and heals your wounds.
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     1961
+Name     Quiet Chamber~
+Sector   city~
+Flags    nomob silence nodrop~
+Stats    0 0 3824
+Desc     The walls, ceiling, and floor are made from the same stone as the rest of
+the temple. To the south the walls open in large windows enabling one to
+see a good part of the forest. In the middle of the floor there is a thick
+carpeting and around the base of the walls there are a couple pillows
+strewn about. This room has been set aside by the Jedi for quiet
+meditation and to ponder the riddles of the galaxy.
+~
+#EXIT
+Direction north~
+ToRoom    1957
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1962
+Name     Recovery Room~
+Sector   city~
+Flags    nomob indoors hotel prototype~
+Stats    0 0 3824
+Desc     The recovery room is quite small. There are 3 beds lined up against the
+wall and next to each bed is a small monitor to monitor a patient. The
+beds are soft, but very short and narrow. The walls are made from stone
+and are covered by the same ancient markings as the rest of the temple.
+ 
+(You may safely quit the game from here.)
+~
+#EXIT
+Direction southeast~
+ToRoom    1959
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1963
+Name     Dimly Lit Corridor~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1945
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1967
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1964
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1964
+Name     Dimly Lit Corridor~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1965
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    1963
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1968
+Key       1855
+Flags     isdoor closed locked~
+#ENDEXIT
+
+Reset D 0 1964 2 2
+#MUDPROG
+Progtype  speech_prog~
+Arglist   p I am ready to serve~
+Comlist   mpoload 1855
+drop key
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     1965
+Name     Force Training~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 3824
+#EXIT
+Direction south~
+ToRoom    1964
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1966
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1966
+Name     Force Training~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1965
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1967
+Name     Work Room~
+Sector   city~
+Flags    nomob indoors safe silence prototype~
+Stats    0 0 3824
+Desc     Along the walls of this room there are large work benches set up. Each
+bench has a full stock of tools and supplies needed to make almost
+anything. People come here to create devices that they need and Jedi come
+here to pass the test of creating a lightsaber. On the walls above the
+benches there are many papers tacked to bulletin boards. People who come
+here usually leave a copy of their schematics behind in order for others
+to use or improve upon them. It is very peaceful and everyone is quiet
+when in this room out of respect for everybody else.
+~
+#EXIT
+Direction north~
+ToRoom    1963
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1968
+Name     Supply Closet~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1964
+Key       1855
+Flags     isdoor closed locked pickproof bashproof~
+#ENDEXIT
+
+Reset D 0 1968 0 2
+#MUDPROG
+Progtype  speech_prog~
+Arglist   "I am ready to serve"~
+Comlist   mpoload 1916
+mpoload 1915
+mpoload 1917
+drop robe
+drop disc
+drop ring
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     1969
+Name     Dimly Lit Corridor~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 3824
+Desc     The corridor leads to the east and to the west there is a turbolift leading
+to the underground levels of the temple. The massassi built a few other
+temples on the moon but this one is by far the largest. The walls are cut
+from a rough stone found in a quarry not far from this site. The hallway
+is lit by small lamps mounted on the walls.
+~
+#EXIT
+Direction east~
+ToRoom    1950
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1970
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1970
+Name     Turbolift~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 3824
+Desc     This turbolift is the only way to get to the levels of the temple that are
+below ground. The lift is of standard size and is made to hold a large
+quantity of people at a time. The floor is a dark grey and the walls and
+ceiling are white. say Next to the hatch there is a small level 'list'
+displaying all of the levels and above it there is a voice activation
+matrix. Simply SAY the number of the level you wish to go to and the lift
+will engage. 
+~
+#EXDESC
+ExDescKey    list~
+ExDesc       (1) Ground Level / Entrance
+(-1) Combat Training Level
+(-2) Kitchen Level
+(-3) Council Level
+~
+#ENDEXDESC
+
+#EXDESC
+ExDescKey    add list~
+#ENDEXDESC
+
+#EXDESC
+ExDescKey    delete list~
+ExDesc       Level 1 - Ground Level / Entrance
+Sublevel -1 - Combat Exercises
+Sublevel -2 - Kitchen
+Sublevel -3 - Council Floor
+~
+#ENDEXDESC
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   1~
+Comlist   mpecho The lift engages and shakes a little.
+mpecho After a few seconds the lift stops at your destination.
+mpecho An electronic voice says: 'Level 1: please step off.'
+mpechoat $n You step off the lift.
+mpechoaround $n $n steps off the lift.
+mptransfer $n 1969
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   -2~
+Comlist   mpecho The lift engages and shakes a little bit.
+mpecho After a few seconds the lift arrives at its destination.
+mpechoat $n An electronic voice says: 'Level -2:please step off.'
+mpechoat $n You step off the lift.
+mpechoaround $n $n steps off the lift.
+mptransfer $n 1971
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   -1~
+Comlist   mpecho The lift engages and shakes a little.
+mpecho After a few seconds the lift stops at its destination.
+mpechoat $n An electronic voice says: 'Level -1:please step off.'
+mpechoat $n You step off the lift.
+mpechoaround $n $n steps off the lift.
+mptransfer $n 1972
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   -3~
+Comlist   mpecho The lift engages and shakes a little.
+mpecho After a few seconds the lift stops at your destination.
+mpecho An electronic voice says: 'Level -3: please step off.'
+mpechoat $n You step off the lift.
+mpechoaround $n $n steps off the lift.
+mptransfer $n 1973
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   Underground~
+Comlist   mpecho The lift engages and shakes a little.
+mpecho After a few seconds the lights go out.
+mpechoat $n The hatch opens and you step off.
+mpechoaround $n The lights come back on and $n is gone.
+mptransfer $n 1974
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     1971
+Name     Kitchen Level~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 3824
+Desc     The Kitchen level is where Jedi can grab a bite to eat. The droids who work
+here do not prepare a very large variety but what they do make is
+extremely good for ones body. It helps to build the body and mind while a
+Jedi trains here. The level itself is just a large area set aside for
+eating and a small kitchen.
+~
+#EXIT
+Direction east~
+ToRoom    1970
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1996
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1972
+Name     Combat Training Level~
+Sector   city~
+Flags    nomob indoors~
+Stats    0 0 3824
+Desc     The combat training level is where Jedi can hone their skills with their
+lightsabers and other weapons. Some Jedi masters use the lightsaber as a
+way to teach their padawan how to control the force. This is because it
+takes concentration and control of the force to wield a lightsaber
+effectively. The training rooms are to the west and the lift is to the
+east.
+~
+#EXIT
+Direction east~
+ToRoom    1970
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1975
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1973
+Name     Council Floor~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 3824
+Desc     This is the deepest level under the temple. It is also where the Jedi
+convene to make crucial decisions about how to maintain peace within the
+galaxy. To the west there is a hallway leading to the council chamber, and
+to the east the turbolift awaits. On the walls there are ancient carvings
+and paintings left behind by the temple builders. If one could read these
+markings, they would be able to tap into the Massassi knowledge and become
+a very powerful being in the galaxy.
+~
+#EXIT
+Direction east~
+ToRoom    1970
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1997
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1974
+Name     Small Dorm~
+Sector   underground~
+Flags    nomob indoors prototype~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1970
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1952
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1975
+Name     Dimly Lit Corridor~
+Sector   city~
+Flags    nomob indoors~
+Stats    0 0 3824
+Desc     The hallway leads to the east and west. To the east the turbolift awaits
+and to the west there are rooms setup for lightsaber training. The hallway
+is light by very small lamps mounted on the walls at 30 foots intervals
+creating shadows in the corners and between the lamps.
+~
+#EXIT
+Direction east~
+ToRoom    1972
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1976
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1976
+Name     Dimly Lit Corridor~
+Sector   city~
+Flags    nomob indoors~
+Stats    0 0 3824
+Desc     The hallway ends here. To the north there is a large room setup for
+lightsaber training and to the south there is another room setup of
+advanced lightsaber training. The remotes and holograms to the south are
+much tougher.  From the north and south you can hear the quiet whoosh of
+remotes and the silence of Jedi training.
+~
+#EXIT
+Direction north~
+ToRoom    1977
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    1975
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1978
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1977
+Name     Lightsaber Training~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+Desc     A large room set aside for lightsaber training. The walls of stone are
+covered in carvings like the rest of the temple and the floor is covered
+in a thick mat so that falling isn't so rough. Along the ceilings there
+are small hologram projectors that create artificial combat partners and
+to the west there are a few remotes.
+~
+#EXIT
+Direction south~
+ToRoom    1976
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1979
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1978
+Name     Advanced Lightsaber Training~
+Sector   city~
+Flags    nomob indoors~
+Stats    0 0 3824
+Desc     A large room set aside for lightsaber training. The walls of stone are
+covered in carvings like the rest of the temple and the floor is covered
+in a thick mat so that falling isn't so rough. Along the ceilings there
+are small hologram projectors that create artificial combat partners and
+the west there are a few training remotes. The holograms and remotes are a
+good bit tougher here.
+~
+#EXIT
+Direction north~
+ToRoom    1976
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1980
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1979
+Name     Lightsaber Training~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+Desc     A large room set aside for lightsaber training. The walls of stone are
+covered in carvings like the rest of the temple and the floor is covered
+in a thick mat so that falling isn't so rough. There are a myriad of small
+training remotes hovering around the area waiting to be used. These
+remotes do not have different settings and are always on adequate pain
+mode.
+~
+#EXIT
+Direction east~
+ToRoom    1977
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1980
+Name     Advanced Lightsaber Training~
+Sector   city~
+Flags    nomob indoors~
+Stats    0 0 3824
+Desc     A large room set aside for lightsaber training. The walls of stone are
+covered in carvings like the rest of the temple and the floor is covered
+in a thick mat so that fallings isn't so rough. Along the ceilings there
+are small hologram projectors that create artificial combat partners.
+There are a decent amount of training remotes hovering close by and a few
+are already in use.
+~
+#EXIT
+Direction east~
+ToRoom    1978
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1981
+Name     Barracks Lounge~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+#EXIT
+Direction west~
+ToRoom    1878
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1982
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 3824
+#ENDROOM
+
+#ROOM
+Vnum     1983
+Name     Turbolift~
+Sector   city~
+Flags    nomob indoors~
+Stats    0 0 3824
+Desc     This lift is of average size and is designed to hold a very large amount of
+people or equipment. It is the only way to get to the underground level of
+the base where most of the officers quarters are. Officers are usually the
+only people seen using this lift but occasionally there are a few enlisted
+personel in here doing some sort of task or another. Beside the door there
+is a 'list' of the levels and above that there is a voice-activation
+module. Simply SAY the number of the level you wish to go to.
+~
+#EXDESC
+ExDescKey    add list~
+ExDesc       Level 1
+Sublevel -1
+~
+#ENDEXDESC
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   1~
+Comlist   mpecho The lift engages and shakes slightly.
+mpecho After a few seconds it stops at its destination.
+mpecho An electronic voice says: 'Level 1: please step off.'
+mpechoat $n You step off the lift.
+mpechoaround $n $n steps off the lift.
+mptransfer $n 1874
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   -1~
+Comlist   mpecho The lift engages and shakes slightly.
+mpecho After a few seconds it stops and shakes slightly.
+mpecho An electronic voice says: 'Quarters Level: Please step off.'
+mpechoat $n You step off the lift.
+mpechoaround $n $n steps off the lift.
+mptransfer $n 1984
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     1984
+Name     Quarters Level~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+#EXIT
+Direction west~
+ToRoom    1985
+#ENDEXIT
+
+#EXIT
+Direction southeast~
+ToRoom    1983
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1985
+Name     Quarters Level~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1984
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1986
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1986
+Name     Quarters Level~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1985
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1987
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1987
+Name     Quarters Level~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1991
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    1986
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1992
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1988
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1988
+Name     Quarters Level~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1987
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1993
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1989
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 3824
+#ENDROOM
+
+#ROOM
+Vnum     1990
+Name     Deep Inside the Briars~
+Sector   forest~
+Flags    nomob~
+Stats    0 0 3824
+Desc     Surrounded by briar bushes, this appears to be a very dangerous
+place to stay for long, as with every movement a needle sharp
+thorn digs into clothing and flesh.  Sunlight shines through
+a small hole in the thick foliage above, gently illuminating
+the area.
+~
+#EXIT
+Direction north~
+ToRoom    1919
+#ENDEXIT
+
+Reset O 0 1929 1 1990
+#MUDPROG
+Progtype  rand_prog~
+Arglist   100~
+Comlist   mpechoat $n Briars dig deep into your flesh.
+mpdamage $n 50
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     1991
+Name     Officers Quarters~
+Sector   city~
+Flags    indoors empty_home hotel~
+Stats    0 0 3824
+Desc     This is a decent sized room furnished with everything a Rebel Alliance
+officer would need in order to be comfortable. Everything is of good
+quailty but not lavish.
+ 
+(You may purchase this room by using the buyhome command.)
+~
+#EXIT
+Direction south~
+ToRoom    1987
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1992
+Name     Officers Quarters~
+Sector   city~
+Flags    indoors empty_home hotel~
+Stats    0 0 3824
+Desc     This is a decent sized room furnished with everything a Rebel Alliance
+officer would need in order to be comfortable. Everything is of good
+quailty but not lavish.
+ 
+(You may purchase this room by using the buyhome command.)
+~
+#EXIT
+Direction north~
+ToRoom    1987
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1993
+Name     Quarters Level~
+Sector   city~
+Flags    indoors~
+Stats    0 0 3824
+#EXIT
+Direction north~
+ToRoom    1994
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    1988
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    1995
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1994
+Name     Officer Quarters~
+Sector   city~
+Flags    indoors empty_home hotel~
+Stats    0 0 3824
+Desc     This is a decent sized room furnished with everything a Rebel Alliance
+officer would need in order to be comfortable. Everything is of qood
+quality but not lavish.
+ 
+(You may purchase this room using the buyhome command.)
+~
+#EXIT
+Direction south~
+ToRoom    1993
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1995
+Name     Officers Quarters~
+Sector   city~
+Flags    indoors empty_home hotel~
+Stats    0 0 3824
+Desc     This is a decent sized room furnished with everything a Rebel Alliance
+officer would need in order to be comfortable. Everything is of good
+quailty but not lavish.
+ 
+(You may purchase this room by using the buyhome command.)
+~
+#EXIT
+Direction north~
+ToRoom    1993
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1996
+Name     Kitchen~
+Sector   city~
+Flags    indoors safe prototype~
+Stats    0 0 3824
+Desc     The kitchen is quite small but has sufficient room for the droids who work
+here. They toil away from evening until night, making sure that all who
+come here leave satisfied. The droid almost look like a part of the
+kitchen because their outershells are polished chrome, the same as the
+appliances, tables, and other items in the kitchen.
+~
+#EXIT
+Direction east~
+ToRoom    1971
+#ENDEXIT
+
+Reset M 0 1851 1 1996
+#ENDROOM
+
+#ROOM
+Vnum     1997
+Name     Short Hallway~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 3824
+Desc     The narrow hallway continues to the west and east. There is only the
+faintest hint of light here. Under your feet you can feel the crunch of
+stone that is deteriorating. On the walls there are many carvings and
+symbols left behind by the makers of the temple. If one could read the
+markings, this would probably be a treasure trove of knowledge.
+~
+#EXIT
+Direction east~
+ToRoom    1973
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1998
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1998
+Name     Short Hallway~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 3824
+Desc     The narrow hallway continues to the east and to the west there is a
+somewhat large chamber. The chamber is dimly lit compared to the darkness
+of the hallway.  On the walls there are many carvings and ancient symbols
+placed here by the temples creators. If one knew what they meant this
+would probably be a treasure trove of knowledge.
+~
+#EXIT
+Direction east~
+ToRoom    1997
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    1999
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     1999
+Name     A Quiet, Peaceful sanctuary~
+Sector   city~
+Flags    nomob indoors safe silence prototype~
+Stats    0 0 3824
+#EXIT
+Direction south~
+ToRoom    2000
+Flags     isdoor hidden searchable~
+#ENDEXIT
+
+#EXIT
+Direction up~
+ToRoom    4500
+#ENDEXIT
+
+Reset O 0 1856 1 1999
+Reset D 0 1999 2 0
+#ENDROOM
+
+#ROOM
+Vnum     2000
+Name     Monitoring Room~
+Sector   city~
+Flags    nomob indoors hotel prototype~
+Stats    0 0 3824
+Desc     The walls,of this small room, have are painted flat black.The
+only furniture is a small table and two chairs.In the very middle
+of the room rests three screens. Each showing three diffrent
+areas.All three monitors are labled: monitor1, monitor2, or
+monitor3.A small Ewok sits on one of the chairs repeating the
+name of the monitor, as he looks at it.
+~
+#EXIT
+Direction north~
+ToRoom    1999
+Flags     isdoor closed~
+#ENDEXIT
+
+Reset O 0 1868 1 2000
+Reset O 0 1869 1 2000
+Reset D 0 2000 0 1
+Reset O 0 1870 1 2000
+#MUDPROG
+Progtype  custom_prog~
+Arglist   monitor1~
+Comlist   mptransfer $n 1859
+mpat 1859 mpforce $n look
+mpat 1859 mptransfer $n 2000
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  custom_prog~
+Arglist   monitor2~
+Comlist   mptransfer $n 1899
+mpat 1899 mpforce $n look
+mpat 1899 mptransfer $n 2000
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  custom_prog~
+Arglist   monitor3~
+Comlist   mptransfer $n 1869
+mpat 1869 mpforce $n look
+mpat 1859 mptransfer $n 2000
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     2001
+Name     The Galactic Mail Center~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3824
+#EXIT
+Direction east~
+ToRoom    1850
+#ENDEXIT
+
+Reset O 0 38 1 2001
+#ENDROOM
+
+#ENDAREA

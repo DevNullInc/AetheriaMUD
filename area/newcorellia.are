@@ -1,0 +1,2351 @@
+#FUSSAREA
+#AREADATA
+Version      1
+Name         New Corellia~
+Author       Salvius~
+Ranges       0 0 0 0
+Economy      0 6255928
+#ENDAREADATA
+
+#MOBILE
+Vnum       4901
+Keywords   low_mob~
+Short      a newly created low_mob~
+Long       Some god abandoned a newly created low_mob here.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc~
+Stats1     0 1 0 0 0 0
+Stats2     0 0 0
+Stats3     0 0 0
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#ENDMOBILE
+
+#MOBILE
+Vnum       4902
+Keywords   CorSec Customs Officer~
+Short      A CorSec Officer~
+Long       A CorSec Officer Stands Here, Checking Baggage.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Specfun    spec_police_fine~
+Gender     male~
+Actflags   npc sentinel prototype~
+Affected   truesight~
+Stats1     0 30 0 -5 0 0
+Stats2     6 10 300
+Stats3     3 4 2
+Stats4     0 0 0 6 6
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#ENDMOBILE
+
+#MOBILE
+Vnum       4903
+Keywords   Corellian Shopkeeper~
+Short      A Shopkeeper~
+Long       A Shopkeeper is here, checking inventory.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     male~
+Actflags   npc sentinel~
+Affected   truesight~
+Stats1     0 10 0 75 0 0
+Stats2     2 10 100
+Stats3     1 4 2
+Stats4     0 0 0 2 2
+Attribs    20 10 10 20 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic wookiee~
+Speaking   basic~
+#MUDPROG
+Progtype  all_greet_prog~
+Arglist   100~
+Comlist   if ispc($n)
+say Hi there, what can I get for you today?
+mpsleep 3
+smile $n
+endif
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       4904
+Keywords   selonian shopkeeper~
+Short      A Selonian Shopkeeper~
+Long       A Selonian Shopkeeper is attemping to sell you dessert.
+~
+Race       Selonian~
+Position   aggressive~
+DefPos     aggressive~
+Gender     female~
+Actflags   npc sentinel~
+Affected   truesight~
+Stats1     0 10 0 75 0 0
+Stats2     2 10 100
+Stats3     1 4 2
+Stats4     0 0 0 2 2
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic wookiee~
+Speaking   basic~
+ShopData   0 0 0 0 0 120 90 0 23
+#MUDPROG
+Progtype  all_greet_prog~
+Arglist   100~
+Comlist   say Do you wanting to buy dessert today?
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       4905
+Keywords   Jerek Miv~
+Short      Jerek Miv~
+Long       Jerek Miv, the shop owner is glancing around.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     male~
+Actflags   npc sentinel~
+Affected   truesight~
+Stats1     0 10 0 75 0 0
+Stats2     2 10 100
+Stats3     1 4 2
+Stats4     0 0 0 2 2
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic wookiee~
+Speaking   basic~
+ShopData   0 0 0 0 0 120 90 0 23
+#MUDPROG
+Progtype  all_greet_prog~
+Arglist   100~
+Comlist   say Hey there! Welcome to Miv's Gadget Shop!
+mpsleep 2
+say And what can I get fer ya today? Top of the line merchandise, satisfaction guaranteed!
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       4906
+Keywords   human butcher shopkeeper~
+Short      The Shopkeeper~
+Long       A human butcher is here, trying to sell meat products.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     male~
+Actflags   npc sentinel~
+Affected   truesight~
+Stats1     0 15 0 62 0 0
+Stats2     3 10 150
+Stats3     1 4 2
+Stats4     0 0 0 3 3
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic wookiee~
+Speaking   basic~
+ShopData   0 0 0 0 0 120 90 0 23
+#MUDPROG
+Progtype  all_greet_prog~
+Arglist   100~
+Comlist   say Hey mac, anything ya need today? I can sell ya some of the finest meat on Corellia.
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       4907
+Keywords   ryn shopkeeper~
+Short      A Ryn Shopkeeper~
+Long       A Female Ryn is here, hand-making jewelry.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     female~
+Actflags   npc sentinel~
+Affected   truesight~
+Stats1     0 7 0 82 0 0
+Stats2     1 10 70
+Stats3     0 4 2
+Stats4     0 0 0 1 1
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic wookiee~
+Speaking   basic~
+ShopData   0 0 0 0 0 120 90 0 23
+#MUDPROG
+Progtype  all_greet_prog~
+Arglist   100~
+Comlist   say Welcome, my crafts are guaranteed to bring out the best in you.
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       4908
+Keywords   Drek Bartender~
+Short      Drek~
+Long       Drek the bartender is standing here, cleaning glasses.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc sentinel~
+Stats1     0 13 0 67 0 0
+Stats2     2 10 130
+Stats3     1 4 2
+Stats4     0 0 0 2 2
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic wookiee~
+Speaking   basic~
+Attacks    punch~
+ShopData   0 0 0 0 0 120 90 0 23
+#MUDPROG
+Progtype  all_greet_prog~
+Arglist   100~
+Comlist   say Hey there buddy, pull up a stool.
+mpsleep 3
+say What can I get for ya today?
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       4909
+Keywords   doctor surgeon Dr. Stimlin~
+Short      Dr. Stimlin~
+Long       A Doctor is here, ready to help heal your wounds.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc sentinel~
+Stats1     0 10 0 75 0 0
+Stats2     2 10 100
+Stats3     1 4 2
+Stats4     0 0 0 2 2
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic wookiee~
+Speaking   basic~
+#MUDPROG
+Progtype  custom_prog~
+Arglist   drprogstart~
+Comlist   mpechoat $n Dr. Stimlin glances at you.
+mpechoaround $n Dr. Stimlin glances at $q.
+mpsleep 3
+say Yes, I can help you. But it will cost 500 credits.
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  bribe_prog~
+Arglist   500~
+Comlist   mpecho The Doctor carefully checks over the credits
+mpsleep 3
+mpechoat $n The Doctor instructs you to lie down on the table and begins to get to work.
+mpechoaround $n The Doctor begins operating on $q
+mpsleep 3
+mprestore $n 900
+say You should be fine now. Next patient!
+mpat 7 drop credits
+mpat 7 mppurge
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  rand_prog~
+Arglist   25~
+Comlist   mpecho The Doctor looks frustrated and yells to a nurse outside..
+say Get to level four, we need more supplies!
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       4910
+Keywords   Receptionist~
+Short      The Receptionist~
+Long       The Receptionist is sitting at her desk, looking through files.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     female~
+Actflags   npc sentinel~
+Stats1     0 5 0 87 0 0
+Stats2     1 10 50
+Stats3     0 4 2
+Stats4     0 0 0 1 1
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#MUDPROG
+Progtype  all_greet_prog~
+Arglist   100~
+Comlist   emote looks up
+mpsleep 3
+say Hello, do you need some help today?
+mpsleep 3
+say If you do, go north to the turbolift and choose a level from the list that offers the service you need.
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       5200
+Keywords   hi_mob~
+Short      a newly created hi_mob~
+Long       Some god abandoned a newly created hi_mob here.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc~
+Stats1     0 1 0 0 0 0
+Stats2     0 0 0
+Stats3     0 0 0
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#ENDMOBILE
+
+#OBJECT
+Vnum     4901
+Keywords low_obj~
+Type     trash~
+Short    a low_obj~
+Long     A low_obj is here.~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     4902
+Keywords majestic fountain~
+Type     fountain~
+Short    a fountain~
+Long     &BA Large Majestic Fountain Has Been Placed Here~
+Values   1000 1000 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     4903
+Keywords Rhyscate~
+Type     food~
+Short    Rhyscate~
+Long     A dark, brown sweetbread was left here.~
+Flags    inventory~
+WFlags   take~
+Values   5 20 0 0 0 0
+Stats    1 5 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     4904
+Keywords Honey Wafer~
+Type     food~
+Short    Honey Wafer~
+Long     A honey covered dessert is here.~
+Flags    inventory~
+WFlags   take~
+Values   10 20 0 0 0 0
+Stats    1 10 1 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     4905
+Keywords Air Cake~
+Type     food~
+Short    Air Cake~
+Long     A Soft Sponge Cake-looking dessert is here.~
+Flags    inventory~
+WFlags   take~
+Values   10 20 0 0 0 0
+Stats    1 10 1 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     4906
+Keywords Meatlump~
+Type     food~
+Short    Meatlump~
+Long     A lump of meat is here.~
+Flags    inventory~
+WFlags   take~
+Values   20 20 0 0 0 0
+Stats    1 20 2 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     4907
+Keywords nerf sausage~
+Type     food~
+Short    Nerf Sausage~
+Long     Some Sausage was left here.~
+Flags    inventory~
+WFlags   take~
+Values   20 20 0 0 0 0
+Stats    1 20 2 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     4908
+Keywords Miv-tech Aquata Breather device~
+Type     device~
+Short    Miv-tech Aquata Breather~
+Long     An Underwater Breathing Device was left here.~
+Flags    inventory~
+WFlags   take head~
+Values   0 0 0 0 0 0
+Stats    3 2000 200 0 0
+Affect       -1 -1 -2147483648 26 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     4909
+Keywords Miv-tech Infini-Light~
+Type     light~
+Short    Miv-tech Infini-Light~
+Long     A Small Light Device was left here.~
+Flags    inventory~
+WFlags   take hold~
+Values   0 0 200 0 0 0
+Stats    1 200 20 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     4910
+Keywords Ring of Good Fortune~
+Type     armor~
+Short    Ring of Good Fortune~
+Long     A Golden Ring was left here.~
+Flags    inventory~
+WFlags   take finger~
+Values   5 5 0 0 0 0
+Stats    1 5000 500 0 0
+Affect       -1 -1 1 31 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     4911
+Keywords Earring of Knowledge~
+Type     armor~
+Short    Earrings of Knowledge~
+Long     A pair of earrings were left here, to collect dust.~
+Flags    inventory~
+WFlags   take ears~
+Values   3 3 0 0 0 0
+Stats    1 2000 200 0 0
+Affect       -1 -1 2 3 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     4912
+Keywords Glass of Corellian Rum~
+Type     drinkcon~
+Short    a Glass of Corellian Rum~
+Long     A Glass of Corellian Rum is here.~
+WFlags   take~
+Values   3 3 4 0 0 0
+Stats    1 5 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     4913
+Keywords Glass of Corellian Ale~
+Type     drinkcon~
+Short    a Glass of Corellian Ale~
+Long     A Glass of Corellian Ale is here.~
+WFlags   take~
+Values   3 3 3 0 0 0
+Stats    1 5 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     4914
+Keywords Glass of Corellian Wine~
+Type     drinkcon~
+Short    a Glass of Corellian Wine~
+Long     A Glass of Corellian Wine is here.~
+WFlags   take~
+Values   3 3 2 0 0 0
+Stats    1 5 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     4915
+Keywords Glass of Corellian Brandy~
+Type     drinkcon~
+Short    a Glass of Corellian Brandy~
+Long     A Glass of Corellian Brandy is here.~
+WFlags   take~
+Values   3 3 7 0 0 0
+Stats    1 7 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     4916
+Keywords Glass of Corellian Whiskey~
+Type     drinkcon~
+Short    a Glass of Corellian Whiskey~
+Long     A Glass of Corellian Whiskey is here.~
+WFlags   take~
+Values   3 3 5 0 0 0
+Stats    1 4 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     4917
+Keywords Juke Box~
+Type     trash~
+Short    a Juke Box~
+Long     A Juke Box Machine is here, playing music.~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     4918
+Keywords Bar~
+Type     furniture~
+Short    the bar~
+Long     There is a bar here with many stools attached to it.~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     4919
+Keywords Small Trash Can corelliantrashbox~
+Type     container~
+Short    a trash can~
+Long     A Small Trash Can is here beside the bar.~
+Values   5000 0 0 0 0 0
+Stats    1 0 0 0 0
+#MUDPROG
+Progtype  use_prog~
+Arglist   100~
+Comlist   mpoload 4919
+mppurge 2.corelliantrashbox
+mea $n You throw your garbage into the can.
+mpechoaround $n $n tosses some garbage into the garbage can.
+~
+#ENDPROG
+
+#ENDOBJECT
+
+#OBJECT
+Vnum     4920
+Keywords medical storage room keycard~
+Type     key~
+Short    A small keycard~
+Long     A small keycard with a medical symbol has been left here.~
+WFlags   take~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     4921
+Keywords Large Storage Crate~
+Type     container~
+Short    a Large Storage Crate~
+Long     A Large Storage Crate is here.~
+Values   700 13 4920 5 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     4922
+Keywords Medpac~
+Type     medpac~
+Short    a MedPac~
+Long     A White Medpac was left here.~
+WFlags   take hold~
+Values   4 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     4923
+Keywords Turbolift List~
+Type     trash~
+Short    the list of levels~
+Long     A small list hangs on the wall which displays different levels.~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#EXDESC
+ExDescKey    Turbolift List~
+ExDesc       &YCoronet Medical Facility Levels
+
+&ROne
+&CLobby
+
+&RTwo
+&CBacta Ward
+
+&RThree
+&CEmergency Room
+~
+#ENDEXDESC
+
+#ENDOBJECT
+
+#OBJECT
+Vnum     4924
+Keywords Large Desk~
+Type     trash~
+Short    a Large Desk~
+Long     The Reception Desk is here~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     5200
+Keywords hi_obj~
+Type     trash~
+Short    a hi_obj~
+Long     A hi_obj is here.~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#ROOM
+Vnum     4901
+Name     Floating in a void~
+Sector   city~
+Flags    nomob~
+Stats    0 0 8232
+Reset M 0 4901 1 4901
+Reset O 0 4901 1 4901
+#ENDROOM
+
+#ROOM
+Vnum     4902
+Name     Coronet Spaceport~
+Sector   city~
+Flags    prototype~
+Stats    0 0 8232
+Desc     This is the the Spaceport of Coronet. Coronet is the Capital
+city of Corellia. The spaceport here is crowded with many travellers.
+Some of these travellers are tourists, while others are native
+to this planet. It's very loud here, due to the sound of the
+arrival and departure of many spacecraft. Near the exit of the
+spaceport, you can see a customs officer in a CorSec uniform.
+He is checking baggage of those who pass him.
+~
+#EXIT
+Direction west~
+ToRoom    4903
+#ENDEXIT
+
+Reset M 0 4902 1 4902
+#ENDROOM
+
+#ROOM
+Vnum     4903
+Name     Pathway To The Spaceport~
+Sector   city~
+Flags    prototype~
+Stats    0 0 8232
+Desc     This pathway splits off three ways. To the east is the Spaceport
+of Coronet, north is the town square, and south continues off
+in a paved road. Crowds of people are arriving from the east,
+and many are leaving to the east. This road is large due to
+the many people who often use it. Surprisingly, this street
+is kept clean due to janitorial droids who roam the streets.
+~
+#EXIT
+Direction north~
+ToRoom    4904
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    4902
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4923
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4904
+Name     Coronet City Square~
+Sector   city~
+Flags    prototype~
+Stats    0 0 8232
+Desc     You are standing in the large City Square of Coronet. This area
+branches off to many others. Many sounds can be heard, such
+as the sound of music to the southwest, and sound of ships to
+the south. North of here lies Meteor way. Starline Avenue to
+the northeast, and Coronet Street to the west.For travellers
+who need a place to rest for the night, a small motel lies to
+the east of here.
+~
+#EXIT
+Direction north~
+ToRoom    4925
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    4905
+Flags     nomob~
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4903
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    4906
+#ENDEXIT
+
+#EXIT
+Direction northeast~
+ToRoom    4928
+#ENDEXIT
+
+#EXIT
+Direction southwest~
+ToRoom    4949
+#ENDEXIT
+
+Reset O 0 4902 1 4904
+#ENDROOM
+
+#ROOM
+Vnum     4905
+Name     A Small Motel~
+Sector   city~
+Flags    indoors hotel prototype~
+Stats    0 0 8232
+Desc     You are standing inside of a small motel, standing by the counter
+is the owner of this motel. She seems friendly and willing to
+assist you in finding a room. The motel itself is small and
+does not offer many services. However, it should be large enough
+to fulfill your needs for a night's rest.
+~
+#EXIT
+Direction west~
+ToRoom    4904
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4906
+Name     Coronet Street~
+Sector   city~
+Flags    prototype~
+Stats    0 0 8232
+#EXIT
+Direction east~
+ToRoom    4904
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    4907
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4907
+Name     Coronet Street~
+Sector   city~
+Flags    prototype~
+Stats    0 0 8232
+#EXIT
+Direction north~
+ToRoom    4908
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    4906
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    4916
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4908
+Name     A Small Road~
+Sector   city~
+Flags    prototype~
+Stats    0 0 8232
+Desc     You are standing on a small road that branches off of Coronet
+street. To return to Coronet street, you only need to travel
+south. North of here is the start of the Corellian business
+district. As you travel down this road, you can see a few people
+walking around as well.
+~
+#EXIT
+Direction north~
+ToRoom    4909
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4907
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4909
+Name     Before The Commercial District~
+Sector   city~
+Flags    prototype~
+Stats    0 0 8232
+Desc     To the west of here is the start of the Coronet Business district.Unlike
+Treasure Ship Row, the shops here contain items made industrially,
+and not handmade items made by citizens who craft items to make
+a living. The streets in the business district are worn due
+to the constant use, they are not taken very good care of.
+~
+#EXIT
+Direction south~
+ToRoom    4908
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    4910
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4910
+Name     A Busy Street~
+Sector   city~
+Flags    prototype~
+Stats    0 0 8232
+Desc     As you continue through the commercial district, you come across
+a small hardware shop. Looking from the outside, the shop does
+not look to be crowded. Now may be a good time to enter if you
+need anything. The district continues to the west, and the exit
+continues east of here.
+~
+#EXIT
+Direction north~
+ToRoom    4913
+Flags     nomob~
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    4909
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    4911
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4911
+Name     A Busy Street~
+Sector   city~
+Flags    prototype~
+Stats    0 0 8232
+Desc     To the south of here, is a small fabric shop. Many tailors go
+there in order to purchase supplies, perhaps it would be good
+to see what they have for sale. The street continues east and
+west of here, but not for much longer. As you travel farther
+down the streets, the roads seem to be more worn and broken.
+~
+#EXIT
+Direction east~
+ToRoom    4910
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4914
+Flags     nomob~
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    4912
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4912
+Name     A Busy Street~
+Sector   city~
+Flags    prototype~
+Stats    0 0 8232
+Desc     This seems to be the end of the commercial district. To the west
+of here is a dead end. This part of the district is not as loud
+as the others, but is the most broken up. If you wish to leave,
+you can continue to the east which leads out of the commercial
+district. North of here is a small jewel shop, they sell crystals,
+gems and various precious metals.
+~
+#EXIT
+Direction north~
+ToRoom    4915
+Flags     nomob~
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    4911
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4913
+Name     A Small Hardware Shop~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+#EXIT
+Direction south~
+ToRoom    4910
+#ENDEXIT
+
+Reset M 0 4903 1 4913
+#ENDROOM
+
+#ROOM
+Vnum     4914
+Name     A Small Fabric Shop~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+Desc     You are now inside of a small fabric shop. There are long sheets
+of different fabrics hanging on the walls which you may purchase.The
+shopkeeper is waiting behind the counter with a device used
+to cut the fabric into usable pieces. To the south is a locked
+door, it is most likely a storage room.
+~
+#EXIT
+Direction north~
+ToRoom    4911
+#ENDEXIT
+
+Reset M 0 4903 2 4914
+#ENDROOM
+
+#ROOM
+Vnum     4915
+Name     A Small Jewel Shop~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+Desc     You are now inside of a jewel shop. The counter where the shopkeeper
+stands is glass, displaying various types of differet jewls
+and precious metal that you may purchase. The shopkeeper is
+smiling at you as you look around here, he would be happy to
+assist you with making a purchase. As you look around, you notice
+a locked room to the north, probably a storage room.
+~
+#EXIT
+Direction south~
+ToRoom    4912
+#ENDEXIT
+
+Reset M 0 4903 3 4915
+#ENDROOM
+
+#ROOM
+Vnum     4916
+Name     Coronet Street~
+Sector   city~
+Flags    prototype~
+Stats    0 0 8232
+#EXIT
+Direction east~
+ToRoom    4907
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4917
+Flags     nomob~
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4917
+Name     Entrance To The Coronet VR Arcade~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+Desc     You are now inside of Coronet's Virtual Reality Arcade. They
+specialize in the simulation of space battles.Many people come
+here in order to compete in simulation battles against people
+from all over the galaxy. This is made possible due to the linkup
+device provided by the simulators themselves.
+~
+#EXIT
+Direction north~
+ToRoom    4916
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4918
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4918
+Name     An Intersection~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+Desc     From here, you can hear the sounds of space battle. It all sounds
+so real due to the technology used in creating the simulators,
+the designers wanted users to experience the full feeling of
+a space fight. East and west of here, hallways continue which
+lead to simulator rooms. Up and down from here are two simulator
+rooms, you can enter in order to start flying.
+~
+#EXIT
+Direction north~
+ToRoom    4917
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    4919
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    4921
+#ENDEXIT
+
+#EXIT
+Direction up~
+ToRoom    4947
+#ENDEXIT
+
+#EXIT
+Direction down~
+ToRoom    4948
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4919
+Name     A Durasteel Hallway~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+Desc     You are in the eastern hallway of the Virtual Reality Arcade
+of Coronet. This hallways leads north and south to the simulation
+rooms for the R-41 starfighter. East of here, the arcade continues
+to the rest of the arcade, and also to the west. The sounds
+of battles grow louder as you walk through here.
+~
+#EXIT
+Direction north~
+ToRoom    4941
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    4920
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4942
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    4918
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4920
+Name     A Durasteel Hallway~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+Desc     You have reached the end of the hallway. To the north and south
+of here are the simulation rooms for the T-Wing starfighter.To
+get back to the entrance of this Arcade, you need only to travel
+to the east. This room isn't as well lit as the others, but
+to the east is a plaque that reads, "Virtual Reality Arcade:
+Coronet District." 
+~
+#EXIT
+Direction north~
+ToRoom    4939
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4940
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    4919
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4921
+Name     A Durasteel Hallway~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+Desc     This hallway branches off to the east and the west. Many consider
+it as the "Z-95 Preparation Room" As to the north and south
+of here are the simulation rooms for said ship. If you want
+to have a shot at flying the Z-95, you can enter one of the
+simulation rooms. If you want to try another ship, you can continue
+explorting.
+~
+#EXIT
+Direction north~
+ToRoom    4943
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    4918
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4944
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    4922
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4922
+Name     A Durasteel Hallway~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+Desc     The X-Wing is the ship the blew up the first death star with
+a single torpedo. The rooms that contain to the simulators of
+these powerful starfighters lie to the north and south. There
+are no other simulation rooms past this hallway, you can either
+turn back to the east, or enter one of the simulation rooms
+to the north and south.
+~
+#EXIT
+Direction north~
+ToRoom    4945
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    4921
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4946
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4923
+Name     A Paved Road~
+Sector   city~
+Flags    prototype~
+Stats    0 0 8232
+Desc     You are now walking down a neatly paved road. Not many people
+walk down this road, and if they do they are calm in order to
+reach their homes because to the east of here is the residential
+area of Coronet. The road continues south which will lead to
+another area of Coronet.
+~
+#EXIT
+Direction north~
+ToRoom    4903
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4924
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4924
+Name     A Paved Road~
+Sector   city~
+Flags    prototype~
+Stats    0 0 8232
+#EXIT
+Direction north~
+ToRoom    4923
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4925
+Name     Meteor Way~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 8232
+#EXIT
+Direction north~
+ToRoom    4926
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4904
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4926
+Name     Meteor Way~
+Sector   city~
+Flags    prototype~
+Stats    0 0 8232
+#EXIT
+Direction north~
+ToRoom    4927
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4925
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4927
+Name     Meteor Way~
+Sector   city~
+Flags    prototype~
+Stats    0 0 8232
+#EXIT
+Direction north~
+ToRoom    4932
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4926
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4928
+Name     Starline Avenue~
+Sector   city~
+Flags    prototype~
+Stats    0 0 8232
+#EXIT
+Direction north~
+ToRoom    4929
+#ENDEXIT
+
+#EXIT
+Direction southwest~
+ToRoom    4904
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4929
+Name     Starline Avenue~
+Sector   city~
+Flags    prototype~
+Stats    0 0 8232
+#EXIT
+Direction north~
+ToRoom    4930
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4928
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4930
+Name     Starline Avenue~
+Sector   city~
+Flags    prototype~
+Stats    0 0 8232
+#EXIT
+Direction south~
+ToRoom    4929
+#ENDEXIT
+
+#EXIT
+Direction northwest~
+ToRoom    4931
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4931
+Name     The Beginnings of Treasure Ship Row~
+Sector   city~
+Flags    prototype~
+Stats    0 0 8232
+Desc     You are now wandering down Treasure Ship Row. Many species set
+up shop on treasure ship row, in order to display their talents
+and to make money by selling their services.North of here is
+a dessert stand owned by a Selonian, and south of here is a
+crafts stand owned by a Ryn. The row continues west of here,
+and you may exit by travelling down Starline Avenue to the southeast.
+~
+#EXIT
+Direction north~
+ToRoom    4933
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4938
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    4932
+#ENDEXIT
+
+#EXIT
+Direction southeast~
+ToRoom    4930
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4932
+Name     Intersection Between Meteor Way and Treasure Ship Row~
+Sector   city~
+Flags    prototype~
+Stats    0 0 8232
+Desc     You are now standing at an intersection. To the north and south
+lies Meteor Way, to the east and south lie Treasure Ship Row.Funny,
+there are no shops set up near this intersection, you will need
+to continue east or west in order to find them.
+~
+#EXIT
+Direction north~
+ToRoom    4959
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    4931
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4927
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    4934
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4933
+Name     A Small Dessert Stand~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+Desc     You are now standing before a small shop, occupied by a female
+Selonian. This stand displays many Corellian desserts. The shopkeeper
+is watching you closely, in order to make sure that you do not
+steal anything. Afterall, this may be the Selonian's only way
+to turn a profit.
+~
+#EXIT
+Direction south~
+ToRoom    4931
+#ENDEXIT
+
+Reset M 0 4904 1 4933
+  Reset G 1 4905 1
+  Reset G 1 4903 1
+  Reset G 1 4904 1
+#ENDROOM
+
+#ROOM
+Vnum     4934
+Name     Treasure Ship Row~
+Sector   city~
+Flags    prototype~
+Stats    0 0 8232
+Desc     You continue your travel down Treasure Ship Row. You notice many
+tourists pass you by as you continue down this path. South of
+here is a Corellian Meat Shop, it might be good for you to go
+inside. West and east of here, Treasure Ship Row continues.
+There are many more shops to explore by this part of Coronet.
+~
+#EXIT
+Direction east~
+ToRoom    4932
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4935
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    4936
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4935
+Name     Corellian Meats~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+Desc     You are now inside of a cold booth, behind a case is fresh Corellian
+meat. The butcher here is wearing an apron. He is tall and round
+shaped, he must really like meat. He is standing there, looking
+at you. He is probably waiting for you to ask for assistance.
+~
+#EXIT
+Direction north~
+ToRoom    4934
+#ENDEXIT
+
+Reset M 0 4906 1 4935
+  Reset G 1 4906 1
+  Reset G 1 4907 1
+#ENDROOM
+
+#ROOM
+Vnum     4936
+Name     Treasure Ship Row~
+Sector   city~
+Flags    prototype~
+Stats    0 0 8232
+Desc     Unfortunately, not as many people set up shop on Treasure Ship
+Row now due to the Galactic War. However, the inventor Jerek
+Miv is still running his shop to the north of here. He sells
+many technologically advanced equipment for you to purchase.
+~
+#EXIT
+Direction north~
+ToRoom    4937
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    4934
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4937
+Name     Miv's Gadget Shop~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+Desc     You are inside of the brightly lit shop of Jerek Miv, technology
+extraordinaire. He specializes in the distribution of technological
+equipment. Among his inventions are the Miv-tech Aquata breather
+and the Miv-tech Inini-light. Such objects are displayed around
+the shop in display cases.
+~
+#EXIT
+Direction south~
+ToRoom    4936
+#ENDEXIT
+
+Reset M 0 4905 1 4937
+  Reset G 1 4909 1
+  Reset G 1 4908 1
+#ENDROOM
+
+#ROOM
+Vnum     4938
+Name     A Crafts Stand~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+Desc     This stand is basically a tent with a table and chair inside.The
+Ryn shopkeeper is here, to sell you her hand made jewelry.It
+is said that Ryn are able to predict the future with Sabacc
+cards, this Ryn is speaking that her crafts can better the individal
+who wears them.
+~
+#EXIT
+Direction north~
+ToRoom    4931
+#ENDEXIT
+
+Reset M 0 4907 1 4938
+  Reset G 1 4911 1
+  Reset G 1 4910 1
+#ENDROOM
+
+#ROOM
+Vnum     4939
+Name     T-Wing Simulation Room One~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+#EXIT
+Direction south~
+ToRoom    4920
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4940
+Name     T-Wing Simulation Room Two~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+#EXIT
+Direction north~
+ToRoom    4920
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4941
+Name     R-41 Simulation Room One~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+#EXIT
+Direction south~
+ToRoom    4919
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4942
+Name     R-41 Simulation Room Two~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+#EXIT
+Direction north~
+ToRoom    4919
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4943
+Name     Z-95 Simulation Room One~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+#EXIT
+Direction south~
+ToRoom    4921
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4944
+Name     Z-95 Simulation Room Two~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+#EXIT
+Direction north~
+ToRoom    4921
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4945
+Name     X-Wing Simulation Room One~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+#EXIT
+Direction south~
+ToRoom    4922
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4946
+Name     X-Wing Simulation Room Two~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+#EXIT
+Direction north~
+ToRoom    4922
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4947
+Name     HLAF-500 Simulation Room One~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+#EXIT
+Direction down~
+ToRoom    4918
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4948
+Name     HLAF-500 Simulation Room Two~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+#EXIT
+Direction up~
+ToRoom    4918
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4949
+Name     Entrance to Drek's Cantina~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 8232
+Desc     As you enter this Cantina, you can immediately hear the sound
+of music playing from within. Unfortunately, due to the quality
+of the music you can tell that it is not from a live band but
+that it is a recording from a machine. The Cantina continues
+to the west of here, and the exit is to the northeast.
+~
+#EXIT
+Direction west~
+ToRoom    4950
+#ENDEXIT
+
+#EXIT
+Direction northeast~
+ToRoom    4904
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4950
+Name     A Dimly Lit Hallway~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+Desc     The sound of the music grows louder upon travelling from the
+east. The bar is to the immediate west of here, Drek will be
+waiting there to serve drinks of many different variety. East
+of here is the entrance to the Cantina, it is also the exit
+in case you've decided that you've had enough to drink and would
+like to leave.
+~
+#EXIT
+Direction east~
+ToRoom    4949
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    4951
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4951
+Name     Standing at the Bar~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+Desc     Standing here behind the bar, is Drek. Drek is the bartender
+and owner of this Cantina. He seems willing to help you. You
+can hear music playing south of here, but strangely, the entertainment
+floor is to the west. Right next to the bar is a small trash
+can, Drek likes it when his Cantina is kept clean. East of here
+is the exit of the cantina, and to the south are booths.
+~
+#EXIT
+Direction east~
+ToRoom    4950
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4956
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    4958
+#ENDEXIT
+
+Reset M 0 4908 1 4951
+  Reset G 1 4916 1
+  Reset G 1 4915 1
+  Reset G 1 4914 1
+  Reset G 1 4913 1
+  Reset G 1 4912 1
+Reset O 0 4918 1 4951
+Reset O 0 4919 1 4951
+#ENDROOM
+
+#ROOM
+Vnum     4952
+Name     A Small Booth~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+#EXIT
+Direction west~
+ToRoom    4956
+Flags     isdoor pickproof~
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4953
+Name     A Small Booth~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 8232
+#EXIT
+Direction east~
+ToRoom    4956
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4954
+Name     A Small Booth~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 8232
+#EXIT
+Direction west~
+ToRoom    4957
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4955
+Name     A Small Booth~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 8232
+#EXIT
+Direction east~
+ToRoom    4957
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4956
+Name     A Dimly Lit Hallway~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+Desc     You are walking through a dimly lit, and narrow hallway. Two
+booths, covered by curtains are attached to the east and west.From
+the south, you can hear music constantly playing. North of here
+is the bar, where Drek stands serving drinks. Also to the south,
+are more booths.
+~
+#EXIT
+Direction north~
+ToRoom    4951
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    4952
+Keywords  curtain~
+Flags     isdoor closed~
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4957
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    4953
+Keywords  curtain~
+Flags     isdoor closed~
+#ENDEXIT
+
+Reset D 0 4956 1 1
+#ENDROOM
+
+#ROOM
+Vnum     4957
+Name     A Dimly Lit Hallway~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+Desc     Sitting at the south edge of the well here is a Juke Box Machine.It
+is currently playing the music of Figrin D'an and his band.
+East and west of here are two booths, covered by curtains for
+privacy. As you look more carefully at the juke box, you can
+notice that there is no way to change the music. It is currently
+broken and repeatedly plays the music of Figrin D'an.
+~
+#EXIT
+Direction north~
+ToRoom    4956
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    4954
+Keywords  curtain~
+Flags     isdoor closed~
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    4955
+Keywords  curtain~
+Flags     isdoor closed~
+#ENDEXIT
+
+Reset O 0 4917 1 4957
+Reset D 0 4957 1 1
+Reset D 0 4957 3 1
+#ENDROOM
+
+#ROOM
+Vnum     4958
+Name     Entertainment Floor~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+Desc     You are standing by the entertainment floor. This is the section
+of the Cantina where live entertainment sets up to play music.At
+this moment there is no band set up here. Instead, equipment
+is leftover such as microphones and speakers. This room is fairly
+spacious, large enough to hold a band of six large people, maybe
+more.
+~
+#EXIT
+Direction east~
+ToRoom    4951
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4959
+Name     Meteor Way~
+Sector   city~
+Flags    prototype~
+Stats    0 0 8232
+#EXIT
+Direction north~
+ToRoom    4961
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    4960
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4932
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4960
+Name     A CorSec Office~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+#EXIT
+Direction west~
+ToRoom    4959
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4961
+Name     Meteor Way~
+Sector   city~
+Flags    prototype~
+Stats    0 0 8232
+#EXIT
+Direction north~
+ToRoom    4962
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4959
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4962
+Name     Entrance to the Coronet Medical Facility~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+Desc     You are standing at the entrance to the Coronet Medical Facility.This
+facility offers many medical services. Along the wall are the
+names of the doctors who have worked in this facility and how
+long they have worked here. To continue further into the facility,
+you can travel north to the reception area.
+~
+#EXIT
+Direction north~
+ToRoom    4963
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4961
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4963
+Name     A Reception Area~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+Desc     You are standing in a very clean, and plain white reception area.Sitting
+here at her desk, is a human receptionist. She seems to be busy
+at the moment, looking through files and various papers. She
+directs you to the north, as it is the turbolift which takes
+you to the different levels of this facility.
+~
+#EXIT
+Direction north~
+ToRoom    4964
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4962
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4964
+Name     A Small Turbolift~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 8232
+Desc     You are standing inside of a circular turbolift, it is fairly
+cold in here. The walls of this lift are painted a white color.On
+the left wall, there is a list which displays the levels of
+the medical facility. From the speakers, soothing music is played
+while you wait.
+~
+Reset O 0 4923 1 4964
+  Reset P 0 4922 1 4923
+#MUDPROG
+Progtype  speech_prog~
+Arglist   1 one~
+Comlist   mpecho The Turbolift begins to move...
+mpsleep 10
+mpecho The Turbolift stops at level one.
+mpechoaround $n $q gets off the turbolift.
+mptransfer $n 4963
+mpat $n mpforce $n look
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   2 two~
+Comlist   mpecho The Turbolift begins to move...
+mpsleep 10
+mpecho The Turbolift stops at level two.
+mpechoaround $n $q gets off the turbolift.
+mptransfer $n 4965
+mpat $n mpforce $n look
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   3 three~
+Comlist   mpecho The Turbolift begins to move...
+mpsleep 10
+mpecho The Turbolift stops at level three.
+mpechoaround $n $q gets off the turbolift.
+mptransfer $n 4973
+mpat $n mpforce $n look
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   4 four~
+Comlist   mpecho The Turbolift begins to move...
+mpsleep 10
+mpecho The Turbolift stops at level four.
+mpechoaround $n $q gets off the turbolift.
+mptransfer $n 4974
+mpat $n mpforce $n look
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  entry_prog~
+Arglist   100~
+Comlist   mpechoat $n The turbolift door closes as you enter.
+mpechoaround $n The turbolift doors close as $q enters.
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     4965
+Name     Entrance to the Bacta Ward~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+Desc     You are standing at the entrance to the Bacta ward. North of
+here is the exit, the turbolift which can take you to different
+levels of this medical facility. South of here, the hallway
+continues and branches off to the Bacta treatment rooms. The
+rooms here are kept very clean and sterile as to not lead to
+an injured patient's wounds becoming infected.
+~
+#EXIT
+Direction north~
+ToRoom    4964
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4966
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4966
+Name     A Narrow Hallway~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 8232
+#EXIT
+Direction north~
+ToRoom    4965
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    4968
+Flags     nomob~
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4969
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    4967
+Flags     nomob~
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4967
+Name     A Bacta Tank~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 1
+#EXIT
+Direction east~
+ToRoom    4966
+#ENDEXIT
+
+#MUDPROG
+Progtype  rand_prog~
+Arglist   100~
+Comlist   mpecho You feel a little better as the bacta starts healing your wounds
+mprestore $n 50
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     4968
+Name     A Bacta Tank~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 1
+#EXIT
+Direction west~
+ToRoom    4966
+#ENDEXIT
+
+#MUDPROG
+Progtype  rand_prog~
+Arglist   100~
+Comlist   mpecho You feel a little better as the bacta starts healing your wounds
+mprestore $n 50
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     4969
+Name     A Narrow Hallway~
+Sector   city~
+Flags    prototype~
+Stats    0 0 1
+#EXIT
+Direction north~
+ToRoom    4966
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    4971
+Flags     nomob~
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    4970
+Flags     nomob~
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     4970
+Name     A Bacta Tank~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 1
+#EXIT
+Direction east~
+ToRoom    4969
+#ENDEXIT
+
+#MUDPROG
+Progtype  rand_prog~
+Arglist   100~
+Comlist   mpecho You feel a little better as the bacta starts healing your wounds
+mprestore $n 50
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     4971
+Name     A Bacta Tank~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 1
+#EXIT
+Direction west~
+ToRoom    4969
+#ENDEXIT
+
+#MUDPROG
+Progtype  rand_prog~
+Arglist   100~
+Comlist   mpecho You feel a little better as the bacta starts healing your wounds
+mprestore $n 50
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     4972
+Name     A Small Waiting Area~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 1
+#EXIT
+Direction north~
+ToRoom    4964
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    4973
+Flags     isdoor closed locked pickproof~
+#ENDEXIT
+
+Reset D 0 4972 2 2
+#MUDPROG
+Progtype  custom_prog~
+Arglist   drlinewait~
+Comlist   mpechoat $n There seems to be a wait to see the Doctor, you will have to be patient.
+mpechoaround $n $q arrives off the turbolift and joins the line to see the doctor.
+mpsleep 25
+mptransfer $n 4973
+mpat 4973 mpforce $n look
+mpat 4973 mpforce $n drprogstart
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     4973
+Name     An Operation Room~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 1
+#EXIT
+Direction north~
+ToRoom    4972
+#ENDEXIT
+
+Reset M 0 4909 1 4973
+  Reset G 1 4920 1
+#ENDROOM
+
+#ROOM
+Vnum     4974
+Name     The Supply Room~
+Sector   city~
+Flags    indoors prototype~
+Stats    0 0 1
+#EXIT
+Direction north~
+ToRoom    4964
+#ENDEXIT
+
+Reset O 0 4921 1 4974
+  Reset P 0 4922 1 4921
+#ENDROOM
+
+#ROOM
+Vnum     5200
+Name     Floating in a void~
+Sector   city~
+Flags    nomob~
+Stats    0 0 8232
+Reset M 0 5200 1 5200
+Reset O 0 5200 1 5200
+#ENDROOM
+
+#ENDAREA

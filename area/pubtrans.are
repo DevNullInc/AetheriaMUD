@@ -1,0 +1,738 @@
+#FUSSAREA
+#AREADATA
+Version      1
+Name         Public Transportation~
+Author       Nathan~
+Ranges       0 0 0 0
+Economy      0 6251473
+#ENDAREADATA
+
+#MOBILE
+Vnum       900
+Keywords   lomob~
+Short      a newly created lomob~
+Long       Some god abandoned a newly created lomob here.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc~
+Stats1     0 1 0 0 0 0
+Stats2     0 0 0
+Stats3     0 0 0
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#ENDMOBILE
+
+#MOBILE
+Vnum       901
+Keywords   A Service Droid~
+Short      A Service Droid~
+Long       A Service Droid stands here waiting to help customers.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc sentinel stayarea~
+Stats1     0 10 0 75 0 0
+Stats2     2 10 100
+Stats3     1 4 2
+Stats4     0 0 1 2 2
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic wookiee twilek rodian hutt noghri gamorrean jawa adarian ewok verpine defel hapan quarren sullustan binary firrerreo togorian shistavanen kubaz yevethan gand duros coynite gotal~
+Speaking   basic wookiee twilek rodian hutt noghri gamorrean jawa adarian ewok verpine defel hapan quarren sullustan binary firrerreo togorian shistavanen kubaz yevethan gand duros coynite gotal~
+Attacks    punch kick~
+Defenses   dodge~
+ShopData   0 0 0 0 0 125 10 1 23
+#ENDMOBILE
+
+#MOBILE
+Vnum       999
+Keywords   himob~
+Short      a newly created himob~
+Long       Some god abandoned a newly created himob here.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc~
+Stats1     0 1 0 0 0 0
+Stats2     0 0 0
+Stats3     0 0 0
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#ENDMOBILE
+
+#OBJECT
+Vnum     900
+Keywords ammo cell~
+Type     ammo~
+Short    a ammo cell~
+Long     A ammo cell is here.~
+Flags    inventory~
+WFlags   take hold~
+Values   1000 0 0 0 0 0
+Stats    1 30 3 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     901
+Keywords A small packaged ration~
+Type     food~
+Short    a small packaged ration~
+Long     A packaged ration is here, waiting to be eaten.~
+Flags    inventory~
+WFlags   take~
+Values   20 20 0 0 0 0
+Stats    2 5 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     902
+Keywords A small canteen~
+Type     drinkcon~
+Short    a small canteen~
+Long     A belt sized canteen was dropped here.~
+Flags    inventory~
+WFlags   take~
+Values   10 10 0 0 0 0
+Stats    1 10 1 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     999
+Keywords hiobj~
+Type     trash~
+Short    a hiobj~
+Long     A hiobj is here.~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#ROOM
+Vnum     900
+Name     Floating in a void~
+Sector   city~
+Flags    nomob~
+Stats    0 0 25816
+Reset M 0 900 1 900
+Reset O 0 900 1 900
+#ENDROOM
+
+#ROOM
+Vnum     901
+Name     Entrance Ramp to the Serin Sol~
+Sector   city~
+Flags    indoors spacecraft prototype~
+Stats    0 0 25816
+Desc     You stand on the entrance ramp of the Serin Sol. The Sol travels
+throughout the galaxy stopping at each planet. While the Sol
+doesn't cost anything it does require a bit of patience.
+~
+#EXIT
+Direction up~
+ToRoom    902
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     902
+Name     A Bright Corridor~
+Sector   city~
+Flags    indoors spacecraft prototype~
+Stats    0 0 25816
+Desc     You stand in the small corridor that connects the sleeping area
+and entrance ramp to the rest of the ship. The walls here are
+bare and are painted dark grey.
+~
+#EXIT
+Direction north~
+ToRoom    903
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    905
+#ENDEXIT
+
+#EXIT
+Direction down~
+ToRoom    901
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     903
+Name     A Bright Corridor~
+Sector   city~
+Flags    indoors spacecraft prototype~
+Stats    0 0 25816
+Desc     This corridor leads to the pilot station, the dining area, and
+back south to the sleeping area and entrance. The walls are still
+bare and grey, very nondescript.
+~
+#EXIT
+Direction north~
+ToRoom    904
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    902
+#ENDEXIT
+
+#EXIT
+Direction up~
+ToRoom    906
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     904
+Name     Before the Pilot's Station~
+Sector   city~
+Flags    indoors spacecraft prototype~
+Stats    0 0 25816
+Desc     You stand before the pilot's station of the Serin Sol. The door
+leading to the cockpit is always kept closed and locked for
+the pilot's security. The Sol travels throughout the galaxy
+making stops at each planet.
+~
+#EXIT
+Direction north~
+ToRoom    907
+Flags     isdoor closed locked pickproof bashproof~
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    903
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     905
+Name     A Small Sleeping Area~
+Sector   city~
+Flags    nomob indoors hotel spacecraft prototype~
+Stats    0 0 25816
+Desc     You are in the small sleeping area of the Serin Sol. There are
+small cots here for travelers to nap between stops. While there
+are only a few cots here, there is no charge for sleeping on
+them.
+~
+#EXIT
+Direction north~
+ToRoom    902
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     906
+Name     The Viewport Dining Area~
+Sector   city~
+Flags    indoors spacecraft prototype~
+Stats    0 0 25816
+Desc     You stand in the Sol's sole (no pun inteneded) dining area. The
+food here is light as many customers only have time for a quick
+snack before the next stop. There are a few tables here but
+customers are mainly expected to stand.
+~
+#EXIT
+Direction down~
+ToRoom    903
+#ENDEXIT
+
+Reset M 0 901 1 906
+  Reset G 1 902 1
+  Reset G 1 901 1
+  Reset G 1 900 1
+#ENDROOM
+
+#ROOM
+Vnum     907
+Name     DO NOT USE THIS VNUM - SERIN SOL PILOT~
+Sector   city~
+Flags    prototype~
+Stats    0 0 25816
+#EXIT
+Direction south~
+ToRoom    904
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     908
+Name     Entrance Ramp to the Serin Monir~
+Sector   city~
+Flags    indoors spacecraft prototype~
+Stats    0 0 25816
+Desc     You stand on the entrance ramp of the Serin Monir. The Monir
+travels throughout the galaxy stopping at each planet. While the
+shuttle doesn't cost anything it does require some patience.
+~
+#EXIT
+Direction up~
+ToRoom    909
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     909
+Name     A Bright Corridor~
+Sector   city~
+Flags    indoors spacecraft prototype~
+Stats    0 0 25816
+Desc     You stand in the small corridor that connects the sleeping area
+and entrance ramp to the rest of the ship. The walls here are
+bare and painted dark grey.
+~
+#EXIT
+Direction north~
+ToRoom    910
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    912
+#ENDEXIT
+
+#EXIT
+Direction down~
+ToRoom    908
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     910
+Name     A Bright Corridor~
+Sector   city~
+Flags    indoors spacecraft prototype~
+Stats    0 0 25816
+Desc     This corridor leads between the aft of the ship and pilot station.
+A small restaurant with a duraplast viewport is above you, offering
+a meal and a great view of space around you.
+~
+#EXIT
+Direction north~
+ToRoom    911
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    909
+#ENDEXIT
+
+#EXIT
+Direction up~
+ToRoom    913
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     911
+Name     Before the Pilot's station~
+Sector   city~
+Flags    indoors spacecraft prototype~
+Stats    0 0 25816
+Desc     You stand before the pilot's station of the Serin Monir. The door
+leading to the cockpit is always kept closed and locked for the
+pilot's security. The Monir travels throughout the galaxy making
+stops at each planet.
+~
+#EXIT
+Direction north~
+ToRoom    914
+Flags     isdoor closed locked pickproof bashproof~
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    910
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     912
+Name     A Small Sleeping Area~
+Sector   city~
+Flags    indoors hotel spacecraft prototype~
+Stats    0 0 25816
+Desc     You are in the small sleeping area of the Serin Monir. There are
+small cots here for travelers to nap between stops. While there
+are only a few cots here, there is no charge for sleeping on
+them.
+~
+#EXIT
+Direction north~
+ToRoom    909
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     913
+Name     The Viewport Dining Area~
+Sector   city~
+Flags    indoors spacecraft prototype~
+Stats    0 0 25816
+Desc     You stand in the Monir's sole dining area. The food here
+is light as many customers only have time for a quick snack
+before the next stop. There are a few tables here but
+customers are mainly expected to stand.
+~
+#EXIT
+Direction down~
+ToRoom    910
+#ENDEXIT
+
+Reset M 0 901 2 913
+  Reset G 1 901 1
+  Reset G 1 902 1
+  Reset G 1 900 1
+#ENDROOM
+
+#ROOM
+Vnum     914
+Name     DO NOT USE THIS VNUM - SERIN MONIR PILOT~
+Sector   city~
+Flags    prototype~
+Stats    0 0 25816
+#EXIT
+Direction south~
+ToRoom    911
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     915
+Name     Entrance Ramp to the Serin Faun~
+Sector   city~
+Flags    indoors spacecraft prototype~
+Stats    0 0 25816
+Desc     You stand on the entrance ramp of the Serin Fau. The Fau travels
+throughout the galaxy stopping at each planet. While the Fau
+doesn't cost anything it does require a bit of patience.
+~
+#EXIT
+Direction up~
+ToRoom    916
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     916
+Name     A Bright Corridor~
+Sector   city~
+Flags    indoors spacecraft prototype~
+Stats    0 0 25816
+Desc     You stand in the small corridor that connects the sleeping area
+and entrance ramp to the rest of the ship. The walls here are
+bare and are painted dark grey.
+~
+#EXIT
+Direction north~
+ToRoom    917
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    918
+#ENDEXIT
+
+#EXIT
+Direction down~
+ToRoom    915
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     917
+Name     A Bright Corridor~
+Sector   city~
+Flags    indoors spacecraft prototype~
+Stats    0 0 25816
+Desc     This corridor leads to the pilot station, the dining area, and
+back south to the sleeping area and entrance. The walls are still
+bare and grey, very nondescript.
+~
+#EXIT
+Direction north~
+ToRoom    920
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    916
+#ENDEXIT
+
+#EXIT
+Direction up~
+ToRoom    919
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     918
+Name     A Small Sleeping Area~
+Sector   city~
+Flags    indoors hotel spacecraft prototype~
+Stats    0 0 25816
+Desc     You are in the small sleeping area of the Serin Fau. There are
+small cots here for travelers to nap between stops. While there
+are only a few cots here, there is no charge for sleeping on
+them.
+~
+#EXIT
+Direction north~
+ToRoom    916
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     919
+Name     The Viewport Dining Area~
+Sector   city~
+Flags    indoors spacecraft prototype~
+Stats    0 0 25816
+Desc     You stand in the Fau's sole dining area. The food here
+is light as many customers only have time for a quick snack
+before the next stop. There are a few tables here but
+customers are mainly expected to stand.
+You stand in the Faun's sole dining area. The food here
+is light as many customers only have time for a quick snack
+before the next stop. There are a few tables here but
+customers are mainly expected to stand.
+~
+#EXIT
+Direction down~
+ToRoom    917
+#ENDEXIT
+
+Reset M 0 901 3 919
+  Reset G 1 900 1
+  Reset G 1 902 1
+  Reset G 1 901 1
+#ENDROOM
+
+#ROOM
+Vnum     920
+Name     Before the Pilot's Station~
+Sector   city~
+Flags    indoors spacecraft prototype~
+Stats    0 0 25816
+Desc     You stand before the pilot's station of the Serin Faun.
+The door leading to the cockpit is always kept closed and
+locked for the pilot's security. The Faun travels
+throughout the galaxy making stops at each planet.
+~
+#EXIT
+Direction north~
+ToRoom    921
+Flags     isdoor closed locked pickproof bashproof~
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    917
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     921
+Name     DO NOT USE THIS VNUM - SERIN FAU PILOT~
+Sector   city~
+Flags    prototype~
+Stats    0 0 25816
+#EXIT
+Direction south~
+ToRoom    920
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     922
+Name     Entrance Ramp to the Serin Taw~
+Sector   city~
+Flags    indoors spacecraft prototype~
+Stats    0 0 25816
+Desc     You stand on the entrance ramp of the Serin Taw. The Taw travels
+throughout the galaxy stopping at each planet. While the Taw
+doesn't cost anything it does require a bit of patience.
+~
+#EXIT
+Direction up~
+ToRoom    923
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     923
+Name     A Bright Corridor~
+Sector   city~
+Flags    indoors spacecraft prototype~
+Stats    0 0 25816
+Desc     You stand in the small corridor that connects the sleeping area
+and entrance ramp to the rest of the ship. The walls here area
+bare and are painted dark grey.
+~
+#EXIT
+Direction north~
+ToRoom    924
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    925
+#ENDEXIT
+
+#EXIT
+Direction down~
+ToRoom    922
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     924
+Name     A Bright Corridor~
+Sector   city~
+Flags    indoors spacecraft prototype~
+Stats    0 0 25816
+Desc     This corridor leads to the pilot station, the dining area, and
+back south to the sleeping area and entrance. The walls are still
+bare and grey, very nondescript.
+~
+#EXIT
+Direction north~
+ToRoom    927
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    923
+#ENDEXIT
+
+#EXIT
+Direction up~
+ToRoom    926
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     925
+Name     A Small Sleeping Area~
+Sector   city~
+Flags    indoors hotel spacecraft prototype~
+Stats    0 0 25816
+Desc     You are in the small sleeping area of the Serin Taw. There are
+small cots here for travelers to nap between stops. While there
+are only a few cots here, there is no charge for sleeping on
+them.
+~
+#EXIT
+Direction north~
+ToRoom    923
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     926
+Name     The Viewport Dining Area~
+Sector   city~
+Flags    indoors spacecraft prototype~
+Stats    0 0 25816
+Desc     You stand in the Taw's sole dining area. The food here is
+light as many customers only have time for a quick snack
+before the next stop. There are a few tables here but customers
+are mainly expected to stand.
+~
+#EXIT
+Direction down~
+ToRoom    924
+#ENDEXIT
+
+Reset M 0 901 4 926
+  Reset G 1 900 1
+  Reset G 1 902 1
+  Reset G 1 901 1
+#ENDROOM
+
+#ROOM
+Vnum     927
+Name     Before the Pilot's Station~
+Sector   city~
+Flags    indoors spacecraft prototype~
+Stats    0 0 25816
+Desc     You stand before the pilot's station of the Serin Taw. The door
+leading to the cockpit is always kept closed and locked for
+the pilot's security. The Sol travels throughout the galaxy
+making stops at each planet.
+~
+#EXIT
+Direction north~
+ToRoom    928
+Flags     isdoor closed locked pickproof bashproof~
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    924
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     928
+Name     DO NOT USE THIS VNUM - SERIN TAW PILOT~
+Sector   city~
+Flags    prototype~
+Stats    0 0 25816
+#EXIT
+Direction south~
+ToRoom    927
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     999
+Name     Floating in a void~
+Sector   city~
+Flags    nomob~
+Stats    0 0 25816
+Reset M 0 999 1 999
+Reset O 0 999 1 999
+#ENDROOM
+
+#ENDAREA

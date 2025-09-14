@@ -1,0 +1,122 @@
+#FUSSAREA
+#AREADATA
+Version      1
+Name         Kashyyyk~
+Author       Azeris and Anix~
+Ranges       0 0 1 36
+Economy      0 6250000
+#ENDAREADATA
+
+#MOBILE
+Vnum       5201
+Keywords   low_mob~
+Short      a newly created low_mob~
+Long       Some god abandoned a newly created low_mob here.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc~
+Stats1     0 1 0 0 0 0
+Stats2     0 0 0
+Stats3     0 0 0
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#ENDMOBILE
+
+#MOBILE
+Vnum       5202
+Keywords   tall wookiee shotaun~
+Short      Shotaun~
+Long       A tall wookiee is standing here.
+~
+Race       Wookiee~
+Position   aggressive~
+DefPos     aggressive~
+Gender     male~
+Actflags   npc noflee deadly prototype~
+Stats1     0 36 0 10 0 0
+Stats2     7 10 360
+Stats3     3 4 2
+Stats4     0 0 15 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic wookiee~
+Speaking   wookiee~
+Attacks    bite trip~
+Defenses   parry dodge~
+#MUDPROG
+Progtype  death_prog~
+Arglist   100~
+Comlist   mpoload 9012
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       5300
+Keywords   hi_mob~
+Short      a newly created hi_mob~
+Long       Some god abandoned a newly created hi_mob here.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc~
+Stats1     0 1 0 0 0 0
+Stats2     0 0 0
+Stats3     0 0 0
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#ENDMOBILE
+
+#OBJECT
+Vnum     5201
+Keywords low_obj~
+Type     trash~
+Short    a low_obj~
+Long     A low_obj is here.~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     5300
+Keywords hi_obj~
+Type     trash~
+Short    a hi_obj~
+Long     A hi_obj is here.~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#ROOM
+Vnum     5201
+Name     Floating in a void~
+Sector   city~
+Flags    nomob~
+Stats    0 0 10576
+Reset M 0 5201 1 5201
+Reset O 0 5201 1 5201
+#ENDROOM
+
+#ROOM
+Vnum     5300
+Name     Floating in a void~
+Sector   city~
+Flags    nomob~
+Stats    0 0 10576
+Reset M 0 5300 1 5300
+Reset O 0 5300 1 5300
+#ENDROOM
+
+#ENDAREA

@@ -1,0 +1,1720 @@
+#FUSSAREA
+#AREADATA
+Version      1
+Name         Korriban~
+Author       Rithis~
+Ranges       0 36 0 36
+Economy      0 3198000
+#ENDAREADATA
+
+#MOBILE
+Vnum       10701
+Keywords   low_mob~
+Short      a newly created low_mob~
+Long       Some god abandoned a newly created low_mob here.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc~
+Stats1     0 1 0 0 0 0
+Stats2     0 0 0
+Stats3     0 0 0
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#ENDMOBILE
+
+#MOBILE
+Vnum       10702
+Keywords   guardian skeleton~
+Short      The Guardian Spirit~
+Long       A Skeleton is standing here, preventing access to the temple.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc sentinel~
+Stats1     0 1 0 -300 0 0
+Stats2     56 50 800
+Stats3     25 20 0
+Stats4     0 0 6 0 0
+Attribs    18 10 10 18 18 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+Resist     slash~
+Immune     blunt~
+Suscept    electricity~
+Defenses   parry dodge~
+#MUDPROG
+Progtype  death_prog~
+Arglist   100~
+Comlist   mpecho Bones scorching, the skeleton of the guardian spirit collapses to the ground
+mpat 101 rem energy
+mpat 101 rem energy
+mpat 101 drop energy
+mpat 101 drop energy
+mpat 101 mppurge
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  greet_prog~
+Arglist   100~
+Comlist   if ispc($n)
+if isevil($n)
+if name($n) == Thracken
+bow $n
+else
+mpkill $n
+endif
+else
+mpkill $n
+endif
+else
+mpkill $n
+endif
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       10703
+Keywords   ancient sith spirit~
+Short      The ancient spirit~
+Long       An Ancient Spirit
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     male~
+Actflags   npc sentinel~
+Stats1     0 30 0 25 0 0
+Stats2     500 30 300
+Stats3     15 25 2
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#MUDPROG
+Progtype  greet_prog~
+Arglist   100~
+Comlist   if level($n) == 30
+if frc($n) == 0
+say You are not worthy of this temple.
+else if frc($n) > 0
+if isgood($n)
+say You are not worthy of this temple.
+else
+say You show potential.
+say You may enter if you wish. Do you?
+endif
+endif
+endif
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   p yes~
+Comlist   if level($n) == 30
+if frc($n) == 30
+say You are not worthy of this temple.
+else if frc($n) > 0
+if isgood($n)
+say You are not worthy of this temple.
+else
+say You may pass
+mpechoat $n Mystical energy swirls over you and you vanish.
+mpechoaround $n Mystical Energy swirls over $n and $e vanishes.
+mptransfer $n 999
+endif
+endif
+endif
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       10704
+Keywords   Spirit Naga Sadow~
+Short      Naga Sadow~
+Long       The Spirit of Naga Sadow is here
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Specfun    spec_make_apprentice_sith~
+Gender     neuter~
+Actflags   npc sentinel practice deadly guardian scholar~
+Stats1     0 36 0 10 0 0
+Stats2     100 100 360
+Stats3     3 4 2
+Stats4     0 0 20 0 0
+Attribs    25 25 25 25 25 25 25 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+Immune     fire cold electricity energy blunt pierce slash acid poison drain sleep charm hold nonmagic plus1 plus2 plus3 plus4 plus5 plus6 magic paralysis~
+Attacks    punch kick~
+Defenses   parry dodge~
+#ENDMOBILE
+
+#MOBILE
+Vnum       10705
+Keywords   A Sith Spirit~
+Short      A Sith Spirit~
+Long       The Spirit of An Ancient Sith Master is here, awaiting apprentices.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc sentinel~
+Stats1     0 30 0 25 0 0
+Stats2     6 10 300
+Stats3     3 4 2
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#MUDPROG
+Progtype  all_greet_prog~
+Arglist   100~
+Comlist   say This is the final test to see if you are worthy of the title of Sith Master.
+say You risk the chance of death by entering.
+say Do you believe you are powerful enough to take this test?
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   p yes~
+Comlist   say Very well, you may enter.
+mpechoat $n &BThe force swirls over you and you vanish.
+mpechoaround $n &BThe force swirls over $n and $e vanishes.
+mptransfer $n 10751
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       10706
+Keywords   A Sith Spirit~
+Short      A Sith Spirit~
+Long       A Sith Spirit is here watching your every move
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc prototype~
+Stats1     -1000 1 0 0 0 0
+Stats2     500 20 0
+Stats3     100 100 0
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#MUDPROG
+Progtype  give_prog~
+Arglist   lightsaber saber~
+Comlist   if ovnumcarry(72)
+emote says: You are a capable user of the force.
+emote says: You may now pass on.
+give lightsaber $n.
+mpechoat $n &BThe force swirls over you and you vanish.
+mpechoaround $n &BThe force swirls over $n and $e vanishes.
+mptransfer $n 10755
+else
+emote says: I'm afraid this is wrong.
+endif
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  give_prog~
+Arglist   lightsaber test~
+Comlist   if ovnumcarry(72)
+emote says: You are a capable user of the force.
+emote says: You may now pass on.
+give lightsaber $n
+mpechoat $n &BThe force swirls over you and you vanish. 
+mpechoaround $n &BThe force swirls over $n and $e vanishes.
+mptransfer $n 10755
+else
+emote says: I'm afraid this is wrong.
+endif
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       10707
+Keywords   Freedon Nadd~
+Short      Freedon Nadd~
+Long       Freedon Nadd is here, awaiting the survivors of the trials.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc prototype~
+Stats1     0 1 0 0 0 0
+Stats2     0 0 0
+Stats3     0 0 0
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#ENDMOBILE
+
+#MOBILE
+Vnum       10899
+Keywords   Silence Industries Destroyer Droid, SI-643A~
+Short      Droidekar SI-643A~
+Long       Droidekar SI-643A stands here, shields raised and blasters armed.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc sentinel guardian droid prototype~
+Affected   truesight~
+Stats1     0 1 0 0 0 0
+Stats2     56 50 800
+Stats3     0 20 0
+Stats4     0 0 6 0 0
+Attribs    18 10 10 18 18 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+Resist     slash~
+Immune     blunt~
+Defenses   parry dodge~
+#MUDPROG
+Progtype  greet_prog~
+Arglist   100~
+Comlist   mpecho The droidekars weapons snap up at you and it glares. "Present Identity for Confirmation"
+Mpecho "Retinal Scan in Progress. Do not Move."
+if isimmort($n)
+mpecho The droidekar's weapons turn away.  "Identify Confirmed.  Access Granted."
+bow $n
+mppkset 10507 no
+else
+if name($n) == Gwen
+mpecho The droidekar's weapons turn away.  "Identify Confirmed.  Access Granted."
+bow $n
+mppkset 10507 no
+else
+if name($n) == Blake
+mpecho The droidekar's weapons turn away.  "Identify Confirmed.  Access Granted."
+bow $n
+mppkset 10507 no
+else
+if clan($n) == Silence Industries
+mpecho The droidekar's weapons turn away.  "Identify Confirmed.  Access Granted."
+bow $n
+mppkset 10507 no
+else
+mpecho The droiddekar's weapons whine to full power. "Identity Not Confirmed. Open Fire."
+mppkset 10507 yes
+mpkill $n
+endif
+endif
+endif
+endif
+~
+#ENDPROG
+
+#ENDMOBILE
+
+#MOBILE
+Vnum       10900
+Keywords   hi_obj~
+Short      a newly created hi_obj~
+Long       Some god abandoned a newly created hi_obj here.
+~
+Race       Human~
+Position   aggressive~
+DefPos     aggressive~
+Gender     neuter~
+Actflags   npc~
+Stats1     0 1 0 0 0 0
+Stats2     0 0 0
+Stats3     0 0 0
+Stats4     0 0 0 0 0
+Attribs    10 10 10 10 10 10 10 0
+Saves      0 0 0 0 0
+Speaks     basic~
+Speaking   basic~
+#ENDMOBILE
+
+#OBJECT
+Vnum     10701
+Keywords low_obj~
+Type     trash~
+Short    a low_obj~
+Long     A low_obj is here.~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     10702
+Keywords Ancient Energy Blaster~
+Type     weapon~
+Short    An Ancient Energy Blaster~
+Long     An odd cannon shaped device is here~
+WFlags   wield~
+Values   100 24 6 6 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     10703
+Keywords sith alter~
+Type     trash~
+Short    a mystical alter~
+Long     &YAn Ancient Alter sits here before you~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#EXDESC
+ExDescKey    sith alter~
+ExDesc       The alter before you is of an ancient sith design. On the side
+of the alter, the word "training" is inscribed. Perhaps it holds
+some meaning here.
+~
+#ENDEXDESC
+
+#MUDPROG
+Progtype  speech_prog~
+Arglist   training~
+Comlist   if frc($n) > 0
+mpecho &YA Mystical Aura appears after all is different as it disappears.
+mptransfer $n 10745
+endif
+~
+#ENDPROG
+
+#ENDOBJECT
+
+#OBJECT
+Vnum     10704
+Keywords Button~
+Type     button~
+Short    A Button~
+Long     A Button is here. Push it!~
+Flags    noremove~
+Values   0 0 0 0 0 0
+Stats    30000 0 0 0 0
+#MUDPROG
+Progtype  push_prog~
+Arglist   100~
+Comlist   mpechoa $n You push a button
+mpechoaround $n $n pushes a button
+mpoload 4501
+mpoload 4502
+mpoload 4504
+mpoload 4505
+mpoload 4506
+mpoload 4507
+mpoload 4508
+mpoload 4503
+mpoload 4509
+drop all
+pull button
+~
+#ENDPROG
+
+#ENDOBJECT
+
+#OBJECT
+Vnum     10705
+Keywords Button~
+Type     button~
+Short    A Button~
+Long     A Button is here. Push it!~
+Flags    noremove~
+Values   0 0 0 0 0 0
+Stats    30000 0 0 0 0
+#MUDPROG
+Progtype  push_prog~
+Arglist   100~
+Comlist   mpechoa $n You push a button
+mpechoaround $n $n pushes a button
+mpechoat $n &BThe force swirls over you and you vanish.
+mpechoaround $n &BThe force swirls over $n and $e vanishes.
+mptransfer $n 10752
+pull button
+~
+#ENDPROG
+
+#ENDOBJECT
+
+#OBJECT
+Vnum     10899
+Keywords spitir necklace~
+Type     armor~
+Short    A Spitir Necklace~
+Long     A necklace with a glowing pendant is here.~
+Flags    glow~
+WFlags   take neck~
+Values   20 20 0 0 0 0
+Stats    1 0 0 0 0
+Affect       -1 -1 1048576 26 0
+#ENDOBJECT
+
+#OBJECT
+Vnum     10900
+Keywords hi_obj~
+Type     trash~
+Short    a hi_obj~
+Long     A hi_obj is here.~
+Values   0 0 0 0 0 0
+Stats    1 0 0 0 0
+#ENDOBJECT
+
+#ROOM
+Vnum     10701
+Name     A Ruined Landing Pad~
+Sector   city~
+Flags    nomob~
+Stats    0 0 3720
+Desc     Old and mostly destroyed, this piece of land once served as a
+landing pad. Although it still can function as one, it seems
+to have not been taken care of. Around this pad is a long stretch
+of desolate land. To the west you can make out a valley of mountains.
+~
+#EXIT
+Direction west~
+ToRoom    10702
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10702
+Name     A Dirt Path~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction east~
+ToRoom    10701
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    10703
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10703
+Name     A Dirt Path~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction east~
+ToRoom    10702
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    10704
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10704
+Name     Before A Mountain~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction east~
+ToRoom    10703
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    10705
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10705
+Name     Before A Mountain~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction north~
+ToRoom    10704
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    10707
+#ENDEXIT
+
+#EXIT
+Direction southwest~
+ToRoom    10706
+Flags     secret hidden~
+#ENDEXIT
+
+#MUDPROG
+Progtype  entry_prog~
+Arglist   25~
+Comlist   mpecho A sound can be heard southwest of here
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     10706
+Name     Beneath The Mountain~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+Desc     You've somehow been lead beneath the mountain. This place was
+very well hidden. The path continues to the west. To the west
+the patch seems to be blocked by...skeletons? 
+~
+#EXIT
+Direction west~
+ToRoom    10708
+#ENDEXIT
+
+#EXIT
+Direction northeast~
+ToRoom    10705
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10707
+Name     Before A Mountain~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction north~
+ToRoom    10705
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10708
+Name     At The Entrance To A Stone Temple~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+Desc     Before you is a large temple. You can sense a dark presence here,
+a chill runs down your spine. Standing at the entrance, not
+permitting entrance are two skeletons. In order to proceed,
+you must defeat them.
+~
+#EXIT
+Direction east~
+ToRoom    10706
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    10709
+Keywords  Gate~
+Flags     isdoor closed~
+#ENDEXIT
+
+Reset M 0 10702 2 10708
+  Reset E 1 10702 1 18
+  Reset E 1 10702 1 16
+Reset M 0 10702 2 10708
+  Reset E 1 10702 1 16
+  Reset E 1 10702 1 18
+#ENDROOM
+
+#ROOM
+Vnum     10709
+Name     Inside The Temple~
+Sector   city~
+Flags    nomob indoors prototype~
+Stats    0 0 3720
+Desc     You are standing inside of the Sith Temple. Before you are many
+different paths. Some may lead to traps and some may lead you
+deeper in to the temple. On the wall to your right is a sign
+with red letters on it: &RBeware all those who dare enter this
+temple. You risk the chance of being imprisoned for all eternity.
+Only those who are one with the force stand a chance of freedom.
+~
+#EXIT
+Direction east~
+ToRoom    10708
+Flags     isdoor pickproof~
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    10721
+#ENDEXIT
+
+#EXIT
+Direction northwest~
+ToRoom    10710
+#ENDEXIT
+
+#EXIT
+Direction southwest~
+ToRoom    10722
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10710
+Name     A Path Within The Temple~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction west~
+ToRoom    10711
+#ENDEXIT
+
+#EXIT
+Direction northwest~
+ToRoom    10715
+#ENDEXIT
+
+#EXIT
+Direction southeast~
+ToRoom    10709
+#ENDEXIT
+
+#MUDPROG
+Progtype  entry_prog~
+Arglist   100~
+Comlist   if frc($n) > 0
+mpechoat $n A voice in your head warns you not to proceed to the northwest.
+endif
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     10711
+Name     A Path Within The Temple~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction east~
+ToRoom    10710
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    10712
+#ENDEXIT
+
+#EXIT
+Direction southwest~
+ToRoom    10716
+#ENDEXIT
+
+#MUDPROG
+Progtype  entry_prog~
+Arglist   100~
+Comlist   if frc($n) > 0
+mpechoat $n A voice in your head warns you not to proceed to the southeast.
+endif
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     10712
+Name     A Path Within The Temple~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction east~
+ToRoom    10711
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    10713
+#ENDEXIT
+
+#EXIT
+Direction northwest~
+ToRoom    10714
+#ENDEXIT
+
+#MUDPROG
+Progtype  entry_prog~
+Arglist   100~
+Comlist   if frc($n) > 0
+mpechoat $n A voice in your head warns you not to proceed to the northwest.
+endif
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     10713
+Name     A Small Chamber~
+Sector   city~
+Flags    hotel prototype~
+Stats    0 0 3720
+#EXIT
+Direction east~
+ToRoom    10712
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10714
+Name     A Path Within The Temple~
+Sector   city~
+Flags    nofloor prototype~
+Stats    0 0 3720
+#EXIT
+Direction down~
+ToRoom    10737
+#ENDEXIT
+
+#EXIT
+Direction northwest~
+ToRoom    10719
+#ENDEXIT
+
+#EXIT
+Direction southeast~
+ToRoom    10712
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10715
+Name     A Path Within The Temple~
+Sector   city~
+Flags    nofloor prototype~
+Stats    0 0 3720
+#EXIT
+Direction down~
+ToRoom    10737
+#ENDEXIT
+
+#EXIT
+Direction northwest~
+ToRoom    10717
+#ENDEXIT
+
+#EXIT
+Direction southeast~
+ToRoom    10710
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10716
+Name     A Path Within The Temple~
+Sector   city~
+Flags    nofloor prototype~
+Stats    0 0 3720
+#EXIT
+Direction east~
+ToRoom    10720
+#ENDEXIT
+
+#EXIT
+Direction down~
+ToRoom    10737
+#ENDEXIT
+
+#EXIT
+Direction northeast~
+ToRoom    10711
+#ENDEXIT
+
+#EXIT
+Direction southwest~
+ToRoom    10718
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10717
+Name     A Path Within The Temple~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction southeast~
+ToRoom    10715
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10718
+Name     A Path Within The Temple~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction northeast~
+ToRoom    10716
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10719
+Name     A Path Within The Temple~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction southeast~
+ToRoom    10714
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10720
+Name     A Path Within The Temple~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction east~
+ToRoom    10721
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    10725
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    10716
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10721
+Name     A Path Within The Temple~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction east~
+ToRoom    10709
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    10720
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10722
+Name     A Path Within The Temple~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction south~
+ToRoom    10723
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    10725
+#ENDEXIT
+
+#EXIT
+Direction northeast~
+ToRoom    10709
+#ENDEXIT
+
+#MUDPROG
+Progtype  entry_prog~
+Arglist   100~
+Comlist   if frc($n) > 0
+mpechoat $n A voice in your head warns you not to travel south.
+endif
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     10723
+Name     A Path Within The Temple~
+Sector   city~
+Flags    nofloor prototype~
+Stats    0 0 3720
+#EXIT
+Direction north~
+ToRoom    10722
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    10724
+#ENDEXIT
+
+#EXIT
+Direction down~
+ToRoom    10737
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10724
+Name     A Path Within The Temple~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction north~
+ToRoom    10723
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10725
+Name     A Path Within The Temple~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction north~
+ToRoom    10720
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    10722
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    10728
+Flags     secret hidden~
+#ENDEXIT
+
+#EXIT
+Direction southwest~
+ToRoom    10726
+#ENDEXIT
+
+#MUDPROG
+Progtype  entry_prog~
+Arglist   100~
+Comlist   if frc($n) > 0
+mpechoat $n A voice in your head tells you not to travel southwest.
+endif
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  greet_prog~
+Arglist   25~
+Comlist   mpecho A wailing noise can be heard from the west
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     10726
+Name     A Path Within The Temple~
+Sector   city~
+Flags    nofloor prototype~
+Stats    0 0 3720
+#EXIT
+Direction down~
+ToRoom    10737
+#ENDEXIT
+
+#EXIT
+Direction northeast~
+ToRoom    10725
+#ENDEXIT
+
+#EXIT
+Direction southwest~
+ToRoom    10727
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10727
+Name     A Path Within The Temple~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction northeast~
+ToRoom    10726
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10728
+Name     A Hidden Chamber~
+Sector   city~
+Flags    safe prototype~
+Stats    0 0 3720
+#EXIT
+Direction east~
+ToRoom    10725
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10729
+Name     Hall of the Ancient's Tombs~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction west~
+ToRoom    10730
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10730
+Name     A Large Room Where Several Paths Meet~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction north~
+ToRoom    10733
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    10729
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    10740
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    10744
+#ENDEXIT
+
+#EXIT
+Direction northeast~
+ToRoom    10731
+#ENDEXIT
+
+#EXIT
+Direction northwest~
+ToRoom    10735
+#ENDEXIT
+
+#EXIT
+Direction southeast~
+ToRoom    10738
+#ENDEXIT
+
+#EXIT
+Direction southwest~
+ToRoom    10742
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10731
+Name     Hall of the Ancient's Tombs~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction north~
+ToRoom    10732
+#ENDEXIT
+
+#EXIT
+Direction southwest~
+ToRoom    10730
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10732
+Name     Standing Before A Tomb~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction north~
+ToRoom    10701
+Keywords  tomb~
+Flags     isdoor closed locked pickproof bashproof~
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    10731
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10733
+Name     Hall of the Ancient's Tombs~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction north~
+ToRoom    10734
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    10730
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10734
+Name     Standing Before A Tomb~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction north~
+ToRoom    10701
+Keywords  tomb~
+Flags     isdoor closed locked pickproof bashproof~
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    10733
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10735
+Name     Hall of the Ancient's Tombs~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction north~
+ToRoom    10736
+#ENDEXIT
+
+#EXIT
+Direction southeast~
+ToRoom    10730
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10736
+Name     Standing Before A Tomb~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction north~
+ToRoom    10737
+Keywords  tomb~
+Flags     isdoor closed~
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    10735
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10737
+Name     A Rusted Cell~
+Sector   city~
+Flags    nomob hotel prototype~
+Stats    0 0 3720
+Desc     You are inside of an old and rusted cell. In one corner of the
+cell is a skeletal figure. You can not make out what race the
+skeleton is from because most of the bones have deteriorated.On
+one wall, a message reads that only those who use the force
+as their tool can free the prisoners by speaking the word "Freedom"
+~
+#MUDPROG
+Progtype  speech_prog~
+Arglist   freedom~
+Comlist   if frc($n) > 0
+mpechoaround $n As $n speaks the word freedom, a mystical force transfers all beings in this cell away.
+mpechoat $n As you speak the word freedom, a swirl of energy appears and clouds your vision. When it disappears you are no longer in the cell.
+mptransfer all 10730
+endif
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     10738
+Name     A Path Within The Temple~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction south~
+ToRoom    10739
+#ENDEXIT
+
+#EXIT
+Direction northwest~
+ToRoom    10730
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10739
+Name     Standing Before A Tomb~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction north~
+ToRoom    10738
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    10701
+Flags     isdoor closed locked pickproof bashproof~
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10740
+Name     Hall of the Ancient's Tombs~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction north~
+ToRoom    10730
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    10741
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10741
+Name     Standing Before A Tomb~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction north~
+ToRoom    10740
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    10701
+Flags     isdoor closed locked pickproof bashproof~
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10742
+Name     Hall of the Ancient's Tombs~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction south~
+ToRoom    10743
+#ENDEXIT
+
+#EXIT
+Direction northeast~
+ToRoom    10730
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10743
+Name     Standing Before A Tomb~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction north~
+ToRoom    10742
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    10701
+Flags     isdoor closed locked pickproof bashproof~
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10744
+Name     Standing In Front of An Alter~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction east~
+ToRoom    10730
+#ENDEXIT
+
+Reset O 0 10703 1 10744
+#ENDROOM
+
+#ROOM
+Vnum     10745
+Name     Corridor Within The Temple~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction east~
+ToRoom    10744
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10746
+Name     A Corridor Intersection ~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction north~
+ToRoom    10750
+#ENDEXIT
+
+#EXIT
+Direction east~
+ToRoom    10745
+#ENDEXIT
+
+#EXIT
+Direction south~
+ToRoom    10748
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    10747
+Flags     isdoor closed~
+#ENDEXIT
+
+Reset D 0 10746 3 1
+#ENDROOM
+
+#ROOM
+Vnum     10747
+Name     The Tomb of Naga Sadow~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction east~
+ToRoom    10746
+#ENDEXIT
+
+Reset M 0 10704 1 10747
+#ENDROOM
+
+#ROOM
+Vnum     10748
+Name     Corridor Within the Temple~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction north~
+ToRoom    10746
+#ENDEXIT
+
+#EXIT
+Direction west~
+ToRoom    10749
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10749
+Name     A Meditation Chamber~
+Sector   city~
+Flags    safe silence prototype~
+Stats    0 0 3720
+#EXIT
+Direction east~
+ToRoom    10748
+#ENDEXIT
+
+#ENDROOM
+
+#ROOM
+Vnum     10750
+Name     A Torch Filled Chamber~
+Sector   city~
+Flags    prototype~
+Stats    0 0 3720
+#EXIT
+Direction south~
+ToRoom    10746
+#ENDEXIT
+
+Reset M 0 10705 1 10750
+#ENDROOM
+
+#ROOM
+Vnum     10751
+Name     An Astral Plane~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 3720
+Desc     For many millenia, the Sith have brought fear into the hearts
+of many. Their power has been proven more of a match for even
+the most powerful Jedi.The Sith are able to perform tasks to
+use the force to their advantage. In order to be a Dark Lord
+of the Sith you must be able to perform these tasks.
+~
+Reset O 0 10705 1 10751
+#MUDPROG
+Progtype  custom_prog~
+Arglist   exit~
+Comlist   mptransfer $n 10750
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     10752
+Name     An Astral Plane~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 3720
+Desc     As a warrior you must fight your own battles, grab what you want,
+and light your own way. If you are capable of being a warrior
+then you must be able to see where you wish to be and where
+you are. If lost and confused you will never find the path to
+your  destiny 
+~
+#MUDPROG
+Progtype  custom_prog~
+Arglist   exit~
+Comlist   mptransfer $n 10750
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  act_prog~
+Arglist   p Shards of iridescent light collide to form a dazzling ball...~
+Comlist   mpecho You have passed this test. You may continue.
+mpechoat $n &BThe force swirls over you and you vanish.
+mpechoaround $n &BThe force swirls over $n and $e vanishes
+mptransfer $n 10753
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     10753
+Name     An Astral Plane~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 3720
+Desc     Sometimes you will be confronted by situations in which you can
+not win. In times like these you must use tactics which some
+may see as unfair. It is always important to be able to shield
+yourself from danger. Do whatever it takes to win battles.
+~
+#MUDPROG
+Progtype  custom_prog~
+Arglist   exit~
+Comlist   mptransfer $n 10750
+~
+#ENDPROG
+
+#MUDPROG
+Progtype  act_prog~
+Arglist   p A translucent blue shield surrounds~
+Comlist   mpecho You have proven yourself capable of defending yourself. You may proceed
+mpechoat $n &BThe force swirls over you and you vanish.
+mpechoaround $n &BThe force swirls over $n and $e vanishes.
+mptransfer $n 10754
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     10754
+Name     An Astral Plane~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 3720
+Desc     lightsaber As a warrior who may draw from the force, you posses
+the ability to predict your opponents movements. This makes
+you very dangerous with a lightsaber, a tool useful for deflecting
+blaster bolts, or parrying other attacks. It takes great concentration
+to craft a lightsaber 
+~
+Reset O 0 10704 1 10754
+#MUDPROG
+Progtype  custom_prog~
+Arglist   exit~
+Comlist   mptransfer $n 10750
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     10755
+Name     An Astral Plane~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 3720
+Desc     A Sith must always be prepared for battle. In the face of the
+most powerful opponent they must stand their ground and show
+no mercy.With the force and the lightsaber as your weapon, you
+will always be victorious.
+~
+#MUDPROG
+Progtype  custom_prog~
+Arglist   exit~
+Comlist   mptransfer $n 10750
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     10756
+Name     An Astral Plane~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 3720
+Desc     End with gem
+~
+#MUDPROG
+Progtype  custom_prog~
+Arglist   exit~
+Comlist   mptransfer $n 10750
+~
+#ENDPROG
+
+#ENDROOM
+
+#ROOM
+Vnum     10757
+Name     An Astral Plane~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 3720
+#ENDROOM
+
+#ROOM
+Vnum     10767
+Name     Floating in a void~
+Sector   city~
+Flags    nomob prototype~
+Stats    0 0 3720
+#ENDROOM
+
+#ROOM
+Vnum     10900
+Name     Floating in a void~
+Sector   city~
+Flags    nomob~
+Stats    0 0 3720
+Reset M 0 10701 1 10900
+Reset M 0 10900 1 10900
+  Reset G 1 10702 1
+  Reset G 1 10702 1
+Reset O 0 10900 1 10900
+Reset O 0 10701 1 10900
+#ENDROOM
+
+#ENDAREA
