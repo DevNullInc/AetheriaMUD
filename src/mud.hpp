@@ -258,10 +258,10 @@ typedef ch_ret SPELL_FUN( int sn, int level, CHAR_DATA * ch, void *vo );
 #define LEVEL_NEOPHYTE		   (MAX_LEVEL - 4)
 #define LEVEL_AVATAR		   (MAX_LEVEL - 5)
 
-#include "dns.h"
-#include "pfiles.h"
-#include "color.h"
-#include "hotboot.h"
+#include "dns.hpp"
+#include "pfiles.hpp"
+#include "color.hpp"
+#include "hotboot.hpp"
 
 #define LEVEL_LOG		    LEVEL_LESSER
 #define LEVEL_HIGOD		    LEVEL_GOD

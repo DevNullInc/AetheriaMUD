@@ -1,4 +1,4 @@
-# SWR Server Management Scripts
+# Aetherium Server Management Scripts
 
 This directory contains portable server management and utility scripts for the SWR MUD server.
 

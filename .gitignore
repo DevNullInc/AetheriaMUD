@@ -1,0 +1,54 @@
+# AetheriaMUD .gitignore
+
+# Build artifacts
+src/swr
+src/swr.exe
+src/resolver
+src/resolver.exe
+src/o/
+src/*.o
+src/*.d
+src/build.log
+
+# Runtime data (generated content)
+boards/
+clans/
+color/
+core/
+gods/
+html/
+planets/
+player/
+ships/
+space/
+
+# Documentation (generated)
+doc/
+
+# Force system (generated content)
+force/
+
+# Area files (keep only help.are)
+area/*
+!area/help.are
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+*.bak
+*~
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE and editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Backup files
+*.orig
+*.rej

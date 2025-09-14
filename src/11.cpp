@@ -33,7 +33,7 @@ Michael Seifert, and Sebastian Hammer.
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include "mud.h"
+#include "mud.hpp"
 
 extern SHIP_DATA *first_ship;
 extern SHIP_DATA *last_ship;

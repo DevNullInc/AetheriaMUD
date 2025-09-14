@@ -60,19 +60,13 @@ endif
 L_FLAGS := $(DYNLIB) $(ARGON2_LIBS) $(ZLIB_LIBS) $(CRYPT) -lm -flto
 
 # Source files
-CPP_FILES := body.cpp account.cpp act_comm.cpp act_info.cpp act_move.cpp act_obj.cpp \
-						 act_wiz.cpp alias.cpp arena.cpp autobuild.cpp ban.cpp bank.cpp bet.cpp \
-						 boards.cpp bounty.cpp build.cpp changes.cpp channels.cpp clans.cpp cleanup.cpp color.cpp combat.cpp \
-						 comm.cpp comments.cpp const.cpp db.cpp delivery.cpp designship.cpp dns.cpp editor.cpp \
-						 fight.cpp finger.cpp grid_c.cpp handler.cpp hashstr.cpp homes.cpp hotboot.cpp immcomm.cpp \
-						 implants.cpp installations.cpp interp.cpp magic.cpp makeobjs.cpp mccp.cpp \
-						 medic.cpp misc.cpp msp.cpp mud_comm.cpp mud_prog.cpp mxp.cpp occupations.cpp olc_bounty.cpp \
-						 olc-shuttle.cpp olc.cpp password.cpp pfiles.cpp pilot.cpp player.cpp quest.cpp races.cpp raceskills.cpp \
-						 renumber.cpp reset.cpp restore.cpp save.cpp shell.cpp shops.cpp \
-						 skills.cpp smuggling.cpp space.cpp space2.cpp special.cpp starsystem.cpp swskills.cpp \
-						 tables.cpp track.cpp update.cpp vendor.cpp wedding.cpp grid.cpp greet.cpp \
-						 imccustom.cpp
-
+CPP_FILES := 11.cpp act_comm.cpp act_info.cpp act_move.cpp act_obj.cpp act_wiz.cpp boards.cpp bounty.cpp \
+	  build.cpp clans.cpp color.cpp comm.cpp comments.cpp const.cpp db.cpp dns.cpp editor.cpp fight.cpp finfo.cpp \
+	  force.cpp fskills.cpp functions.cpp handler.cpp hashstr.cpp hotboot.cpp hunter.cpp interp.cpp \
+	  magic.cpp makeobjs.cpp marriage.cpp mccp.cpp misc.cpp mssp.cpp mud_comm.cpp mud_prog.cpp newarena.cpp \
+	  pfiles.cpp planets.cpp player.cpp reset.cpp save.cpp sha256.cpp ships.cpp shops.cpp skills.cpp slicers.cpp \
+	  space.cpp special.cpp swskills.cpp tables.cpp track.cpp tech.cpp update.cpp \
+	  
 ifdef IMC # IMC2 support
 		CPP_FILES += imc.cpp md5.cpp
 endif
