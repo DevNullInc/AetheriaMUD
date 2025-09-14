@@ -1,104 +1,143 @@
-CC      = g++
-#PROF    = -p
+# Compiler and target
+CC       := $(shell command -v g++ 2>/dev/null || command -v clang++)
+STD      := -std=c++23 # Requires GCC 13+ or Clang++ 15+
+ARCH     := -m64 # Force 64-bit build
 
-#Uncomment to compile in Cygwin
-#CYGWIN = -DCYGWIN
+# Feature toggles
+WEB      ?= -DWEB # Enable web server support (requires libmicrohttpd)
+IMC      ?= 1 # Enable IMC2 support
+IMCFLAGS := -DIMC -DIMCSMAUG # Enable IMC2 support
 
-#Uncomment the line below if you are getting undefined references to dlsym, dlopen, and dlclose.
-#Comment it out if you get errors about ldl not being found.
-NEED_DL = -ldl
-
-#Some systems need this for dynamic linking to work.
-EXPORT_SYMBOLS = -export-dynamic
-
-# Uncomment the two lines below if compiling on a Solaris box
-#SOLARIS_FLAG = -Dsun -DSYSV
-#SOLARIS_LINK = -lnsl -lsocket
-
-#Memory debugging flags. Cygwin lacks libasan support required for this to work.
-ifndef CYGWIN
-M_FLAGS = -fsanitize=address -fsanitize=leak -fno-omit-frame-pointer
+# OS detection
+OS := $(shell uname | cut -d _ -f 1)
+ifeq ($(OS),CYGWIN)
+		WIN := 1
 endif
 
-W_FLAGS = -std=c++1z -Wall -Wshadow -Wformat-security -Winline -Wpointer-arith -Wcast-align -Wredundant-decls
+ifndef WIN
+		DYNLIB := -ldl
+endif
 
-C_FLAGS = -g2 $(W_FLAGS) $(M_FLAGS) $(SOLARIS_FLAG) $(PROF) $(EXPORT_SYMBOLS)
-L_FLAGS = $(M_FLAGS) $(PROF) $(SOLARIS_LINK) -lm -lz $(NEED_DL)
-#D_FLAGS : For the DNS Slave process. No need in linking all the extra libs for this.
-D_FLAGS = -g2 -O -fsanitize=address -fsanitize=leak -fno-omit-frame-pointer $(PROF) $(SOLARIS_LINK)
+# Libs via pkg-config (with fallbacks)
+ARGON2_CFLAGS := $(shell pkg-config --cflags argon2 2>/dev/null)
+ARGON2_LIBS   := $(shell pkg-config --libs   argon2 2>/dev/null || echo -largon2)
+ZLIB_CFLAGS   := $(shell pkg-config --cflags zlib   2>/dev/null)
+ZLIB_LIBS     := $(shell pkg-config --libs   zlib   2>/dev/null || echo -lz)
+CRYPT         := -lcrypt
 
-C_FILES = 11.c act_comm.c act_info.c act_move.c act_obj.c act_wiz.c boards.c bounty.c \
-	  build.c clans.c color.c comm.c comments.c const.c db.c dns.c editor.c fight.c finfo.c \
-	  force.c fskills.c functions.c handler.c hashstr.c hotboot.c hunter.c interp.c \
-	  magic.c makeobjs.c marriage.c mccp.c misc.c mssp.c mud_comm.c mud_prog.c newarena.c \
-	  pfiles.c planets.c player.c reset.c save.c sha256.c ships.c shops.c skills.c slicers.c \
-	  space.c special.c swskills.c tables.c track.c tech.c update.c
+# Build/indent
+INDENT       := indent
+INDENT_FLAGS := -ts4 -nut -bap -bli0 -di10 -l78 -lp -nbc -i8 -sc -cdb -c1 -cd1 -nbfda -npcs -bad -hnl -nce -npsl -bl
 
-O_FILES := $(patsubst %.c,o/%.o,$(C_FILES))
+# Defines and debug
+DEFINES  := -DMCCP -DMXP -DACCOUNT -DOLC_HOMES -DRESTORE -DOLC_SHUTTLE $(WEB)
+DEBUG    ?= -g3
 
-H_FILES = $(wildcard *.h) 
+# C++23 optimization - go native x64 with LTO
+ifndef DEBUG
+		OPT_FLAG := -pipe -O3 -march=native -mtune=native -flto
+endif
 
-all:
-	$(info    Using flags: $(C_FLAGS))
-	$(MAKE) -s swr
-	$(MAKE) -s dns
+# C++23 hardcore warning flags - NO MERCY MODE
+W_FLAGS := -Wall -Wextra -Wpedantic -Wshadow -Wpointer-arith -Wcast-qual \
+					 -Wcast-align -Wformat-security -Wconversion -Wsign-conversion \
+					 -Wold-style-cast -Woverloaded-virtual -Wnon-virtual-dtor \
+					 -Wdeprecated -Wdeprecated-declarations -Werror
 
-# pull in dependency info for *existing* .o files
--include dependencies.d
-
-ifdef CYGWIN
-swr: $(O_FILES)
-	rm -f swr.exe
-	dlltool --export-all --output-def swr.def $(O_FILES)
-	dlltool --dllname swr.exe --output-exp swr.exp --def swr.def
-	$(CC) -o swr.exe $(O_FILES) swr.exp $(L_FLAGS)
-	@echo -e "Generating dependency file ...";
-	@$(CC) -MM $(C_FLAGS) $(C_FILES) > dependencies.d
-	@perl -pi -e 's.^([a-z]).o/$$1.g' dependencies.d
-	@echo -e "Done compiling mud.";
-	chmod g+w swr.exe
-	chmod a+x swr.exe
-	chmod g+w $(O_FILES)
-
-clean:
-	@rm -f o/*.o swr.exe dependencies.d resolver.exe resolver.o *~
-
+# NO LEGACY CRUTCHES - fix the code instead
+ifeq ($(CC),clang++)
+	C_FLAGS := $(STD) -stdlib=libc++ $(ARCH) $(OPT_FLAG) $(DEBUG) $(DEFINES) $(IMCFLAGS) \
+		$(ARGON2_CFLAGS) $(ZLIB_CFLAGS) $(W_FLAGS) \
+		-MMD -MP
+	L_FLAGS := $(DYNLIB) $(ARGON2_LIBS) $(ZLIB_LIBS) $(CRYPT) -lm -flto -stdlib=libc++
 else
-swr: $(O_FILES)
-	rm -f swr
-	$(CC) -export-dynamic -o swr $(O_FILES) $(L_FLAGS)
-	@echo -e "Generating dependency file ...";
-	@$(CC) -MM $(C_FLAGS) $(C_FILES) > dependencies.d
-	@perl -pi -e 's.^([a-z]).o/$$1.g' dependencies.d
-	@echo -e "Done compiling mud.";
-	chmod g+w swr
-	chmod a+x swr
-	chmod g+w $(O_FILES)
+	C_FLAGS := $(STD) $(ARCH) $(OPT_FLAG) $(DEBUG) $(DEFINES) $(IMCFLAGS) \
+		$(ARGON2_CFLAGS) $(ZLIB_CFLAGS) $(W_FLAGS) \
+		-MMD -MP
+	L_FLAGS := $(DYNLIB) $(ARGON2_LIBS) $(ZLIB_LIBS) $(CRYPT) -lm -flto
+endif
+# Add LTO to linking for maximum optimization
+L_FLAGS := $(DYNLIB) $(ARGON2_LIBS) $(ZLIB_LIBS) $(CRYPT) -lm -flto
 
-clean:
-	@rm -f o/*.o swr dependencies.d resolver resolver.o *~
+# Source files
+CPP_FILES := body.cpp account.cpp act_comm.cpp act_info.cpp act_move.cpp act_obj.cpp \
+						 act_wiz.cpp alias.cpp arena.cpp autobuild.cpp ban.cpp bank.cpp bet.cpp \
+						 boards.cpp bounty.cpp build.cpp changes.cpp channels.cpp clans.cpp cleanup.cpp color.cpp combat.cpp \
+						 comm.cpp comments.cpp const.cpp db.cpp delivery.cpp designship.cpp dns.cpp editor.cpp \
+						 fight.cpp finger.cpp grid_c.cpp handler.cpp hashstr.cpp homes.cpp hotboot.cpp immcomm.cpp \
+						 implants.cpp installations.cpp interp.cpp magic.cpp makeobjs.cpp mccp.cpp \
+						 medic.cpp misc.cpp msp.cpp mud_comm.cpp mud_prog.cpp mxp.cpp occupations.cpp olc_bounty.cpp \
+						 olc-shuttle.cpp olc.cpp password.cpp pfiles.cpp pilot.cpp player.cpp quest.cpp races.cpp raceskills.cpp \
+						 renumber.cpp reset.cpp restore.cpp save.cpp shell.cpp shops.cpp \
+						 skills.cpp smuggling.cpp space.cpp space2.cpp special.cpp starsystem.cpp swskills.cpp \
+						 tables.cpp track.cpp update.cpp vendor.cpp wedding.cpp grid.cpp greet.cpp \
+						 imccustom.cpp
+
+ifdef IMC # IMC2 support
+		CPP_FILES += imc.cpp md5.cpp
+endif
+ifdef WEB # Web server support
+		CPP_FILES += web-server.cpp
 endif
 
-dns: resolver.o
-	rm -f resolver
-	$(CC) $(D_FLAGS) -o resolver resolver.o
-	@echo -e "Done compiling DNS resolver.";
-	chmod g+w resolver
-	chmod a+x resolver
-	chmod g+w resolver.o
+# Object files and dependencies
+O_DIR    := o
+O_FILES  := $(patsubst %.cpp,$(O_DIR)/%.o,$(CPP_FILES))
+DEPS     := $(O_FILES:.o=.d)
 
-indent:
-	indent -ts3 -nut -nsaf -nsai -nsaw -npcs -npsl -ncs -nbc -bls -prs -bap -cbi0 -cli3 -bli0 -l125 -lp -i3 -cdb -c1 -cd1 -sc -pmt $(C_FILES)
-	indent -ts3 -nut -nsaf -nsai -nsaw -npcs -npsl -ncs -nbc -bls -prs -bap -cbi0 -cli3 -bli0 -l125 -lp -i3 -cdb -c1 -cd1 -sc -pmt $(H_FILES)
+# Targets
+ifeq ($(WIN),1)
+		SWR      := swr.exe
+		RESOLVER := resolver.exe
+else
+		SWR      := swr
+		RESOLVER := resolver
+endif
 
-indentclean:
-	rm *.c~ *.h~
+# Make rules
+.PHONY: all clean dns neat indentclean resolver
 
-new:
-	$(MAKE) indentclean
-	$(MAKE) clean
-	$(MAKE) all
+# Build all targets
+all: $(SWR)
 
-o/%.o: %.c
-	echo "  Compiling $@...";
-	$(CC) -c $(C_FLAGS) $< -o $@
+# Build the DNS resolver
+dns: $(RESOLVER)
+
+# Main server
+$(SWR): $(O_FILES)
+		@echo "Linking $(SWR) for $(OS) (WIN=$(WIN))"
+ifdef WIN # Windows needs a .def file for exports
+		@dlltool --export-all --output-def swr.def $(O_FILES)
+		@dlltool --dllname $(SWR) --output-exp swr.exp --def swr.def
+		@$(CC) $(W_FLAGS) -o $(SWR) $(O_FILES) swr.exp $(L_FLAGS)
+else # Linux/Mac just link normally
+		@$(CC) $(W_FLAGS) -o $(SWR) $(O_FILES) $(L_FLAGS)
+endif #endif
+		@[ -f /usr/bin/bf ] && /usr/bin/bf -s $(SWR) && /usr/bin/bf -m $(SWR) || true
+		@chmod g+w $(SWR) $(O_FILES)
+
+# Resolver utility
+$(RESOLVER): $(O_DIR)/resolver.o
+		@echo "Linking $(RESOLVER)"
+		@$(CC) $(DEFINES) -o $(RESOLVER) $(O_DIR)/resolver.o
+		@chmod g+w $(RESOLVER) && chmod a+x $(RESOLVER) && chmod g+w $(O_DIR)/resolver.o
+
+# Compile rule with auto dep generation
+$(O_DIR)/%.o: %.cpp mud.hpp
+		@mkdir -p $(O_DIR)
+		@echo "Compiling $< -> $@"
+		$(CC) $(C_FLAGS) -c $< -o $@
+
+# NOTE: To use std::format, you must have GCC 13+ or Clang++ 15+ with libc++ 15+.
+
+# Clean up build artifacts
+clean:
+		@echo "Cleaning objects and resolver artifacts"
+		@rm -f $(O_FILES) $(DEPS) $(RESOLVER) $(O_DIR)/resolver.o
+
+# Neatify source code
+neat:
+		$(INDENT) $(INDENT_FLAGS) $(CPP_FILES) $(wildcard *.hpp)
+
+# Auto-include dependencies (safe if missing)
+-include $(DEPS) # Include dependency files

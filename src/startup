@@ -1,12 +1,14 @@
 #! /bin/csh -f
 
-set port = 4020
+set port = 4848
 if ( "$1" != "" ) set port="$1"
 
 cd ../area
 
-limit coredumpsize unlimited
-limit stacksize unlimited
+nohup
+nice
+limit stack 1024k
+unlimit core
 if ( -e shutdown.txt ) rm -f shutdown.txt
 
 while ( 1 )
@@ -20,13 +22,6 @@ while ( 1 )
     date > $logfile
     date > ../area/boot.txt
 
-    # Check if already running  
-    set matches = `netstat -an | grep ":$port " | grep -c LISTEN`
-    if ( $matches >= 1 ) then 
-	# Already running 
-	echo MUD Already running. 
-	exit 0 
-    endif
     ../src/swr $port >&! $logfile
 
     if ( -e shutdown.txt ) then
@@ -36,4 +31,3 @@ while ( 1 )
     sleep 10
 
 end
-
