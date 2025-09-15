@@ -54,7 +54,8 @@
 #include <errno.h>
 #include <dirent.h>
 #include "mud.hpp"
-#include "sha256.hpp"
+#include "password.hpp"
+#include <string>
 
 #define RESTORE_INTERVAL 21600
 
@@ -4539,7 +4540,7 @@ void do_set_boot_time( CHAR_DATA * ch, const char *argument )
  */
 void do_form_password( CHAR_DATA * ch, const char *argument )
 {
-   char *pwcheck;
+   // Argon2 password hash output
 
    set_char_color( AT_IMMORT, ch );
 
@@ -4552,10 +4553,10 @@ void do_form_password( CHAR_DATA * ch, const char *argument )
    /*
     * This is arbitrary to discourage weak passwords 
     */
-   if( strlen( argument ) < 5 )
+   if( strlen( argument ) < 8 )
    {
       send_to_char( "Usage: formpass <password>\r\n", ch );
-      send_to_char( "New password must be at least 5 characters in length.\r\n", ch );
+      send_to_char( "New password must be at least 8 characters in length.\r\n", ch );
       return;
    }
 
@@ -4566,9 +4567,8 @@ void do_form_password( CHAR_DATA * ch, const char *argument )
       return;
    }
 
-   pwcheck = sha256_crypt( argument );
-
-   ch_printf( ch, "%s results in the encrypted string: %s\r\n", argument, pwcheck );
+   std::string pwcheck = hash_password(argument);
+   ch_printf( ch, "%s results in the encrypted string: %s\r\n", argument, pwcheck.c_str() );
    return;
 }
 

@@ -44,14 +44,15 @@
  *                                                                                                                               *
  *********************************************************************************************************************************/
 
-#include <sys/types.h>
-#include <ctype.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
-#include <unistd.h>
+#include <string>
+#include <chrono>
+#include <format>
+#include <cctype>
+#include <cstdio>
+#include <cstring>
 #include "mud.hpp"
-#include "sha256.hpp"
+#include "password.hpp"
+#include <string>
 
 /*
  * Keep players from defeating examine progs -Druid
@@ -3567,16 +3568,17 @@ void do_password( CHAR_DATA * ch, const char *argument )
       return;
    }
 
-   if( strcmp( sha256_crypt( arg1 ), ch->pcdata->pwd ) )
+   // Use Argon2 password verification
+   if( !verify_password(arg1, ch->pcdata->pwd) )
    {
       WAIT_STATE( ch, 40 );
       send_to_char( "Wrong password.  Wait 10 seconds.\r\n", ch );
       return;
    }
 
-   if( strlen( arg2 ) < 5 )
+   if( strlen( arg2 ) < 8 )
    {
-      send_to_char( "New password must be at least five characters long.\r\n", ch );
+      send_to_char( "New password must be at least eight characters long.\r\n", ch );
       return;
    }
 
@@ -3586,10 +3588,9 @@ void do_password( CHAR_DATA * ch, const char *argument )
       return;
    }
 
-   pwdnew = sha256_crypt( arg2 );
-
-   DISPOSE( ch->pcdata->pwd );
-   ch->pcdata->pwd = strdup( pwdnew );
+   // Hash new password with Argon2
+   std::string pwdnew = hash_password(arg2);
+   ch->pcdata->pwd = pwdnew;
    if( IS_SET( sysdata.save_flags, SV_PASSCHG ) )
       save_char_obj( ch );
    send_to_char( "Ok.\r\n", ch );

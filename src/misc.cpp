@@ -49,7 +49,7 @@
 #include <string.h>
 #include <time.h>
 #include "mud.hpp"
-#include "sha256.hpp"
+#include "password.hpp"
 
 extern int top_exit;
 
@@ -3085,7 +3085,7 @@ void do_suicide( CHAR_DATA * ch, const char *argument )
       return;
    }
 
-   if( strcmp( sha256_crypt( argument ), ch->pcdata->pwd ) )
+   if( !verify_password(argument, ch->pcdata->pwd) )
    {
       send_to_char( "Sorry wrong password.\r\n", ch );
       log_printf( "%s attempting to commit suicide... WRONG PASSWORD!", ch->name );

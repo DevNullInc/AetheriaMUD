@@ -70,8 +70,7 @@
 #include "mud.hpp"
 #include "mccp.hpp"
 #include "mssp.hpp"
-#include "sha256.hpp"
-
+#include "password.hpp"
 /*
  * Socket and TCP/IP stuff.
  */
@@ -1775,7 +1774,7 @@ void nanny_get_old_password( DESCRIPTOR_DATA * d, char *argument )
 
    write_to_buffer( d, "\r\n", 2 );
 
-   if( strcmp( sha256_crypt( argument ), ch->pcdata->pwd ) )
+   if( !verify_password(argument, ch->pcdata->pwd) )
    {
       write_to_buffer( d, "Wrong password.\r\n", 0 );
       /*
@@ -1874,13 +1873,12 @@ void nanny_confirm_new_name( DESCRIPTOR_DATA * d, const char *argument )
 void nanny_get_new_password( DESCRIPTOR_DATA * d, const char *argument )
 {
    CHAR_DATA *ch = d->character;
-   char *pwdnew;
 
    write_to_buffer( d, "\r\n", 2 );
 
-   if( strlen( argument ) < 5 )
+   if( strlen( argument ) < 8 )
    {
-      send_to_desc_color( "&zPassword must be at least five characters long.\r\nPassword: &w", d );
+      send_to_desc_color( "&zPassword must be at least eight characters long.\r\nPassword: &w", d );
       return;
    }
 
@@ -1890,10 +1888,10 @@ void nanny_get_new_password( DESCRIPTOR_DATA * d, const char *argument )
       return;
    }
 
-   pwdnew = sha256_crypt( argument );
-
-   DISPOSE( ch->pcdata->pwd );
-   ch->pcdata->pwd = strdup( pwdnew );
+   std::string pwdnew = hash_password(argument);
+   /* If ch->pcdata->pwd is char*, use strdup. Otherwise, assign string. */
+   DISPOSE(ch->pcdata->pwd);
+   ch->pcdata->pwd = strdup(pwdnew.c_str());
    send_to_desc_color( "\r\n&zPlease retype the password to confirm: &w", d );
    d->connected = CON_CONFIRM_NEW_PASSWORD;
 }
@@ -1904,7 +1902,7 @@ void nanny_confirm_new_password( DESCRIPTOR_DATA * d, const char *argument )
 
    write_to_buffer( d, "\r\n", 2 );
    
-   if( strcmp( sha256_crypt( argument ), ch->pcdata->pwd ) )
+   if( !verify_password(argument, ch->pcdata->pwd) )
    {
       send_to_desc_color( "&zPasswords don't match.\r\nRetype password: &w", d );
       d->connected = CON_GET_NEW_PASSWORD;
