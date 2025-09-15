@@ -1,36 +1,55 @@
-/* 
-
-SWFotE copyright (c) 2002 was created by
-Chris 'Tawnos' Dary (cadary@uwm.edu),
-Korey 'Eleven' King (no email),
-Matt 'Trillen' White (mwhite17@ureach.com),
-Daniel 'Danimal' Berrill (danimal924@yahoo.com),
-Richard 'Bambua' Berrill (email unknown),
-Stuart 'Ackbar' Unknown (email unknown)
-
-SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper
-based on a concept and ideas from the original SWR immortals: 
-Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn), 
-Ackbar, Satin, Streen and Bib as well as much input from our other builders 
-and players.
-
-Original SMAUG 1.4a written by Thoric (Derek Snider) with Altrag,
-Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,
-Grishnakh, Fireblade, and Nivek.
-
-Original MERC 2.1 code by Hatchet, Furey, and Kahn.
-
-Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,
-Michael Seifert, and Sebastian Hammer.
-
-*/
+/*********************************************************************************************************************************
+ *                                                                                                                   ;           *
+ *                                                                                                                  ED.          *
+ *                        ,;                             ,;                                                  :      E#Wi         *
+ *                      f#i          .    .            f#i j.         t                                      Ef     E###G.       *
+ *             ..     .E#t  GEEEEEEELDi   Dt         .E#t  EW,        Ej             ..           ..       : E#t    E#fD#W;      *
+ *            ;W,    i#W,   ,;;L#K;;.E#i  E#i       i#W,   E##j       E#,           ;W,          ,W,     .Et E#t    E#t t##L     *
+ *           j##,   L#D.       t#E   E#t  E#t      L#D.    E###D.     E#t          j##,         t##,    ,W#t E#t    E#t  .E#K,   *
+ *          G###, :K#Wfff;     t#E   E#t  E#t    :K#Wfff;  E#jG#W;    E#t         G###,        L###,   j###t E#t fi E#t    j##f  *
+ *        :E####, i##WLLLLt    t#E   E########f. i##WLLLLt E#t t##f   E#t       :E####,      .E#j##,  G#fE#t E#t L#jE#t    :E#K: *
+ *       ;W#DG##,  .E#L        t#E   E#j..K#j...  .E#L     E#t  :K#E: E#t      ;W#DG##,     ;WW; ##,:K#i E#t E#t L#LE#t   t##L   *
+ *      j###DW##,    f#E:      t#E   E#t  E#t       f#E:   E#KDDDD###iE#t     j###DW##,    j#E.  ##f#W,  E#t E#tf#E:E#t .D#W;    *
+ *     G##i,,G##,     ,WW;     t#E   E#t  E#t        ,WW;  E#f,t#Wi,,,E#t    G##i,,G##,  .D#L    ###K:   E#t E###f  E#tiW#G.     *
+ *   :K#K:   L##,      .D#;    t#E   f#t  f#t         .D#; E#t  ;#W:  E#t  :K#K:   L##, :K#t     ##D.    E#t E#K,   E#K##i       *
+ *  ;##D.    L##,        tt     fE    ii   ii           tt DWi   ,KK: E#t ;##D.    L##, ...      #G      ..  EL     E##D.        *
+ *  ,,,      .,,                 :                                    ,;. ,,,      .,,           j           :      E#t          *
+ *                                                                                                                  L:           *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                AetheriaMUD additions and changes from the Star Wars Reality code                                              *
+ *                copyright (c) 2025 /dev/null Industries - StygianRenegade                                                     *
+ *                                                                                                                               *
+ *                Star Wars Reality Code Additions and changes from the Smaug Code copyright (c) 1997                            *
+ *                by Sean Cooper                                                                                                 *
+ *                                                                                                                               *
+ *           Starwars and Starwars Names copyright(c) Disney Enterprises, Inc.... All hail the mouse overlord!                   *
+ *                                                                                                                               *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                                             SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper                       *
+ *                                                                                                                               *
+ *                           Based on a concept and ideas from the original SWR immortals:                                       *
+ *                Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn),                                  *
+ *                Ackbar, Satin, Streen and Bib as well as much input from our other builders and players.                       *
+ *                                                                                                                               *
+ *                           Original SMAUG 1.4a written by Thoric (Derek Snider) with:                                          *
+ *                Altrag, Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,                                      *
+ *                Grishnakh, Fireblade, and Nivek.                                                                               *
+ *                                                                                                                               *
+ *                           Original MERC 2.1 code by: Hatchet, Furey, and Kahn.                                                *
+ *                                                                                                                               *
+ *                           Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,                                 *
+ *                Michael Seifert, and Sebastian Hammer.                                                                         *
+ *                                                                                                                               *
+ *********************************************************************************************************************************/
 
 #include <sys/types.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include "mud.h"
+#include "mud.hpp"
 
 #define BFS_MARK         BV01
 
@@ -2748,69 +2767,69 @@ const char *affect_bit_name( int vector )
 
    buf[0] = '\0';
    if( vector & AFF_BLIND )
-      mudstrlcat( buf, " blind", 512 );
+      strlcat( buf, " blind", 512 );
    if( vector & AFF_INVISIBLE )
-      mudstrlcat( buf, " invisible", 512 );
+      strlcat( buf, " invisible", 512 );
    if( vector & AFF_DETECT_EVIL )
-      mudstrlcat( buf, " detect_evil", 512 );
+      strlcat( buf, " detect_evil", 512 );
    if( vector & AFF_DETECT_INVIS )
-      mudstrlcat( buf, " detect_invis", 512 );
+      strlcat( buf, " detect_invis", 512 );
    if( vector & AFF_DETECT_MAGIC )
-      mudstrlcat( buf, " detect_magic", 512 );
+      strlcat( buf, " detect_magic", 512 );
    if( vector & AFF_DETECT_HIDDEN )
-      mudstrlcat( buf, " detect_hidden", 512 );
+      strlcat( buf, " detect_hidden", 512 );
    if( vector & AFF_WEAKEN )
-      mudstrlcat( buf, " weaken", 512 );
+      strlcat( buf, " weaken", 512 );
    if( vector & AFF_SANCTUARY )
-      mudstrlcat( buf, " sanctuary", 512 );
+      strlcat( buf, " sanctuary", 512 );
    if( vector & AFF_FAERIE_FIRE )
-      mudstrlcat( buf, " faerie_fire", 512 );
+      strlcat( buf, " faerie_fire", 512 );
    if( vector & AFF_INFRARED )
-      mudstrlcat( buf, " infrared", 512 );
+      strlcat( buf, " infrared", 512 );
    if( vector & AFF_CURSE )
-      mudstrlcat( buf, " curse", 512 );
+      strlcat( buf, " curse", 512 );
    if( vector & AFF_COVER_TRAIL )
-      mudstrlcat( buf, " cover trail", 512 );
+      strlcat( buf, " cover trail", 512 );
    if( vector & AFF_POISON )
-      mudstrlcat( buf, " poison", 512 );
+      strlcat( buf, " poison", 512 );
    if( vector & AFF_PROTECT )
-      mudstrlcat( buf, " protect", 512 );
+      strlcat( buf, " protect", 512 );
    if( vector & AFF_PARALYSIS )
-      mudstrlcat( buf, " paralysis", 512 );
+      strlcat( buf, " paralysis", 512 );
    if( vector & AFF_SLEEP )
-      mudstrlcat( buf, " sleep", 512 );
+      strlcat( buf, " sleep", 512 );
    if( vector & AFF_SNEAK )
-      mudstrlcat( buf, " sneak", 512 );
+      strlcat( buf, " sneak", 512 );
    if( vector & AFF_HIDE )
-      mudstrlcat( buf, " hide", 512 );
+      strlcat( buf, " hide", 512 );
    if( vector & AFF_CHARM )
-      mudstrlcat( buf, " charm", 512 );
+      strlcat( buf, " charm", 512 );
    if( vector & AFF_POSSESS )
-      mudstrlcat( buf, " possess", 512 );
+      strlcat( buf, " possess", 512 );
    if( vector & AFF_FLYING )
-      mudstrlcat( buf, " flying", 512 );
+      strlcat( buf, " flying", 512 );
    if( vector & AFF_PASS_DOOR )
-      mudstrlcat( buf, " pass_door", 512 );
+      strlcat( buf, " pass_door", 512 );
    if( vector & AFF_FLOATING )
-      mudstrlcat( buf, " floating", 512 );
+      strlcat( buf, " floating", 512 );
    if( vector & AFF_TRUESIGHT )
-      mudstrlcat( buf, " true_sight", 512 );
+      strlcat( buf, " true_sight", 512 );
    if( vector & AFF_DETECTTRAPS )
-      mudstrlcat( buf, " detect_traps", 512 );
+      strlcat( buf, " detect_traps", 512 );
    if( vector & AFF_SCRYING )
-      mudstrlcat( buf, " scrying", 512 );
+      strlcat( buf, " scrying", 512 );
    if( vector & AFF_FIRESHIELD )
-      mudstrlcat( buf, " fireshield", 512 );
+      strlcat( buf, " fireshield", 512 );
    if( vector & AFF_SHOCKSHIELD )
-      mudstrlcat( buf, " shockshield", 512 );
+      strlcat( buf, " shockshield", 512 );
    if( vector & AFF_ICESHIELD )
-      mudstrlcat( buf, " iceshield", 512 );
+      strlcat( buf, " iceshield", 512 );
    if( vector & AFF_POSSESS )
-      mudstrlcat( buf, " possess", 512 );
+      strlcat( buf, " possess", 512 );
    if( vector & AFF_BERSERK )
-      mudstrlcat( buf, " berserk", 512 );
+      strlcat( buf, " berserk", 512 );
    if( vector & AFF_AQUA_BREATH )
-      mudstrlcat( buf, " aqua_breath", 512 );
+      strlcat( buf, " aqua_breath", 512 );
    return ( buf[0] != '\0' ) ? buf + 1 : "none";
 }
 
@@ -2823,61 +2842,61 @@ const char *extra_bit_name( int extra_flags )
 
    buf[0] = '\0';
    if( extra_flags & ITEM_GLOW )
-      mudstrlcat( buf, " glow", 512 );
+      strlcat( buf, " glow", 512 );
    if( extra_flags & ITEM_HUM )
-      mudstrlcat( buf, " hum", 512 );
+      strlcat( buf, " hum", 512 );
    if( extra_flags & ITEM_DARK )
-      mudstrlcat( buf, " dark", 512 );
+      strlcat( buf, " dark", 512 );
    if( extra_flags & ITEM_HUTT_SIZE )
-      mudstrlcat( buf, " hutt_size", 512 );
+      strlcat( buf, " hutt_size", 512 );
    if( extra_flags & ITEM_CONTRABAND )
-      mudstrlcat( buf, " contraband", 512 );
+      strlcat( buf, " contraband", 512 );
    if( extra_flags & ITEM_INVIS )
-      mudstrlcat( buf, " invis", 512 );
+      strlcat( buf, " invis", 512 );
    if( extra_flags & ITEM_MAGIC )
-      mudstrlcat( buf, " magic", 512 );
+      strlcat( buf, " magic", 512 );
    if( extra_flags & ITEM_NODROP )
-      mudstrlcat( buf, " nodrop", 512 );
+      strlcat( buf, " nodrop", 512 );
    if( extra_flags & ITEM_BLESS )
-      mudstrlcat( buf, " bless", 512 );
+      strlcat( buf, " bless", 512 );
    if( extra_flags & ITEM_ANTI_GOOD )
-      mudstrlcat( buf, " anti-good", 512 );
+      strlcat( buf, " anti-good", 512 );
    if( extra_flags & ITEM_ANTI_EVIL )
-      mudstrlcat( buf, " anti-evil", 512 );
+      strlcat( buf, " anti-evil", 512 );
    if( extra_flags & ITEM_ANTI_NEUTRAL )
-      mudstrlcat( buf, " anti-neutral", 512 );
+      strlcat( buf, " anti-neutral", 512 );
    if( extra_flags & ITEM_NOREMOVE )
-      mudstrlcat( buf, " noremove", 512 );
+      strlcat( buf, " noremove", 512 );
    if( extra_flags & ITEM_INVENTORY )
-      mudstrlcat( buf, " inventory", 512 );
+      strlcat( buf, " inventory", 512 );
    if( extra_flags & ITEM_DEATHROT )
-      mudstrlcat( buf, " deathrot", 512 );
+      strlcat( buf, " deathrot", 512 );
    if( extra_flags & ITEM_ANTI_SOLDIER )
-      mudstrlcat( buf, " anti-soldier", 512 );
+      strlcat( buf, " anti-soldier", 512 );
    if( extra_flags & ITEM_ANTI_THIEF )
-      mudstrlcat( buf, " anti-thief", 512 );
+      strlcat( buf, " anti-thief", 512 );
    if( extra_flags & ITEM_ANTI_HUNTER )
-      mudstrlcat( buf, " anti-hunter", 512 );
+      strlcat( buf, " anti-hunter", 512 );
    if( extra_flags & ITEM_ANTI_JEDI )
-      mudstrlcat( buf, " anti-jedi", 512 );
+      strlcat( buf, " anti-jedi", 512 );
    if( extra_flags & ITEM_ANTI_SITH )
-      mudstrlcat( buf, " anti-sith", 512 );
+      strlcat( buf, " anti-sith", 512 );
    if( extra_flags & ITEM_ANTI_PILOT )
-      mudstrlcat( buf, " anti-pilot", 512 );
+      strlcat( buf, " anti-pilot", 512 );
    if( extra_flags & ITEM_SMALL_SIZE )
-      mudstrlcat( buf, " small_size", 512 );
+      strlcat( buf, " small_size", 512 );
    if( extra_flags & ITEM_LARGE_SIZE )
-      mudstrlcat( buf, " large_size", 512 );
+      strlcat( buf, " large_size", 512 );
    if( extra_flags & ITEM_DONATION )
-      mudstrlcat( buf, " donation", 512 );
+      strlcat( buf, " donation", 512 );
    if( extra_flags & ITEM_CLANOBJECT )
-      mudstrlcat( buf, " clan", 512 );
+      strlcat( buf, " clan", 512 );
    if( extra_flags & ITEM_ANTI_CITIZEN )
-      mudstrlcat( buf, " anti-citizen", 512 );
+      strlcat( buf, " anti-citizen", 512 );
    if( extra_flags & ITEM_PROTOTYPE )
-      mudstrlcat( buf, " prototype", 512 );
+      strlcat( buf, " prototype", 512 );
    if( extra_flags & ITEM_HUMAN_SIZE )
-      mudstrlcat( buf, " human_size", 512 );
+      strlcat( buf, " human_size", 512 );
    return ( buf[0] != '\0' ) ? buf + 1 : "none";
 }
 
@@ -2890,7 +2909,7 @@ const char *magic_bit_name( int magic_flags )
 
    buf[0] = '\0';
    if( magic_flags & ITEM_RETURNING )
-      mudstrlcat( buf, " returning", 512 );
+      strlcat( buf, " returning", 512 );
    return ( buf[0] != '\0' ) ? buf + 1 : "none";
 }
 
@@ -3349,10 +3368,10 @@ void showaffect( CHAR_DATA * ch, AFFECT_DATA * paf )
             for( x = 0; x < 32; x++ )
                if( IS_SET( paf->modifier, 1 << x ) )
                {
-                  mudstrlcat( buf, " ", MAX_STRING_LENGTH );
-                  mudstrlcat( buf, a_flags[x], MAX_STRING_LENGTH );
+                  strlcat( buf, " ", MAX_STRING_LENGTH );
+                  strlcat( buf, a_flags[x], MAX_STRING_LENGTH );
                }
-            mudstrlcat( buf, "\r\n", MAX_STRING_LENGTH );
+            strlcat( buf, "\r\n", MAX_STRING_LENGTH );
             break;
          case APPLY_WEAPONSPELL:
          case APPLY_WEARSPELL:
@@ -3367,10 +3386,10 @@ void showaffect( CHAR_DATA * ch, AFFECT_DATA * paf )
             for( x = 0; x < 32; x++ )
                if( IS_SET( paf->modifier, 1 << x ) )
                {
-                  mudstrlcat( buf, " ", MAX_STRING_LENGTH );
-                  mudstrlcat( buf, ris_flags[x], MAX_STRING_LENGTH );
+                  strlcat( buf, " ", MAX_STRING_LENGTH );
+                  strlcat( buf, ris_flags[x], MAX_STRING_LENGTH );
                }
-            mudstrlcat( buf, "\r\n", MAX_STRING_LENGTH );
+            strlcat( buf, "\r\n", MAX_STRING_LENGTH );
             break;
       }
       send_to_char( buf, ch );

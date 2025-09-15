@@ -1,29 +1,49 @@
-/* 
-
-SWFotE copyright (c) 2002 was created by
-Chris 'Tawnos' Dary (cadary@uwm.edu),
-Korey 'Eleven' King (no email),
-Matt 'Trillen' White (mwhite17@ureach.com),
-Daniel 'Danimal' Berrill (danimal924@yahoo.com),
-Richard 'Bambua' Berrill (email unknown),
-Stuart 'Ackbar' Unknown (email unknown)
-
-SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper
-based on a concept and ideas from the original SWR immortals: 
-Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn), 
-Ackbar, Satin, Streen and Bib as well as much input from our other builders 
-and players.
-
-Original SMAUG 1.4a written by Thoric (Derek Snider) with Altrag,
-Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,
-Grishnakh, Fireblade, and Nivek.
-
-Original MERC 2.1 code by Hatchet, Furey, and Kahn.
-
-Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,
-Michael Seifert, and Sebastian Hammer.
-
-*/
+/*********************************************************************************************************************************
+ *                                                                                                                   ;           *
+ *                                                                                                                  ED.          *
+ *                        ,;                             ,;                                                  :      E#Wi         *
+ *                      f#i          .    .            f#i j.         t                                      Ef     E###G.       *
+ *             ..     .E#t  GEEEEEEELDi   Dt         .E#t  EW,        Ej             ..           ..       : E#t    E#fD#W;      *
+ *            ;W,    i#W,   ,;;L#K;;.E#i  E#i       i#W,   E##j       E#,           ;W,          ,W,     .Et E#t    E#t t##L     *
+ *           j##,   L#D.       t#E   E#t  E#t      L#D.    E###D.     E#t          j##,         t##,    ,W#t E#t    E#t  .E#K,   *
+ *          G###, :K#Wfff;     t#E   E#t  E#t    :K#Wfff;  E#jG#W;    E#t         G###,        L###,   j###t E#t fi E#t    j##f  *
+ *        :E####, i##WLLLLt    t#E   E########f. i##WLLLLt E#t t##f   E#t       :E####,      .E#j##,  G#fE#t E#t L#jE#t    :E#K: *
+ *       ;W#DG##,  .E#L        t#E   E#j..K#j...  .E#L     E#t  :K#E: E#t      ;W#DG##,     ;WW; ##,:K#i E#t E#t L#LE#t   t##L   *
+ *      j###DW##,    f#E:      t#E   E#t  E#t       f#E:   E#KDDDD###iE#t     j###DW##,    j#E.  ##f#W,  E#t E#tf#E:E#t .D#W;    *
+ *     G##i,,G##,     ,WW;     t#E   E#t  E#t        ,WW;  E#f,t#Wi,,,E#t    G##i,,G##,  .D#L    ###K:   E#t E###f  E#tiW#G.     *
+ *   :K#K:   L##,      .D#;    t#E   f#t  f#t         .D#; E#t  ;#W:  E#t  :K#K:   L##, :K#t     ##D.    E#t E#K,   E#K##i       *
+ *  ;##D.    L##,        tt     fE    ii   ii           tt DWi   ,KK: E#t ;##D.    L##, ...      #G      ..  EL     E##D.        *
+ *  ,,,      .,,                 :                                    ,;. ,,,      .,,           j           :      E#t          *
+ *                                                                                                                  L:           *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                AetheriaMUD additions and changes from the Star Wars Reality code                                              *
+ *                copyright (c) 2025 /dev/null Industries - StygianRenegade                                                     *
+ *                                                                                                                               *
+ *                Star Wars Reality Code Additions and changes from the Smaug Code copyright (c) 1997                            *
+ *                by Sean Cooper                                                                                                 *
+ *                                                                                                                               *
+ *           Starwars and Starwars Names copyright(c) Disney Enterprises, Inc.... All hail the mouse overlord!                   *
+ *                                                                                                                               *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                                             SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper                       *
+ *                                                                                                                               *
+ *                           Based on a concept and ideas from the original SWR immortals:                                       *
+ *                Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn),                                  *
+ *                Ackbar, Satin, Streen and Bib as well as much input from our other builders and players.                       *
+ *                                                                                                                               *
+ *                           Original SMAUG 1.4a written by Thoric (Derek Snider) with:                                          *
+ *                Altrag, Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,                                      *
+ *                Grishnakh, Fireblade, and Nivek.                                                                               *
+ *                                                                                                                               *
+ *                           Original MERC 2.1 code by: Hatchet, Furey, and Kahn.                                                *
+ *                                                                                                                               *
+ *                           Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,                                 *
+ *                Michael Seifert, and Sebastian Hammer.                                                                         *
+ *                                                                                                                               *
+ *********************************************************************************************************************************/
+// Save.cpp - Character saving module.                -- 2025 StygianRenegade
 
 #include <sys/types.h>
 #include <ctype.h>
@@ -33,7 +53,7 @@ Michael Seifert, and Sebastian Hammer.
 #include <unistd.h>
 #include <sys/stat.h>
 #include <dirent.h>
-#include "mud.h"
+#include "mud.hpp"
 
 /*
  * Increment with every major format change.
@@ -823,7 +843,7 @@ bool load_char_obj( DESCRIPTOR_DATA * d, char *name, bool preload, bool hotboot 
        * Cheat so that bug will show line #'s -- Altrag 
        */
       fpArea = fp;
-      mudstrlcpy( strArea, strsave, MAX_INPUT_LENGTH );
+      strlcpy( strArea, strsave, MAX_INPUT_LENGTH );
       for( ;; )
       {
          char letter;
@@ -863,7 +883,7 @@ bool load_char_obj( DESCRIPTOR_DATA * d, char *name, bool preload, bool hotboot 
       }
       FCLOSE( fp );
       fpArea = NULL;
-      mudstrlcpy( strArea, "$", MAX_INPUT_LENGTH);
+      strlcpy( strArea, "$", MAX_INPUT_LENGTH);
    }
 
    if( !found )
@@ -874,18 +894,18 @@ bool load_char_obj( DESCRIPTOR_DATA * d, char *name, bool preload, bool hotboot 
       ch->editor = NULL;
       ch->pcdata->clan_name = STRALLOC( "" );
       ch->pcdata->clan = NULL;
-      ch->pcdata->pwd = str_dup( "" );
-      ch->pcdata->email = str_dup( "" );
-      ch->pcdata->bamfin = str_dup( "" );
-      ch->pcdata->bamfout = str_dup( "" );
-      ch->rank = str_dup( "" );
-      ch->pcdata->shipname = str_dup( "" );
-      ch->pcdata->bestowments = str_dup( "" );
+      ch->pcdata->pwd = strdup( "" );
+      ch->pcdata->email = strdup( "" );
+      ch->pcdata->bamfin = strdup( "" );
+      ch->pcdata->bamfout = strdup( "" );
+      ch->rank = strdup( "" );
+      ch->pcdata->shipname = strdup( "" );
+      ch->pcdata->bestowments = strdup( "" );
       ch->pcdata->title = STRALLOC( "" );
       ch->pcdata->disguise = STRALLOC( "" );
-      ch->pcdata->homepage = str_dup( "" );
-      ch->pcdata->screenname = str_dup( "" );
-      ch->pcdata->image = str_dup( "" );
+      ch->pcdata->homepage = strdup( "" );
+      ch->pcdata->screenname = strdup( "" );
+      ch->pcdata->image = strdup( "" );
       ch->pcdata->bio = STRALLOC( "" );
       ch->pcdata->authed_by = STRALLOC( "" );
       ch->pcdata->prompt = STRALLOC( "" );
@@ -1162,7 +1182,7 @@ void fread_char( CHAR_DATA * ch, FILE * fp, bool preload, bool hotboot )
                s1 = fread_word( fp );
                s2 = fread_number( fp );
                CREATE( contract, CONTRACT_DATA, 1 );
-               contract->target = str_dup( s1 );
+               contract->target = strdup( s1 );
                contract->amount = s2;
                LINK( contract, ch->first_contract, ch->last_contract, next_in_contract, prev_in_contract );
                fMatch = TRUE;
@@ -1568,31 +1588,31 @@ void fread_char( CHAR_DATA * ch, FILE * fp, bool preload, bool hotboot )
                if( !ch->description )
                   ch->description = STRALLOC( "" );
                if( !ch->pcdata->pwd )
-                  ch->pcdata->pwd = str_dup( "" );
+                  ch->pcdata->pwd = strdup( "" );
                if( !ch->pcdata->shipname )
-                  ch->pcdata->shipname = str_dup( "" );
+                  ch->pcdata->shipname = strdup( "" );
                if( !ch->pcdata->email )
-                  ch->pcdata->email = str_dup( "" );
+                  ch->pcdata->email = strdup( "" );
                if( !ch->pcdata->bamfin )
-                  ch->pcdata->bamfin = str_dup( "" );
+                  ch->pcdata->bamfin = strdup( "" );
                if( !ch->pcdata->bamfout )
-                  ch->pcdata->bamfout = str_dup( "" );
+                  ch->pcdata->bamfout = strdup( "" );
                if( !ch->pcdata->bio )
                   ch->pcdata->bio = STRALLOC( "" );
                if( !ch->rank )
-                  ch->rank = str_dup( "" );
+                  ch->rank = strdup( "" );
                if( !ch->pcdata->bestowments )
-                  ch->pcdata->bestowments = str_dup( "" );
+                  ch->pcdata->bestowments = strdup( "" );
                if( !ch->pcdata->title )
                   ch->pcdata->title = STRALLOC( "" );
                if( !ch->pcdata->disguise )
                   ch->pcdata->disguise = STRALLOC( "" );
                if( !ch->pcdata->homepage )
-                  ch->pcdata->homepage = str_dup( "" );
+                  ch->pcdata->homepage = strdup( "" );
                if( !ch->pcdata->screenname )
-                  ch->pcdata->screenname = str_dup( "" );
+                  ch->pcdata->screenname = strdup( "" );
                if( !ch->pcdata->image )
-                  ch->pcdata->image = str_dup( "" );
+                  ch->pcdata->image = strdup( "" );
                if( !ch->pcdata->authed_by )
                   ch->pcdata->authed_by = STRALLOC( "" );
                if( !ch->pcdata->prompt )
@@ -2204,7 +2224,7 @@ void load_corpses( void )
       }
    }
    fpArea = NULL;
-   mudstrlcpy( strArea, "$", MAX_INPUT_LENGTH );
+   strlcpy( strArea, "$", MAX_INPUT_LENGTH );
    closedir( dp );
    falling = 0;
    return;
@@ -2247,20 +2267,20 @@ void save_profile( CHAR_DATA * ch )
       if( ch->pcdata->image && ch->pcdata->image[0] != '\0' )
          snprintf( image, MAX_INPUT_LENGTH, "%s", show_tilde( ch->pcdata->image ) );
       else
-         mudstrlcpy( image, "../grx/noimage.gif", MAX_INPUT_LENGTH );
+         strlcpy( image, "../grx/noimage.gif", MAX_INPUT_LENGTH );
 
       if( ch->sex == 1 )
-         mudstrlcpy( sex, "Male", MAX_INPUT_LENGTH );
+         strlcpy( sex, "Male", MAX_INPUT_LENGTH );
       else if( ch->sex == 2 )
-         mudstrlcpy( sex, "Female", MAX_INPUT_LENGTH );
+         strlcpy( sex, "Female", MAX_INPUT_LENGTH );
       else
-         mudstrlcpy( sex, "Neutral", MAX_INPUT_LENGTH );
+         strlcpy( sex, "Neutral", MAX_INPUT_LENGTH );
 
       if( ch->pcdata->email && ch->pcdata->email[0] != '\0' )
          snprintf( email, MAX_INPUT_LENGTH, "%s", ch->pcdata->email );
       else
       {
-         mudstrlcpy( email, "Not Specified.", MAX_INPUT_LENGTH );
+         strlcpy( email, "Not Specified.", MAX_INPUT_LENGTH );
          emailurl = FALSE;
       }
       if( ch->pcdata->homepage && ch->pcdata->homepage[0] != '\0' )
@@ -2269,7 +2289,7 @@ void save_profile( CHAR_DATA * ch )
       }
       else
       {
-         mudstrlcpy( homepage, "Not Specified.", MAX_INPUT_LENGTH );
+         strlcpy( homepage, "Not Specified.", MAX_INPUT_LENGTH );
          pageurl = FALSE;
       }
 
@@ -2277,19 +2297,19 @@ void save_profile( CHAR_DATA * ch )
          snprintf( aimname, MAX_INPUT_LENGTH, "%s", ch->pcdata->screenname );
       else
       {
-         mudstrlcpy( aimname, "Not Specified.", MAX_INPUT_LENGTH );
+         strlcpy( aimname, "Not Specified.", MAX_INPUT_LENGTH );
          aimurl = FALSE;
       }
 
       if( ch->description && ch->description[0] != '\0' )
          snprintf( desc, MAX_STRING_LENGTH, "%s", ch->description );
       else
-         mudstrlcpy( desc, "Not Specified.", MAX_STRING_LENGTH );
+         strlcpy( desc, "Not Specified.", MAX_STRING_LENGTH );
 
       if( ch->pcdata->bio && ch->pcdata->bio[0] != '\0' )
          snprintf( bio, MAX_STRING_LENGTH, "%s", ch->pcdata->bio );
       else
-         mudstrlcpy( bio, "None.", MAX_STRING_LENGTH );
+         strlcpy( bio, "None.", MAX_STRING_LENGTH );
 
       fprintf( fp, "<HTML>\n" );
       fprintf( fp, "<HEAD>\n" );
@@ -2411,4 +2431,3 @@ void load_plr_home( CHAR_DATA * ch )
         release_supermob(  );
     }
 }
-

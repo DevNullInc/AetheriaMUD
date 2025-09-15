@@ -44,25 +44,21 @@
  *                                                                                                                               *
  *********************************************************************************************************************************/
 
+#include <cctype>
+#include <cerrno>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+#include <csignal>
+#include <cstdarg>
+#include <string>
+#include <chrono>
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
-#include <ctype.h>
-#include <errno.h>
-#include <stdio.h>
-#include <ctime>
-#include <string>
 #include <fcntl.h>
-#include <signal.h>
-#include "mud.hpp"
-#include "mccp.hpp"
-#include "mssp.hpp"
-#include "sha256.hpp"
-
-/*
- * Socket and TCP/IP stuff.
- */
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -71,6 +67,14 @@
 #include <arpa/inet.h>
 #include <arpa/telnet.h>
 #include <netdb.h>
+#include "mud.hpp"
+#include "mccp.hpp"
+#include "mssp.hpp"
+#include "sha256.hpp"
+
+/*
+ * Socket and TCP/IP stuff.
+ */
 
 #define MAX_NEST	100
 
@@ -194,7 +198,7 @@ int main( int argc, char **argv )
    current_time = ( time_t ) now_time.tv_sec;
 /*  gettimeofday( &boot_time, NULL);   okay, so it's kludgy, sue me :) */
    boot_time = time( 0 );  /*  <-- I think this is what you wanted */
-   mudstrlcpy( str_boot_time, ctime( &current_time ), MAX_INPUT_LENGTH );
+   strlcpy( str_boot_time, ctime( &current_time ), MAX_INPUT_LENGTH );
 
    /*
     * Init boot time.
@@ -318,28 +322,42 @@ void init_descriptor( DESCRIPTOR_DATA * dnew, int desc )
    CREATE( dnew->outbuf, char, dnew->outsize );
 }
 
+/*
+ * This function supports connections for both IPv6 and IPv4.
+ * On a server which only has one type of address, it will still bind to both.
+ * Every major operating system these days supports both, even if they only have one type of address.
+ */
 int init_socket( int mudport )
 {
-   char hostname[64];
-   struct sockaddr_in sa;
-   int x = 1;
+   struct sockaddr_in6 serv_addr6;
+   int x = 1, ipv6only = 0;
    int fd;
 
-   gethostname( hostname, sizeof( hostname ) );
-
-   if( ( fd = socket( AF_INET, SOCK_STREAM, 0 ) ) < 0 )
+   if( ( fd = socket( AF_INET6, SOCK_STREAM, 0 ) ) < 0 )
    {
       perror( "Init_socket: socket" );
       exit( 1 );
    }
 
-   if( setsockopt( fd, SOL_SOCKET, SO_REUSEADDR, ( void * )&x, sizeof( x ) ) < 0 )
+#if defined(WIN32)
+   if( setsockopt( fd, IPPROTO_IPV6, IPV6_V6ONLY, ( const char * )&ipv6only, sizeof( ipv6only ) ) < 0 )
+#else
+   if( setsockopt( fd, IPPROTO_IPV6, IPV6_V6ONLY, ( void * )&ipv6only, sizeof( ipv6only ) ) < 0 )
+#endif
    {
-      perror( "Init_socket: SO_REUSEADDR" );
+      perror( "Init_socket: IPPROTO_IPV6" );
       close( fd );
       exit( 1 );
    }
 
+/*
+ * SO_DONTLINGER no longer appears to be necessary so I've commented it out.
+ * If for some reason you find that the socket won't work correctly without it, uncomment it.
+ * Please let us know at smaugmuds.afkmods.com as well, describing what failed to work properly without it.
+ * I'm not even sure if the SYSV part is relevant these days as the only information that keeps coming
+ * up on Google is 15+ years old. -- Samson 1/22/2025.
+ */
+/*
 #if defined(SO_DONTLINGER) && !defined(SYSV)
    {
       struct linger ld;
@@ -347,7 +365,11 @@ int init_socket( int mudport )
       ld.l_onoff = 1;
       ld.l_linger = 1000;
 
+#if defined(WIN32)
+      if( setsockopt( fd, SOL_SOCKET, SO_DONTLINGER, ( const char * )&ld, sizeof( ld ) ) < 0 )
+#else
       if( setsockopt( fd, SOL_SOCKET, SO_DONTLINGER, ( void * )&ld, sizeof( ld ) ) < 0 )
+#endif
       {
          perror( "Init_socket: SO_DONTLINGER" );
          close( fd );
@@ -355,14 +377,42 @@ int init_socket( int mudport )
       }
    }
 #endif
+*/
 
-   gethostbyname( hostname );
-   getservbyname( "service", "mud" );
-   memset( &sa, '\0', sizeof( sa ) );
-   sa.sin_family = AF_INET;   /* hp->h_addrtype; */
-   sa.sin_port = htons( mudport );
+/* 
+ * SO_REUSEADDR, however, is still necessary or the socket will only be able to bind to one
+ * protocol. The MUD will fail to start, saying the address is already in use when the second
+ * attempt to bind is made by the operating system. -- Samson 1/22/2025.
+ */
+#if defined(WIN32)
+   if( setsockopt( fd, SOL_SOCKET, SO_REUSEADDR, ( const char * )&x, sizeof( x ) ) < 0 )
+#else
+   if( setsockopt( fd, SOL_SOCKET, SO_REUSEADDR, ( void * )&x, sizeof( x ) ) < 0 )
+#endif
+   {
+      perror( "Init_socket: SO_REUSEADDR" );
+      close( fd );
+      exit( 1 );
+   }
 
-   if( bind( fd, ( struct sockaddr * )&sa, sizeof( sa ) ) == -1 )
+   memset( &serv_addr6, '\0', sizeof( serv_addr6 ) );
+   serv_addr6.sin6_family = AF_INET6;
+   serv_addr6.sin6_addr = in6addr_any;
+   serv_addr6.sin6_port = htons( mudport );
+
+   /*
+    * It is highly unlikely that a server will call for this, but just in case it does, you would need
+    * to uncomment the statement and specify the IP address of your server. Currently this only works
+    * for IPv4. I have not been able to find information on how to call this for the IPV6 side, so it's
+    * entirely possible that it was not seen as a thing to do with IPv6. -- Samson 1/22/2025.
+    *
+    * sa.sin_addr.s_addr = inet_addr( "x.x.x.x" ); 
+    */
+#if defined(__APPLE__)
+   if( bind( fd, ( const struct sockaddr * )&serv_addr6, (socklen_t)sizeof( serv_addr6 ) ) == -1 )
+#else
+   if( bind( fd, ( struct sockaddr * )&serv_addr6, sizeof( serv_addr6 ) ) == -1 )
+#endif
    {
       perror( "Init_socket: bind" );
       close( fd );
@@ -403,7 +453,7 @@ static void caught_alarm( int signum )
 
    bug( "%s: ALARM CLOCK!", __func__ );
 
-   mudstrlcpy( buf, "Alas, the hideous malevalent entity known only as 'Lag' rises once more!\r\n", MAX_STRING_LENGTH );
+   strlcpy( buf, "Alas, the hideous malevalent entity known only as 'Lag' rises once more!\r\n", MAX_STRING_LENGTH );
    echo_to_all( AT_IMMORT, buf, ECHOTAR_ALL );
    if( newdesc )
    {
@@ -577,7 +627,7 @@ void game_loop( void )
                d->fcommand = TRUE;
                stop_idling( d->character );
 
-               mudstrlcpy( cmdline, d->incomm, MAX_INPUT_LENGTH );
+               strlcpy( cmdline, d->incomm, MAX_INPUT_LENGTH );
                d->incomm[0] = '\0';
 
                if( d->character )
@@ -697,59 +747,107 @@ void game_loop( void )
 
 void new_descriptor( int new_desc )
 {
-   char buf[MAX_STRING_LENGTH];
    DESCRIPTOR_DATA *dnew;
    BAN_DATA *pban;
-   struct sockaddr_in sock;
+   struct sockaddr_in6 sock;
    int desc;
+   char ip[INET6_ADDRSTRLEN];
+   char buf[MAX_STRING_LENGTH];
+   string newip;
+#if defined(WIN32)
+   ULONG r;
+   int size;
+#else
+   int r;
    socklen_t size;
+#endif
 
-   set_alarm( 20 );
    size = sizeof( sock );
    if( check_bad_desc( new_desc ) )
    {
       set_alarm( 0 );
       return;
    }
-
    set_alarm( 20 );
+
    if( ( desc = accept( new_desc, ( struct sockaddr * )&sock, &size ) ) < 0 )
    {
       perror( "New_descriptor: accept" );
       set_alarm( 0 );
       return;
    }
-
    if( check_bad_desc( new_desc ) )
    {
       set_alarm( 0 );
       return;
    }
-#if !defined(FNDELAY)
-#define FNDELAY O_NDELAY
-#endif
 
    set_alarm( 20 );
-   if( fcntl( desc, F_SETFL, FNDELAY ) == -1 )
+
+#if defined(WIN32)
+   r = 1;
+   if( ioctlsocket( desc, FIONBIO, &r ) == SOCKET_ERROR )
    {
-      perror( "New_descriptor: fcntl: FNDELAY" );
-      set_alarm( 0 );
+      perror( "New_descriptor: fcntl: O_NONBLOCK" );
+      close( desc );
       return;
    }
+#else
+   r = fcntl( desc, F_GETFL, 0 );
+   if( r < 0 || fcntl( desc, F_SETFL, O_NONBLOCK | O_NDELAY | r ) < 0 )
+   {
+      perror( "New_descriptor: fcntl: O_NONBLOCK" );
+      close( desc );
+      return;
+   }
+#endif
+
    if( check_bad_desc( new_desc ) )
       return;
 
+   inet_ntop( AF_INET6, &sock.sin6_addr, ip, INET6_ADDRSTRLEN );
+   newip = ip;
+
+   if( newip != "::1" )
+   {
+      string::size_type pos = newip.find_last_of( ":", newip.length() );
+      string::size_type pos2 = newip.find_last_of( ".", newip.length() );
+
+      if( pos2 != string::npos )
+      {
+         if( pos != string::npos )
+         {
+            newip = newip.substr( pos + 1 );
+         }
+      }
+   }
+
    CREATE( dnew, DESCRIPTOR_DATA, 1 );
-   init_descriptor( dnew, desc );
-   dnew->port = ntohs( sock.sin_port );
-   mudstrlcpy( log_buf, inet_ntoa( sock.sin_addr ), MAX_STRING_LENGTH );
-   dnew->host = STRALLOC( log_buf );
+   dnew->next = NULL;
+   dnew->descriptor = desc;
+   dnew->connected = CON_GET_NAME;
+   dnew->outsize = 2000;
+   dnew->idle = 0;
+   dnew->lines = 0;
+   dnew->scrlen = 24;
+   dnew->port = ntohs( sock.sin6_port );
+   dnew->newstate = 0;
+   dnew->prevcolor = 0x07;
+   dnew->host = STRALLOC( newip.c_str() );
+   dnew->hostip = STRALLOC( newip.c_str() );
+   dnew->ifd = -1;   /* Descriptor pipes, used for DNS resolution and such */
+   dnew->ipid = -1;
+   dnew->can_compress = FALSE;
+   CREATE( dnew->mccp, MCCP, 1 );
+
+   CREATE( dnew->outbuf, char, dnew->outsize );
+
    if( !sysdata.NO_NAME_RESOLVING )
    {
-      mudstrlcpy( buf, in_dns_cache( log_buf ), MAX_STRING_LENGTH );
+      strlcpy( buf, in_dns_cache( dnew->host ), MAX_STRING_LENGTH );
 
       if( buf[0] == '\0' )
-         resolve_dns( dnew, sock.sin_addr.s_addr );
+         resolve_dns( dnew, dnew->host );
       else
       {
          STRFREE( dnew->host );
@@ -789,7 +887,7 @@ void new_descriptor( int new_desc )
    write_to_buffer( dnew, (const char *)will_compress2_str, 0 );
 
    /*
-    * Send the greeting. Forces new color function - Tawnos
+    * Send the greeting.
     */
    {
       extern char *help_greeting;
@@ -806,11 +904,11 @@ void new_descriptor( int new_desc )
       if( sysdata.time_of_max )
          DISPOSE( sysdata.time_of_max );
       snprintf( buf, MAX_STRING_LENGTH, "%24.24s", ctime( &current_time ) );
-      sysdata.time_of_max = str_dup( buf );
+      sysdata.time_of_max = strdup( buf );
       sysdata.alltimemax = sysdata.maxplayers;
-      snprintf( log_buf, MAX_STRING_LENGTH, "Broke all-time maximum player record: %d", sysdata.alltimemax );
-      log_string_plus( log_buf, LOG_COMM, sysdata.log_level );
-      to_channel( log_buf, CHANNEL_MONITOR, "Monitor", LEVEL_IMMORTAL );
+      snprintf( buf, MAX_STRING_LENGTH, "Broke all-time maximum player record: %d", sysdata.alltimemax );
+      log_string_plus( buf, LOG_COMM, sysdata.log_level );
+      to_channel( buf, CHANNEL_MONITOR, "Monitor", LEVEL_IMMORTAL );
       save_sysdata( sysdata );
    }
    set_alarm( 0 );
@@ -1136,9 +1234,9 @@ void read_from_buffer( DESCRIPTOR_DATA * d )
     * Do '!' substitution.
     */
    if( d->incomm[0] == '!' )
-      mudstrlcpy( d->incomm, d->inlast, MAX_INPUT_LENGTH );
+      strlcpy( d->incomm, d->inlast, MAX_INPUT_LENGTH );
    else
-      mudstrlcpy( d->inlast, d->incomm, MAX_INPUT_LENGTH );
+      strlcpy( d->inlast, d->incomm, MAX_INPUT_LENGTH );
 
    /*
     * Shift the input buffer.
@@ -1320,6 +1418,19 @@ void write_to_buffer( DESCRIPTOR_DATA * d, const char *txt, size_t length )
    d->outtop += length;
    d->outbuf[d->outtop] = '\0';
    return;
+}
+
+void buffer_printf( DESCRIPTOR_DATA * d, const char *fmt, ... )
+{
+   char buf[MAX_STRING_LENGTH * 2];
+
+   va_list args;
+
+   va_start( args, fmt );
+   vsprintf( buf, fmt, args );
+   va_end( args );
+
+   write_to_buffer( d, buf, strlen( buf ) );
 }
 
 /*
@@ -1698,7 +1809,7 @@ void nanny_get_old_password( DESCRIPTOR_DATA * d, char *argument )
       return;
    }
 
-   mudstrlcpy( buf, ch->name, MAX_STRING_LENGTH );
+   strlcpy( buf, ch->name, MAX_STRING_LENGTH );
    d->character->desc = NULL;
    free_char( d->character );
    load_char_obj( d, buf, FALSE, FALSE );
@@ -1782,7 +1893,7 @@ void nanny_get_new_password( DESCRIPTOR_DATA * d, const char *argument )
    pwdnew = sha256_crypt( argument );
 
    DISPOSE( ch->pcdata->pwd );
-   ch->pcdata->pwd = str_dup( pwdnew );
+   ch->pcdata->pwd = strdup( pwdnew );
    send_to_desc_color( "\r\n&zPlease retype the password to confirm: &w", d );
    d->connected = CON_CONFIRM_NEW_PASSWORD;
 }
@@ -1844,10 +1955,10 @@ void nanny_get_new_sex( DESCRIPTOR_DATA * d, const char *argument )
          if( iRace >= 0 )
          {
             snprintf( buf2, MAX_STRING_LENGTH, "&R[&z%-15.15s&R]&w  ", race_table[iRace].race_name );
-            mudstrlcat( buf, buf2, MAX_STRING_LENGTH );
+            strlcat( buf, buf2, MAX_STRING_LENGTH );
             if( ++col % 4 == 0 )
             {
-               mudstrlcat( buf, "\r\n", MAX_STRING_LENGTH );
+               strlcat( buf, "\r\n", MAX_STRING_LENGTH );
                send_to_desc_color( buf, d );
                buf[0] = '\0';
             }
@@ -1855,8 +1966,8 @@ void nanny_get_new_sex( DESCRIPTOR_DATA * d, const char *argument )
       }
    }
    if( col % 4 != 0 )
-      mudstrlcat( buf, "\r\n", MAX_STRING_LENGTH );
-   mudstrlcat( buf, "&z:&w ", MAX_STRING_LENGTH );
+      strlcat( buf, "\r\n", MAX_STRING_LENGTH );
+   strlcat( buf, "&z:&w ", MAX_STRING_LENGTH );
    send_to_desc_color( buf, d );
    d->connected = CON_GET_NEW_RACE;
 }
@@ -1899,18 +2010,18 @@ void nanny_get_new_race( DESCRIPTOR_DATA * d, const char *argument )
       if( ability_name[iClass] && ability_name[iClass][0] != '\0' && str_cmp( ability_name[iClass], "force" ) )
       {
          snprintf( buf2, MAX_STRING_LENGTH, "&R[&z%-15.15s&R]&w  ", ability_name[iClass] );
-         mudstrlcat( buf, buf2, MAX_STRING_LENGTH );
+         strlcat( buf, buf2, MAX_STRING_LENGTH );
          if( ++col % 4 == 0 )
          {
-            mudstrlcat( buf, "\r\n", MAX_STRING_LENGTH );
+            strlcat( buf, "\r\n", MAX_STRING_LENGTH );
             send_to_desc_color( buf, d );
             buf[0] = '\0';
          }
       }
    }
    if( col % 4 != 0 )
-      mudstrlcat( buf, "\r\n", MAX_STRING_LENGTH );
-   mudstrlcat( buf, "&z:&w ", MAX_STRING_LENGTH );
+      strlcat( buf, "\r\n", MAX_STRING_LENGTH );
+   strlcat( buf, "&z:&w ", MAX_STRING_LENGTH );
 
    send_to_desc_color( buf, d );
    d->connected = CON_GET_NEW_CLASS;
@@ -1954,18 +2065,18 @@ void nanny_get_new_primary( DESCRIPTOR_DATA * d, const char *argument )
          && ch->main_ability != iClass )
       {
          snprintf( buf2, MAX_STRING_LENGTH, "&R[&z%-15.15s&R]&w  ", ability_name[iClass] );
-         mudstrlcat( buf, buf2, MAX_STRING_LENGTH );
+         strlcat( buf, buf2, MAX_STRING_LENGTH );
          if( ++col % 4 == 0 )
          {
-            mudstrlcat( buf, "\r\n", MAX_STRING_LENGTH );
+            strlcat( buf, "\r\n", MAX_STRING_LENGTH );
             send_to_desc_color( buf, d );
             buf[0] = '\0';
          }
       }
    }
    if( col % 4 != 0 )
-      mudstrlcat( buf, "\r\n", MAX_STRING_LENGTH );
-   mudstrlcat( buf, "&z:&w ", MAX_STRING_LENGTH );
+      strlcat( buf, "\r\n", MAX_STRING_LENGTH );
+   strlcat( buf, "&z:&w ", MAX_STRING_LENGTH );
 
    send_to_desc_color( buf, d );
    d->connected = CON_GET_NEW_SECOND;
@@ -2073,10 +2184,10 @@ void nanny_roll_stats( DESCRIPTOR_DATA * d, const char *argument )
             snprintf( buf3, MAX_STRING_LENGTH, "%s", height_name[iClass] );
             buf3[0] = UPPER( buf3[0] );
             snprintf( buf2, MAX_STRING_LENGTH, "&R[&z%-15.15s&R]&w  ", buf3 );
-            mudstrlcat( buf, buf2, MAX_STRING_LENGTH );
+            strlcat( buf, buf2, MAX_STRING_LENGTH );
             if( ++col % 4 == 0 )
             {
-               mudstrlcat( buf, "\r\n", MAX_STRING_LENGTH );
+               strlcat( buf, "\r\n", MAX_STRING_LENGTH );
                send_to_desc_color( buf, d );
                buf[0] = '\0';
             }
@@ -2095,10 +2206,10 @@ void nanny_roll_stats( DESCRIPTOR_DATA * d, const char *argument )
             snprintf( buf3, MAX_STRING_LENGTH, "%s", droid_name[iDroid] );
             buf3[0] = UPPER( buf3[0] );
             snprintf( buf2, MAX_STRING_LENGTH, "&R[&z%-15.15s&R]&w  ", buf3 );
-            mudstrlcat( buf, buf2, MAX_STRING_LENGTH );
+            strlcat( buf, buf2, MAX_STRING_LENGTH );
             if( ++col % 4 == 0 )
             {
-               mudstrlcat( buf, "\r\n", MAX_STRING_LENGTH );
+               strlcat( buf, "\r\n", MAX_STRING_LENGTH );
                send_to_desc_color( buf, d );
                buf[0] = '\0';
             }
@@ -2106,8 +2217,8 @@ void nanny_roll_stats( DESCRIPTOR_DATA * d, const char *argument )
       }
    }
    if( col % 4 != 0 )
-      mudstrlcat( buf, "\r\n", MAX_STRING_LENGTH );
-   mudstrlcat( buf, "&z:&w ", MAX_STRING_LENGTH );
+      strlcat( buf, "\r\n", MAX_STRING_LENGTH );
+   strlcat( buf, "&z:&w ", MAX_STRING_LENGTH );
 
    send_to_desc_color( buf, d );
    if( !IS_DROID( ch ) )
@@ -2148,10 +2259,10 @@ void nanny_get_height( DESCRIPTOR_DATA * d, const char *argument )
          snprintf( buf3, MAX_STRING_LENGTH, "%s", build_name[iClass] );
          buf3[0] = UPPER( buf3[0] );
          snprintf( buf2, MAX_STRING_LENGTH, "&R[&z%-15.15s&R]&w  ", buf3 );
-         mudstrlcat( buf, buf2, MAX_STRING_LENGTH );
+         strlcat( buf, buf2, MAX_STRING_LENGTH );
          if( ++col % 4 == 0 )
          {
-            mudstrlcat( buf, "\r\n", MAX_STRING_LENGTH );
+            strlcat( buf, "\r\n", MAX_STRING_LENGTH );
             send_to_desc_color( buf, d );
             buf[0] = '\0';
          }
@@ -2159,8 +2270,8 @@ void nanny_get_height( DESCRIPTOR_DATA * d, const char *argument )
       }
    }
    if( col % 4 != 0 )
-      mudstrlcat( buf, "\r\n", MAX_STRING_LENGTH );
-   mudstrlcat( buf, "&z:&w ", MAX_STRING_LENGTH );
+      strlcat( buf, "\r\n", MAX_STRING_LENGTH );
+   strlcat( buf, "&z:&w ", MAX_STRING_LENGTH );
    send_to_desc_color( buf, d );
    d->connected = CON_GET_BUILD;
 }
@@ -2649,7 +2760,7 @@ short check_reconnect( DESCRIPTOR_DATA * d, char *name, bool fConn )
          if( fConn == FALSE )
          {
             DISPOSE( d->character->pcdata->pwd );
-            d->character->pcdata->pwd = str_dup( ch->pcdata->pwd );
+            d->character->pcdata->pwd = strdup( ch->pcdata->pwd );
          }
          else
          {
@@ -3017,7 +3128,7 @@ char *act_string( const char *format, CHAR_DATA * to, CHAR_DATA * ch, const void
       while( ( *point = *i ) != '\0' )
          ++point, ++i;
    }
-   mudstrlcpy( point, "\r\n", MSL );
+   strlcpy( point, "\r\n", MSL );
    if( !DONT_UPPER )
    {
       bool bUppercase = true;     //Always uppercase first letter 
@@ -3217,27 +3328,27 @@ char *hit_prompt( CHAR_DATA * ch )
       else
          percent = -1;
       if( percent >= 100 )
-         mudstrlcpy( pbuf, "\e[1;30m\e[0;31m++\e[1;31m++\e[0;33m++\e[1;33m++\e[1;32m++", MAX_STRING_LENGTH );
+         strlcpy( pbuf, "\e[1;30m\e[0;31m++\e[1;31m++\e[0;33m++\e[1;33m++\e[1;32m++", MAX_STRING_LENGTH );
       else if( percent >= 90 )
-         mudstrlcpy( pbuf, "\e[1;30m\e[0;31m++\e[1;31m++\e[0;33m++\e[1;33m++\e[1;32m+\e[1;30m+", MAX_STRING_LENGTH );
+         strlcpy( pbuf, "\e[1;30m\e[0;31m++\e[1;31m++\e[0;33m++\e[1;33m++\e[1;32m+\e[1;30m+", MAX_STRING_LENGTH );
       else if( percent >= 80 )
-         mudstrlcpy( pbuf, "\e[1;30m\e[0;31m++\e[1;31m++\e[0;33m++\e[1;33m++\e[1;30m++", MAX_STRING_LENGTH );
+         strlcpy( pbuf, "\e[1;30m\e[0;31m++\e[1;31m++\e[0;33m++\e[1;33m++\e[1;30m++", MAX_STRING_LENGTH );
       else if( percent >= 70 )
-         mudstrlcpy( pbuf, "\e[1;30m\e[0;31m++\e[1;31m++\e[0;33m++\e[1;33m+\e[1;30m+++", MAX_STRING_LENGTH );
+         strlcpy( pbuf, "\e[1;30m\e[0;31m++\e[1;31m++\e[0;33m++\e[1;33m+\e[1;30m+++", MAX_STRING_LENGTH );
       else if( percent >= 60 )
-         mudstrlcpy( pbuf, "\e[1;30m\e[0;31m++\e[1;31m++\e[0;33m++\e[1;30m++++", MAX_STRING_LENGTH );
+         strlcpy( pbuf, "\e[1;30m\e[0;31m++\e[1;31m++\e[0;33m++\e[1;30m++++", MAX_STRING_LENGTH );
       else if( percent >= 50 )
-         mudstrlcpy( pbuf, "\e[1;30m\e[0;31m++\e[1;31m++\e[0;33m+\e[1;30m+++++", MAX_STRING_LENGTH );
+         strlcpy( pbuf, "\e[1;30m\e[0;31m++\e[1;31m++\e[0;33m+\e[1;30m+++++", MAX_STRING_LENGTH );
       else if( percent >= 40 )
-         mudstrlcpy( pbuf, "\e[1;30m\e[0;31m++\e[1;31m++\e[1;30m++++++", MAX_STRING_LENGTH );
+         strlcpy( pbuf, "\e[1;30m\e[0;31m++\e[1;31m++\e[1;30m++++++", MAX_STRING_LENGTH );
       else if( percent >= 30 )
-         mudstrlcpy( pbuf, "\e[1;30m\e[0;31m++\e[1;31m+\e[1;30m+++++++", MAX_STRING_LENGTH );
+         strlcpy( pbuf, "\e[1;30m\e[0;31m++\e[1;31m+\e[1;30m+++++++", MAX_STRING_LENGTH );
       else if( percent >= 20 )
-         mudstrlcpy( pbuf, "\e[1;30m\e[0;31m++\e[1;30m++++++++", MAX_STRING_LENGTH );
+         strlcpy( pbuf, "\e[1;30m\e[0;31m++\e[1;30m++++++++", MAX_STRING_LENGTH );
       else if( percent >= 10 )
-         mudstrlcpy( pbuf, "\e[1;30m\e[0;31m+\e[1;30m+++++++++", MAX_STRING_LENGTH );
+         strlcpy( pbuf, "\e[1;30m\e[0;31m+\e[1;30m+++++++++", MAX_STRING_LENGTH );
       else
-         mudstrlcpy( pbuf, "\e[1;30m++++++++++", MAX_STRING_LENGTH );
+         strlcpy( pbuf, "\e[1;30m++++++++++", MAX_STRING_LENGTH );
    }
    return pbuf;
 }
@@ -3246,15 +3357,15 @@ char *default_prompt( CHAR_DATA * ch )
 {
    static char buf[MAX_STRING_LENGTH];
 
-   mudstrlcpy( buf, "", MAX_STRING_LENGTH );
+   strlcpy( buf, "", MAX_STRING_LENGTH );
    if( ch->skill_level[FORCE_ABILITY] > 1 || get_trust( ch ) >= LEVEL_IMMORTAL )
-      mudstrlcat( buf, "&pForce:&P%m/&p%M  &pAlign:&P%a\r\n", MAX_STRING_LENGTH );
-//  mudstrlcat(buf, "&BHealth:&C%h&B/%H  &BMovement:&C%v&B/%V  &w%e", MAX_STRING_LENGTH );
-//  mudstrlcat(buf, "&C >&w", MAX_STRING_LENGTH, );
+      strlcat( buf, "&pForce:&P%m/&p%M  &pAlign:&P%a\r\n", MAX_STRING_LENGTH );
+//  strlcat(buf, "&BHealth:&C%h&B/%H  &BMovement:&C%v&B/%V  &w%e", MAX_STRING_LENGTH );
+//  strlcat(buf, "&C >&w", MAX_STRING_LENGTH, );
 
-   mudstrlcat( buf, "&G[&zHp:&w%h&G/&w%H&G] &G[&zMv:&w%v&G/&w%V&G] &G(&zAlign:&w%a&G) &w", MAX_STRING_LENGTH );
+   strlcat( buf, "&G[&zHp:&w%h&G/&w%H&G] &G[&zMv:&w%v&G/&w%V&G] &G(&zAlign:&w%a&G) &w", MAX_STRING_LENGTH );
    if( ch->position == POS_FIGHTING )
-      mudstrlcat( buf, "&W&G[%e&W&G] &w", MAX_STRING_LENGTH );
+      strlcat( buf, "&W&G[%e&W&G] &w", MAX_STRING_LENGTH );
    return buf;
 }
 
@@ -3294,7 +3405,7 @@ void display_prompt( DESCRIPTOR_DATA * d )
 
    if( ansi )
    {
-      mudstrlcpy( pbuf, ANSI_RESET, MAX_STRING_LENGTH );
+      strlcpy( pbuf, ANSI_RESET, MAX_STRING_LENGTH );
       d->prevcolor = 0x08;
       pbuf += 4;
    }
@@ -3338,15 +3449,15 @@ void display_prompt( DESCRIPTOR_DATA * d )
                   if( ch->top_level >= 10 )
                      pstat = ch->alignment;
                   else if( IS_GOOD( ch ) )
-                     mudstrlcpy( pbuf, "good", MAX_STRING_LENGTH );
+                     strlcpy( pbuf, "good", MAX_STRING_LENGTH );
                   else if( IS_EVIL( ch ) )
-                     mudstrlcpy( pbuf, "evil", MAX_STRING_LENGTH );
+                     strlcpy( pbuf, "evil", MAX_STRING_LENGTH );
                   else
-                     mudstrlcpy( pbuf, "neutral", MAX_STRING_LENGTH );
+                     strlcpy( pbuf, "neutral", MAX_STRING_LENGTH );
                   break;
                case 'e':
                   if( ch->position == POS_FIGHTING )
-                     mudstrlcpy( pbuf, hit_prompt( ch ), MAX_STRING_LENGTH );
+                     strlcpy( pbuf, hit_prompt( ch ), MAX_STRING_LENGTH );
                   break;
                case 'h':
                   pstat = ch->hit;
@@ -3367,7 +3478,7 @@ void display_prompt( DESCRIPTOR_DATA * d )
                      pstat = 0;
                   break;
                case 'n':
-                  mudstrlcpy( pbuf, "\r\n", MAX_STRING_LENGTH );
+                  strlcpy( pbuf, "\r\n", MAX_STRING_LENGTH );
                   break;
                case 'u':
                   pstat = num_descriptors;
@@ -3397,7 +3508,7 @@ void display_prompt( DESCRIPTOR_DATA * d )
                       ( IS_NPC( ch ) && IS_SET( ch->act, ACT_MOBINVIS ) ) )
                      snprintf( pbuf, MAX_STRING_LENGTH, "(Invis %d) ", ( IS_NPC( ch ) ? ch->mobinvis : ch->pcdata->wizinvis ) );
                   else if( IS_AFFECTED( ch, AFF_INVISIBLE ) )
-                     mudstrlcpy( pbuf, "(Invis) ", MAX_STRING_LENGTH );
+                     strlcpy( pbuf, "(Invis) ", MAX_STRING_LENGTH );
                   break;
                case 'I':
                   pstat = ( IS_NPC( ch ) ? ( IS_SET( ch->act, ACT_MOBINVIS ) ? ch->mobinvis : 0 )

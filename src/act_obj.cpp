@@ -44,2838 +44,2257 @@
  *                                                                                                                               *
  *********************************************************************************************************************************/
 
-
 #include <sys/types.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 #include <time.h>
-#include "mud.h"
-#include "bet.h"
+#include "mud.hpp"
 
-/*double sqrt( double x );*/
+
+const short movement_loss[SECT_MAX] = {
+   1, 2, 2, 3, 4, 6, 4, 1, 6, 10, 6, 5, 7, 4
+};
+
+const char *const dir_name[] = {
+   "north", "east", "south", "west", "up", "down",
+   "northeast", "northwest", "southeast", "southwest", "somewhere"
+};
+
+const int trap_door[] = {
+   TRAP_N, TRAP_E, TRAP_S, TRAP_W, TRAP_U, TRAP_D,
+   TRAP_NE, TRAP_NW, TRAP_SE, TRAP_SW
+};
+
+
+const short rev_dir[] = {
+   2, 3, 0, 1, 5, 4, 9, 8, 7, 6, 10
+};
+
+ROOM_INDEX_DATA *vroom_hash[64];
 
 /*
  * Local functions.
  */
-void get_obj(CHAR_DATA *ch, OBJ_DATA *obj, OBJ_DATA *container);
-void wear_obj(CHAR_DATA *ch, OBJ_DATA *obj, bool fReplace, short wear_bit);
+bool has_key( CHAR_DATA * ch, int key );
 
-/*
- * how resistant an object is to damage				-Thoric
- */
-short get_obj_resistance(OBJ_DATA *obj)
+
+const char *const sect_names[SECT_MAX][2] = {
+   {"In a room", "inside"}, {"A City Street", "cities"},
+   {"In a field", "fields"}, {"In a forest", "forests"},
+   {"hill", "hills"}, {"On a mountain", "mountains"},
+   {"In the water", "waters"}, {"In rough water", "waters"},
+   {"Underwater", "underwaters"}, {"In the air", "air"},
+   {"In a desert", "deserts"}, {"Somewhere", "unknown"},
+   {"ocean floor", "ocean floor"}, {"underground", "underground"}
+};
+
+const int sent_total[SECT_MAX] = {
+   4, 24, 4, 4, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1
+};
+
+const char *const room_sents[SECT_MAX][25] = {
+   {
+    "The rough hewn walls are made of granite.",
+    "You see an occasional spider crawling around.",
+    "You notice signs of a recent battle from the bloodstains on the floor.",
+    "This place hasa damp musty odour not unlike rotting vegetation."},
+
+   {
+    "You notice the occasional stray looking for food.",
+    "Tall buildings loom on either side of you stretching to the sky.",
+    "Some street people are putting on an interesting display of talent trying to earn some credits.",
+    "Two people nearby shout heated words of argument at one another.",
+    "You think you can make out several shady figures talking down a dark alleyway."
+    "A slight breeze blows through the tall buildings.",
+    "A small crowd of people have gathered at one side of the street.",
+    "Clouds far above you obscure the tops of the highest skyscrapers.",
+    "A speeder moves slowly through the street avoiding pedestrians.",
+    "A cloudcar flys by overhead.",
+    "The air is thick and hard to breath.",
+    "The many smells of the city assault your senses.",
+    "You hear a scream far of in the distance.",
+    "The buildings around you seem endless in number.",
+    "The city stretches seemingly endless in all directions.",
+    "The street is wide and long.",
+    "A swoop rider passes quickly by weaving in and out of pedestrians and other vehicles.",
+    "The surface of the road is worn from many travellers.",
+    "You feel it would be very easy to get lost in such an enormous city.",
+    "You can see other streets above and bellow this one running in many directions.",
+    "There are entrances to several buildings at this level.",
+    "Along the edge of the street railings prevent pedestrians from falling to their death.",
+    "In between the many towers you can see down into depths of the lower city.",
+    "A grate in the street prevents rainwater from building up.",
+    "You can see you reflection in several of the transparisteel windows as you pass by."
+    "You hear a scream far of in the distance.",
+    },
+
+   {
+    "You notice sparce patches of brush and shrubs.",
+    "There is a small cluster of trees far off in the distance.",
+    "Around you are grassy fields as far as the eye can see.",
+    "Throughout the plains a wide variety of weeds and wildflowers are scattered."},
+
+   {
+    "Tall, dark evergreens prevent you from seeing very far.",
+    "Many huge oak trees that look several hundred years old are here.",
+    "You notice a solitary lonely weeping willow.",
+    "To your left is a patch of bright white birch trees, slender and tall."},
+
+   {
+    "The rolling hills are lightly speckled with violet wildflowers."},
+
+   {
+    "The rocky mountain pass offers many hiding places."},
+
+   {
+    "The water is smooth as glass."},
+
+   {
+    "Rough waves splash about angrily."},
+
+   {
+    "A small school of fish swims by."},
+
+   {
+    "The land is far far below.",
+    "A misty haze of clouds drifts by."},
+
+   {
+    "Around you is sand as far as the eye can see.",
+    "You think you see an oasis far in the distance."},
+
+   {
+    "You notice nothing unusual."},
+
+   {
+    "There are many rocks and coral which litter the ocean floor."},
+
+   {
+    "You stand in a lengthy tunnel of rock."}
+
+};
+
+int wherehome( CHAR_DATA * ch )
 {
-   short resist;
+   if( ch->plr_home )
+      return ch->plr_home->vnum;
 
-   resist = number_fuzzy(MAX_ITEM_IMPACT);
+   if( get_trust( ch ) >= LEVEL_IMMORTAL )
+      return ROOM_START_IMMORTAL;
+   if( ch->race == RACE_HUMAN )
+      return ROOM_START_HUMAN;
+   if( ch->race == RACE_WOOKIEE )
+      return ROOM_START_WOOKIEE;
+   if( ch->race == RACE_RODIAN )
+      return ROOM_START_RODIAN;
+   if( ch->race == RACE_MON_CALAMARI )
+      return ROOM_START_MON_CALAMARIAN;
+   if( ch->race == RACE_TWI_LEK )
+      return ROOM_START_TWILEK;
+   if( ch->race == RACE_HUTT )
+      return ROOM_START_HUTT;
+   if( ch->race == RACE_GAMORREAN )
+      return ROOM_START_GAMORREAN;
+   if( ch->race == RACE_JAWA )
+      return ROOM_START_JAWA;
+   if( ch->race == RACE_ADARIAN )
+      return ROOM_START_ADARIAN;
+   if( ch->race == RACE_EWOK )
+      return ROOM_START_EWOK;
+   if( ch->race == RACE_VERPINE )
+      return ROOM_START_VERPINE;
+   if( ch->race == RACE_DEFEL )
+      return ROOM_START_DEFEL;
+   if( ch->race == RACE_TRANDOSHAN )
+      return ROOM_START_TRANDOSHAN;
+   if( ch->race == RACE_HAPAN )
+      return ROOM_START_HAPAN;
+   if( ch->race == RACE_QUARREN )
+      return ROOM_START_QUARREN;
+   if( ch->race == RACE_NOGHRI )
+      return ROOM_START_NOGHRI;
 
-   /*
-    * magical items are more resistant
-    */
-   if (IS_OBJ_STAT(obj, ITEM_MAGIC))
-      resist += number_fuzzy(12);
-
-   /*
-    * blessed objects should have a little bonus
-    */
-   if (IS_OBJ_STAT(obj, ITEM_BLESS))
-      resist += number_fuzzy(5);
-
-   /*
-    * lets make store inventory pretty tough
-    */
-   if (IS_OBJ_STAT(obj, ITEM_INVENTORY))
-      resist += 20;
-
-   /*
-    * okay... let's add some bonus/penalty for item level...
-    */
-   resist += (obj->level / 10);
-
-   /*
-    * and lasty... take armor or weapon's condition into consideration
-    */
-   if (obj->item_type == ITEM_ARMOR || obj->item_type == ITEM_WEAPON)
-      resist += (obj->value[0]);
-
-   return URANGE(10, resist, 99);
+   return ROOM_VNUM_TEMPLE;
 }
 
-void get_obj(CHAR_DATA *ch, OBJ_DATA *obj, OBJ_DATA *container)
+char *grab_word( char *argument, char *arg_first )
 {
-   CLAN_DATA *clan;
-   int weight;
-
-   if (!CAN_WEAR(obj, ITEM_TAKE) && (ch->top_level < sysdata.level_getobjnotake))
-   {
-      send_to_char("You can't take that.\r\n", ch);
-      return;
-   }
-
-   if (IS_OBJ_STAT(obj, ITEM_PROTOTYPE) && !can_take_proto(ch))
-   {
-      send_to_char("A godly force prevents you from getting close to it.\r\n", ch);
-      return;
-   }
-
-   if (obj->item_type != ITEM_MONEY)
-   {
-      if ((ch->carry_number + get_obj_number(obj) > can_carry_n(ch)))
-      {
-         act(AT_PLAIN, "$d: you can't carry that many items.", ch, NULL, obj->name, TO_CHAR);
-         return;
-      }
-   }
-
-   if (IS_OBJ_STAT(obj, ITEM_COVERING))
-      weight = obj->weight;
-   else
-      weight = get_obj_weight(obj);
-
-   /* Money weight shouldn't count */
-   if (obj->item_type != ITEM_MONEY)
-   {
-      if (obj->in_obj)
-      {
-         OBJ_DATA *tobj = obj->in_obj;
-         int inobj = 1;
-         bool checkweight = FALSE;
-
-         /* need to make it check weight if its in a magic container */
-         if (tobj->item_type == ITEM_CONTAINER && IS_OBJ_STAT(tobj, ITEM_MAGIC))
-            checkweight = TRUE;
-
-         while (tobj->in_obj)
-         {
-            tobj = tobj->in_obj;
-            inobj++;
-
-            /* need to make it check weight if its in a magic container */
-            if (tobj->item_type == ITEM_CONTAINER && IS_OBJ_STAT(tobj, ITEM_MAGIC))
-               checkweight = TRUE;
-         }
-
-         /* need to check weight if not carried by ch or in a magic container. */
-         if (!tobj->carried_by || tobj->carried_by != ch || checkweight)
-         {
-            if ((ch->carry_weight + weight) > can_carry_w(ch))
-            {
-               act(AT_PLAIN, "$d: you can't carry that much weight.", ch, NULL, obj->name, TO_CHAR);
-               return;
-            }
-         }
-      }
-      else if ((ch->carry_weight + weight) > can_carry_w(ch))
-      {
-         act(AT_PLAIN, "$d: you can't carry that much weight.", ch, NULL, obj->name, TO_CHAR);
-         return;
-      }
-   }
-
-   if (container)
-   {
-      act(AT_ACTION, IS_OBJ_STAT(container, ITEM_COVERING) ? "You get $p from beneath $P." : "You get $p from $P", ch, obj, container, TO_CHAR);
-      act(AT_ACTION, IS_OBJ_STAT(container, ITEM_COVERING) ? "$n gets $p from beneath $P." : "$n gets $p from $P", ch, obj, container, TO_ROOM);
-      obj_from_obj(obj);
-   }
-   else
-   {
-      act(AT_ACTION, "You get $p.", ch, obj, container, TO_CHAR);
-      act(AT_ACTION, "$n gets $p.", ch, obj, container, TO_ROOM);
-      obj_from_room(obj);
-   }
-
-   /*
-    * Clan storeroom checks
-    */
-   if (IS_SET(ch->in_room->room_flags, ROOM_CLANSTOREROOM) && (!container || container->carried_by == NULL))
-      for (clan = first_clan; clan; clan = clan->next)
-         if (clan->storeroom == ch->in_room->vnum)
-            save_clan_storeroom(ch, clan);
-
-   if (obj->item_type != ITEM_CONTAINER)
-      check_for_trap(ch, obj, TRAP_GET);
-   if (char_died(ch))
-      return;
-
-   if (obj->item_type == ITEM_MONEY)
-   {
-      ch->gold += obj->value[0] * obj->count;
-      extract_obj(obj);
-   }
-   else
-   {
-      obj = obj_to_char(obj, ch);
-   }
-
-   if (char_died(ch) || obj_extracted(obj))
-      return;
-   oprog_get_trigger(ch, obj);
-   return;
-}
-
-void do_get(CHAR_DATA *ch, const char *argument)
-{
-   char arg1[MAX_INPUT_LENGTH];
-   char arg2[MAX_INPUT_LENGTH];
-   OBJ_DATA *obj;
-   OBJ_DATA *obj_next;
-   OBJ_DATA *container;
-   short number;
-   bool found;
-
-   argument = one_argument(argument, arg1);
-   if (is_number(arg1))
-   {
-      number = atoi(arg1);
-      if (number < 1)
-      {
-         send_to_char("That was easy...\r\n", ch);
-         return;
-      }
-      if ((ch->carry_number + number) > can_carry_n(ch))
-      {
-         send_to_char("You can't carry that many.\r\n", ch);
-         return;
-      }
-      argument = one_argument(argument, arg1);
-   }
-   else
-      number = 0;
-   argument = one_argument(argument, arg2);
-   /*
-    * munch optional words
-    */
-   if (!str_cmp(arg2, "from") && argument[0] != '\0')
-      argument = one_argument(argument, arg2);
-
-   /*
-    * Get type.
-    */
-   if (arg1[0] == '\0')
-   {
-      send_to_char("Get what?\r\n", ch);
-      return;
-   }
-
-   if (ms_find_obj(ch))
-      return;
-
-   if (arg2[0] == '\0')
-   {
-      if (number <= 1 && str_cmp(arg1, "all") && str_prefix("all.", arg1))
-      {
-         /*
-          * 'get obj'
-          */
-         obj = get_obj_list(ch, arg1, ch->in_room->first_content);
-         if (!obj)
-         {
-            act(AT_PLAIN, "I see no $T here.", ch, NULL, arg1, TO_CHAR);
-            return;
-         }
-         separate_obj(obj);
-         get_obj(ch, obj, NULL);
-         if (char_died(ch))
-            return;
-         if (IS_SET(sysdata.save_flags, SV_GET))
-            save_char_obj(ch);
-      }
-      else
-      {
-         short cnt = 0;
-         bool fAll;
-         char *chk;
-
-         if (IS_SET(ch->in_room->room_flags, ROOM_DONATION))
-         {
-            send_to_char("The gods frown upon such a display of greed!\r\n", ch);
-            return;
-         }
-         if (!str_cmp(arg1, "all"))
-            fAll = TRUE;
-         else
-            fAll = FALSE;
-         if (number > 1)
-            chk = arg1;
-         else
-            chk = &arg1[4];
-         /*
-          * 'get all' or 'get all.obj'
-          */
-         found = FALSE;
-         for (obj = ch->in_room->first_content; obj; obj = obj_next)
-         {
-            obj_next = obj->next_content;
-            if ((fAll || nifty_is_name(chk, obj->name)) && can_see_obj(ch, obj))
-            {
-               found = TRUE;
-               if (number && (cnt + obj->count) > number)
-                  split_obj(obj, number - cnt);
-               cnt += obj->count;
-               get_obj(ch, obj, NULL);
-               if (char_died(ch) || ch->carry_number >= can_carry_n(ch) || ch->carry_weight >= can_carry_w(ch) || (number && cnt >= number))
-               {
-                  if (IS_SET(sysdata.save_flags, SV_GET) && !char_died(ch))
-                     save_char_obj(ch);
-                  return;
-               }
-            }
-         }
-
-         if (!found)
-         {
-            if (fAll)
-               send_to_char("I see nothing here.\r\n", ch);
-            else
-               act(AT_PLAIN, "I see no $T here.", ch, NULL, chk, TO_CHAR);
-         }
-         else if (IS_SET(sysdata.save_flags, SV_GET))
-            save_char_obj(ch);
-      }
-   }
-   else
-   {
-      /*
-       * 'get ... container'
-       */
-      if (!str_cmp(arg2, "all") || !str_prefix("all.", arg2))
-      {
-         send_to_char("You can't do that.\r\n", ch);
-         return;
-      }
-
-      if ((container = get_obj_here(ch, arg2)) == NULL)
-      {
-         act(AT_PLAIN, "I see no $T here.", ch, NULL, arg2, TO_CHAR);
-         return;
-      }
-
-      switch (container->item_type)
-      {
-      default:
-         if (!IS_OBJ_STAT(container, ITEM_COVERING))
-         {
-            send_to_char("That's not a container.\r\n", ch);
-            return;
-         }
-         if (ch->carry_weight + container->weight > can_carry_w(ch))
-         {
-            send_to_char("It's too heavy for you to lift.\r\n", ch);
-            return;
-         }
-         break;
-
-      case ITEM_CONTAINER:
-      case ITEM_DROID_CORPSE:
-      case ITEM_CORPSE_PC:
-      case ITEM_CORPSE_NPC:
-         break;
-      }
-
-      if (!IS_OBJ_STAT(container, ITEM_COVERING) && IS_SET(container->value[1], CONT_CLOSED))
-      {
-         act(AT_PLAIN, "The $d is closed.", ch, NULL, container->name, TO_CHAR);
-         return;
-      }
-
-      if (number <= 1 && str_cmp(arg1, "all") && str_prefix("all.", arg1))
-      {
-         /*
-          * 'get obj container'
-          */
-         obj = get_obj_list(ch, arg1, container->first_content);
-         if (!obj)
-         {
-            act(AT_PLAIN, IS_OBJ_STAT(container, ITEM_COVERING) ? "I see nothing like that beneath the $T." : "I see nothing like that in the $T.", ch, NULL, container->short_descr, TO_CHAR);
-            return;
-         }
-         separate_obj(obj);
-         get_obj(ch, obj, container);
-
-         check_for_trap(ch, container, TRAP_GET);
-         if (char_died(ch))
-            return;
-         if (IS_SET(sysdata.save_flags, SV_GET))
-            save_char_obj(ch);
-      }
-      else
-      {
-         int cnt = 0;
-         bool fAll;
-         char *chk;
-
-         /*
-          * 'get all container' or 'get all.obj container'
-          */
-         if (IS_OBJ_STAT(container, ITEM_DONATION))
-         {
-            send_to_char("The gods frown upon such an act of greed!\r\n", ch);
-            return;
-         }
-         if (!str_cmp(arg1, "all"))
-            fAll = TRUE;
-         else
-            fAll = FALSE;
-         if (number > 1)
-            chk = arg1;
-         else
-            chk = &arg1[4];
-         found = FALSE;
-         for (obj = container->first_content; obj; obj = obj_next)
-         {
-            obj_next = obj->next_content;
-            if ((fAll || nifty_is_name(chk, obj->name)) && can_see_obj(ch, obj))
-            {
-               found = TRUE;
-               if (number && (cnt + obj->count) > number)
-                  split_obj(obj, number - cnt);
-               cnt += obj->count;
-               get_obj(ch, obj, container);
-               if (char_died(ch) || ch->carry_number >= can_carry_n(ch) || ch->carry_weight >= can_carry_w(ch) || (number && cnt >= number))
-               {
-                  if (container->item_type == ITEM_CORPSE_PC)
-                     write_corpses(NULL, container->short_descr + 14);
-                  if (found && IS_SET(sysdata.save_flags, SV_GET))
-                     save_char_obj(ch);
-                  return;
-               }
-            }
-         }
-
-         if (!found)
-         {
-            if (fAll)
-               act(AT_PLAIN, IS_OBJ_STAT(container, ITEM_COVERING) ? "I see nothing beneath the $T." : "I see nothing in the $T.", ch, NULL, container->short_descr, TO_CHAR);
-            else
-               act(AT_PLAIN, IS_OBJ_STAT(container, ITEM_COVERING) ? "I see nothing like that beneath the $T." : "I see nothing like that in the $T.", ch, NULL, container->short_descr, TO_CHAR);
-         }
-         else
-            check_for_trap(ch, container, TRAP_GET);
-         if (char_died(ch))
-            return;
-         if (found && IS_SET(sysdata.save_flags, SV_GET))
-            save_char_obj(ch);
-      }
-   }
-   return;
-}
-
-void do_put(CHAR_DATA *ch, const char *argument)
-{
-   char arg1[MAX_INPUT_LENGTH];
-   char arg2[MAX_INPUT_LENGTH];
-   OBJ_DATA *container;
-   OBJ_DATA *obj;
-   OBJ_DATA *obj_next;
-   CLAN_DATA *clan;
+   char cEnd;
    short count;
-   int number;
-   bool save_char = FALSE;
 
-   argument = one_argument(argument, arg1);
-   if (is_number(arg1))
+   count = 0;
+
+   while( isspace( *argument ) )
+      argument++;
+
+   cEnd = ' ';
+   if( *argument == '\'' || *argument == '"' )
+      cEnd = *argument++;
+
+   while( *argument != '\0' || ++count >= 255 )
    {
-      number = atoi(arg1);
-      if (number < 1)
+      if( *argument == cEnd )
       {
-         send_to_char("That was easy...\r\n", ch);
-         return;
-      }
-      argument = one_argument(argument, arg1);
-   }
-   else
-      number = 0;
-   argument = one_argument(argument, arg2);
-   /*
-    * munch optional words
-    */
-   if ((!str_cmp(arg2, "into") || !str_cmp(arg2, "inside") || !str_cmp(arg2, "in")) && argument[0] != '\0')
-      argument = one_argument(argument, arg2);
-
-   if (arg1[0] == '\0' || arg2[0] == '\0')
-   {
-      send_to_char("Put what in what?\r\n", ch);
-      return;
-   }
-
-   if (ms_find_obj(ch))
-      return;
-
-   if (!str_cmp(arg2, "all") || !str_prefix("all.", arg2))
-   {
-      send_to_char("You can't do that.\r\n", ch);
-      return;
-   }
-
-   if ((container = get_obj_here(ch, arg2)) == NULL)
-   {
-      act(AT_PLAIN, "I see no $T here.", ch, NULL, arg2, TO_CHAR);
-      return;
-   }
-
-   if (!container->carried_by && IS_SET(sysdata.save_flags, SV_PUT))
-      save_char = TRUE;
-
-   if (IS_OBJ_STAT(container, ITEM_COVERING))
-   {
-      if (ch->carry_weight + container->weight > can_carry_w(ch))
-      {
-         send_to_char("It's too heavy for you to lift.\r\n", ch);
-         return;
-      }
-   }
-   else
-   {
-      if (container->item_type != ITEM_CONTAINER)
-      {
-         send_to_char("That's not a container.\r\n", ch);
-         return;
-      }
-
-      if (IS_SET(container->value[1], CONT_CLOSED))
-      {
-         act(AT_PLAIN, "The $d is closed.", ch, NULL, container->name, TO_CHAR);
-         return;
-      }
-   }
-
-   if (number > 0)
-   {
-      /*
-       * 'put NNNN coins object'
-       */
-
-      if (!str_cmp(arg1, "credits") || !str_cmp(arg1, "credit"))
-      {
-         if (ch->gold < number)
-         {
-            send_to_char("You haven't got that many credits.\r\n", ch);
-            return;
-         }
-
-         if (!IS_NPC(ch) && ch->top_level < 11)
-         {
-            send_to_char("Due to cheating, players under level 11 are not allowed to move credits.\r\n", ch);
-            return;
-         }
-
-         ch->gold -= number;
-
-         for (obj = container->first_content; obj; obj = obj_next)
-         {
-            obj_next = obj->next_content;
-
-            switch (obj->pIndexData->vnum)
-            {
-            case OBJ_VNUM_MONEY_ONE:
-               number += 1;
-               extract_obj(obj);
-               break;
-
-            case OBJ_VNUM_MONEY_SOME:
-               number += obj->value[0];
-               extract_obj(obj);
-               break;
-            }
-         }
-
-         act(AT_ACTION, "$n puts some credits in $P.", ch, NULL, container, TO_ROOM);
-         obj_to_obj(create_money(number), container);
-         send_to_char("OK.\r\n", ch);
-         if (IS_SET(sysdata.save_flags, SV_DROP))
-            save_char_obj(ch);
-         return;
-      }
-   }
-
-   if (number <= 1 && str_cmp(arg1, "all") && str_prefix("all.", arg1))
-   {
-      /*
-       * 'put obj container'
-       */
-      if ((obj = get_obj_carry(ch, arg1)) == NULL)
-      {
-         send_to_char("You do not have that item.\r\n", ch);
-         return;
-      }
-
-      if (obj == container)
-      {
-         send_to_char("You can't fold it into itself.\r\n", ch);
-         return;
-      }
-
-      if (!can_drop_obj(ch, obj))
-      {
-         send_to_char("You can't let go of it.\r\n", ch);
-         return;
-      }
-
-      if ((IS_OBJ_STAT(container, ITEM_COVERING) && (get_obj_weight(obj) / obj->count) > ((get_obj_weight(container) / container->count) - container->weight)))
-      {
-         send_to_char("It won't fit under there.\r\n", ch);
-         return;
-      }
-
-      if ((get_obj_weight(obj) / obj->count) + (get_obj_weight(container) / container->count) > container->value[0])
-      {
-         send_to_char("It won't fit.\r\n", ch);
-         return;
-      }
-
-      if (obj->item_type == ITEM_GRENADE && obj->timer > 0)
-      {
-         send_to_char("Put an armed grenade in a bag? This ain't acme, kid.\r\n", ch);
-         return;
-      }
-
-      separate_obj(obj);
-      separate_obj(container);
-      obj_from_char(obj);
-      obj = obj_to_obj(obj, container);
-      check_for_trap(ch, container, TRAP_PUT);
-      if (char_died(ch))
-         return;
-      count = obj->count;
-      obj->count = 1;
-      if (!oprog_use_trigger(ch, container, NULL, NULL, NULL))
-      {
-         act(AT_ACTION, IS_OBJ_STAT(container, ITEM_COVERING) ? "$n hides $p beneath $P." : "$n puts $p in $P.", ch, obj, container, TO_ROOM);
-         act(AT_ACTION, IS_OBJ_STAT(container, ITEM_COVERING) ? "You hide $p beneath $P." : "You put $p in $P.", ch, obj, container, TO_CHAR);
-      }
-      obj->count = count;
-
-      if (save_char)
-         save_char_obj(ch);
-      /*
-       * Clan storeroom check
-       */
-      if (IS_SET(ch->in_room->room_flags, ROOM_CLANSTOREROOM) && container->carried_by == NULL)
-         for (clan = first_clan; clan; clan = clan->next)
-            if (clan->storeroom == ch->in_room->vnum)
-               save_clan_storeroom(ch, clan);
-   }
-   else
-   {
-      bool found = FALSE;
-      int cnt = 0;
-      bool fAll;
-      char *chk;
-
-      if (!str_cmp(arg1, "all"))
-         fAll = TRUE;
-      else
-         fAll = FALSE;
-      if (number > 1)
-         chk = arg1;
-      else
-         chk = &arg1[4];
-
-      if (container->pIndexData->vnum == 1097 && fAll)
-      {
-         send_to_char("You can't put everything into the trash! Do it one at a time!\r\n", ch);
-         return;
-      }
-
-      separate_obj(container);
-      /*
-       * 'put all container' or 'put all.obj container'
-       */
-      for (obj = ch->first_carrying; obj; obj = obj_next)
-      {
-         obj_next = obj->next_content;
-
-         if ((fAll || nifty_is_name(chk, obj->name)) && can_see_obj(ch, obj) && obj->wear_loc == WEAR_NONE && obj != container && can_drop_obj(ch, obj) && get_obj_weight(obj) + get_obj_weight(container) <= container->value[0])
-         {
-            if (number && (cnt + obj->count) > number)
-               split_obj(obj, number - cnt);
-            cnt += obj->count;
-            obj_from_char(obj);
-            if (!oprog_use_trigger(ch, container, NULL, NULL, NULL))
-            {
-               act(AT_ACTION, "$n puts $p in $P.", ch, obj, container, TO_ROOM);
-               act(AT_ACTION, "You put $p in $P.", ch, obj, container, TO_CHAR);
-            }
-            obj = obj_to_obj(obj, container);
-            found = TRUE;
-
-            check_for_trap(ch, container, TRAP_PUT);
-            if (char_died(ch))
-               return;
-            if (number && cnt >= number)
-               break;
-         }
-      }
-
-      /*
-       * Don't bother to save anything if nothing was dropped   -Thoric
-       */
-      if (!found)
-      {
-         if (fAll)
-            act(AT_PLAIN, "You are not carrying anything.", ch, NULL, NULL, TO_CHAR);
-         else
-            act(AT_PLAIN, "You are not carrying any $T.", ch, NULL, chk, TO_CHAR);
-         return;
-      }
-
-      if (save_char)
-         save_char_obj(ch);
-      /*
-       * Clan storeroom check
-       */
-      if (IS_SET(ch->in_room->room_flags, ROOM_CLANSTOREROOM) && container->carried_by == NULL)
-         for (clan = first_clan; clan; clan = clan->next)
-            if (clan->storeroom == ch->in_room->vnum)
-               save_clan_storeroom(ch, clan);
-   }
-
-   return;
-}
-
-void do_drop(CHAR_DATA *ch, const char *argument)
-{
-   char arg[MAX_INPUT_LENGTH];
-   OBJ_DATA *obj;
-   OBJ_DATA *obj_next;
-   bool found;
-   CLAN_DATA *clan;
-   int number;
-
-   argument = one_argument(argument, arg);
-   if (is_number(arg))
-   {
-      number = atoi(arg);
-      if (number < 1)
-      {
-         send_to_char("That was easy...\r\n", ch);
-         return;
-      }
-      argument = one_argument(argument, arg);
-   }
-   else
-      number = 0;
-
-   if (arg[0] == '\0')
-   {
-      send_to_char("Drop what?\r\n", ch);
-      return;
-   }
-
-   if (ms_find_obj(ch))
-      return;
-
-   if (IS_SET(ch->in_room->room_flags, ROOM_NODROP) || (!IS_NPC(ch) && IS_SET(ch->act, PLR_LITTERBUG)))
-   {
-      set_char_color(AT_MAGIC, ch);
-      send_to_char("A magical force stops you!\r\n", ch);
-      set_char_color(AT_TELL, ch);
-      send_to_char("Someone tells you, 'No littering here!'\r\n", ch);
-      return;
-   }
-
-   if (number > 0)
-   {
-      /*
-       * 'drop NNNN coins'
-       */
-
-      if (!str_cmp(arg, "credits") || !str_cmp(arg, "credit"))
-      {
-         if (ch->gold < number)
-         {
-            send_to_char("You haven't got that many credits.\r\n", ch);
-            return;
-         }
-
-         if (!IS_NPC(ch) && ch->top_level < 11)
-         {
-            send_to_char("Due to cheating, players under level 11 are not allowed to move credits.\r\n", ch);
-            return;
-         }
-
-         ch->gold -= number;
-
-         for (obj = ch->in_room->first_content; obj; obj = obj_next)
-         {
-            obj_next = obj->next_content;
-
-            switch (obj->pIndexData->vnum)
-            {
-            case OBJ_VNUM_MONEY_ONE:
-               number += 1;
-               extract_obj(obj);
-               break;
-
-            case OBJ_VNUM_MONEY_SOME:
-               number += obj->value[0];
-               extract_obj(obj);
-               break;
-            }
-         }
-
-         act(AT_ACTION, "$n drops some credits.", ch, NULL, NULL, TO_ROOM);
-         obj_to_room(create_money(number), ch->in_room);
-         send_to_char("OK.\r\n", ch);
-         if (!IS_NPC(ch) && IS_IMMORTAL(ch))
-         {
-            log_printf("%s dropped %d credits.", ch->name, number);
-         }
-         if (IS_SET(sysdata.save_flags, SV_DROP))
-            save_char_obj(ch);
-         return;
-      }
-   }
-
-   if (number <= 1 && str_cmp(arg, "all") && str_prefix("all.", arg))
-   {
-      /*
-       * 'drop obj'
-       */
-      if ((obj = get_obj_carry(ch, arg)) == NULL)
-      {
-         send_to_char("You do not have that item.\r\n", ch);
-         return;
-      }
-
-      if (!can_drop_obj(ch, obj))
-      {
-         send_to_char("You can't let go of it.\r\n", ch);
-         return;
-      }
-
-      separate_obj(obj);
-      act(AT_ACTION, "$n drops $p.", ch, obj, NULL, TO_ROOM);
-      act(AT_ACTION, "You drop $p.", ch, obj, NULL, TO_CHAR);
-      if (!IS_NPC(ch) && IS_IMMORTAL(ch))
-      {
-         log_printf("%s dropped %s.", ch->name, obj->short_descr);
-      }
-
-      obj_from_char(obj);
-      obj = obj_to_room(obj, ch->in_room);
-      oprog_drop_trigger(ch, obj); /* mudprogs */
-
-      if (char_died(ch) || obj_extracted(obj))
-         return;
-
-      /*
-       * Clan storeroom saving
-       */
-      if (IS_SET(ch->in_room->room_flags, ROOM_CLANSTOREROOM))
-         for (clan = first_clan; clan; clan = clan->next)
-            if (clan->storeroom == ch->in_room->vnum)
-               save_clan_storeroom(ch, clan);
-   }
-   else
-   {
-      int cnt = 0;
-      char *chk;
-      bool fAll;
-
-      if (!str_cmp(arg, "all"))
-         fAll = TRUE;
-      else
-         fAll = FALSE;
-      if (number > 1)
-         chk = arg;
-      else
-         chk = &arg[4];
-      /*
-       * 'drop all' or 'drop all.obj'
-       */
-      if (IS_SET(ch->in_room->room_flags, ROOM_NODROPALL))
-      {
-         send_to_char("You can't seem to do that here...\r\n", ch);
-         return;
-      }
-      found = FALSE;
-      for (obj = ch->first_carrying; obj; obj = obj_next)
-      {
-         obj_next = obj->next_content;
-
-         if ((fAll || nifty_is_name(chk, obj->name)) && can_see_obj(ch, obj) && obj->wear_loc == WEAR_NONE && can_drop_obj(ch, obj))
-         {
-            found = TRUE;
-            if (obj->pIndexData->progtypes & DROP_PROG && obj->count > 1)
-            {
-               ++cnt;
-               separate_obj(obj);
-               obj_from_char(obj);
-               if (!obj_next)
-                  obj_next = ch->first_carrying;
-            }
-            else
-            {
-               if (number && (cnt + obj->count) > number)
-                  split_obj(obj, number - cnt);
-               cnt += obj->count;
-               obj_from_char(obj);
-            }
-            act(AT_ACTION, "$n drops $p.", ch, obj, NULL, TO_ROOM);
-            act(AT_ACTION, "You drop $p.", ch, obj, NULL, TO_CHAR);
-            obj = obj_to_room(obj, ch->in_room);
-            if (!IS_NPC(ch) && IS_IMMORTAL(ch))
-            {
-               log_printf("%s dropped %s.", ch->name, obj->short_descr);
-            }
-            oprog_drop_trigger(ch, obj); /* mudprogs */
-            if (char_died(ch))
-               return;
-            if (number && cnt >= number)
-               break;
-         }
-      }
-
-      if (IS_SET(ch->in_room->room_flags, ROOM_CLANSTOREROOM))
-         for (clan = first_clan; clan; clan = clan->next)
-            if (clan->storeroom == ch->in_room->vnum)
-               save_clan_storeroom(ch, clan);
-
-      if (!found)
-      {
-         if (fAll)
-            act(AT_PLAIN, "You are not carrying anything.", ch, NULL, NULL, TO_CHAR);
-         else
-            act(AT_PLAIN, "You are not carrying any $T.", ch, NULL, chk, TO_CHAR);
-      }
-   }
-   if (IS_SET(sysdata.save_flags, SV_DROP))
-      save_char_obj(ch); /* duping protector */
-   return;
-}
-
-void do_give(CHAR_DATA *ch, const char *argument)
-{
-   char arg1[MAX_INPUT_LENGTH];
-   char arg2[MAX_INPUT_LENGTH];
-   char buf[MAX_INPUT_LENGTH];
-   CHAR_DATA *victim;
-   OBJ_DATA *obj;
-
-   argument = one_argument(argument, arg1);
-   argument = one_argument(argument, arg2);
-   if (!str_cmp(arg2, "to") && argument[0] != '\0')
-      argument = one_argument(argument, arg2);
-
-   if (arg1[0] == '\0' || arg2[0] == '\0')
-   {
-      send_to_char("Give what to whom?\r\n", ch);
-      return;
-   }
-
-   if (ms_find_obj(ch))
-      return;
-
-   if (is_number(arg1))
-   {
-      /*
-       * 'give NNNN coins victim'
-       */
-      int amount;
-
-      amount = atoi(arg1);
-      if (amount <= 0 || (str_cmp(arg2, "credits") && str_cmp(arg2, "credit")))
-      {
-         send_to_char("Sorry, you can't do that.\r\n", ch);
-         return;
-      }
-
-      argument = one_argument(argument, arg2);
-      if (!str_cmp(arg2, "to") && argument[0] != '\0')
-         argument = one_argument(argument, arg2);
-      if (arg2[0] == '\0')
-      {
-         send_to_char("Give what to whom?\r\n", ch);
-         return;
-      }
-
-      if ((victim = get_char_room(ch, arg2)) == NULL)
-      {
-         send_to_char("They aren't here.\r\n", ch);
-         return;
-      }
-
-      if (ch->gold < amount)
-      {
-         send_to_char("Very generous of you, but you haven't got that many credits.\r\n", ch);
-         return;
-      }
-
-      if (!IS_NPC(ch) && ch->top_level < 11)
-      {
-         send_to_char("Due to cheating, players under level 11 are not allowed to move credits.\r\n", ch);
-         return;
-      }
-
-      ch->gold -= amount;
-      victim->gold += amount;
-      snprintf(buf, MAX_INPUT_LENGTH, "You receive %d %s from $n.", amount, (amount > 1) ? "credits" : "credit");
-
-      act(AT_ACTION, buf, ch, NULL, victim, TO_VICT);
-      snprintf(buf, MAX_INPUT_LENGTH, "You give $N %d %s", amount, (amount > 1) ? "credits." : "credit.");
-      act(AT_ACTION, "$n gives $N some credits.", ch, NULL, victim, TO_NOTVICT);
-      act(AT_ACTION, buf, ch, NULL, victim, TO_CHAR);
-      send_to_char("OK.\r\n", ch);
-      if (!IS_NPC(ch) && !IS_NPC(victim) && IS_IMMORTAL(ch))
-      {
-         log_printf("%s gives %s %d credits.", ch->name, victim->name, amount);
-      }
-      mprog_bribe_trigger(victim, ch, amount);
-      if (IS_SET(sysdata.save_flags, SV_GIVE) && !char_died(ch))
-         save_char_obj(ch);
-      if (IS_SET(sysdata.save_flags, SV_RECEIVE) && !char_died(victim))
-         save_char_obj(victim);
-      return;
-   }
-
-   if ((obj = get_obj_carry(ch, arg1)) == NULL)
-   {
-      send_to_char("You do not have that item.\r\n", ch);
-      return;
-   }
-
-   if (obj->wear_loc != WEAR_NONE)
-   {
-      send_to_char("You must remove it first.\r\n", ch);
-      return;
-   }
-
-   if ((victim = get_char_room(ch, arg2)) == NULL)
-   {
-      send_to_char("They aren't here.\r\n", ch);
-      return;
-   }
-
-   if (!can_drop_obj(ch, obj))
-   {
-      send_to_char("You can't let go of it.\r\n", ch);
-      return;
-   }
-
-   if (victim->carry_number + (get_obj_number(obj) / obj->count) > can_carry_n(victim) && !IS_NPC(victim))
-   {
-      act(AT_PLAIN, "$N has $S hands full.", ch, NULL, victim, TO_CHAR);
-      return;
-   }
-
-   if (victim->carry_weight + (get_obj_weight(obj) / obj->count) > can_carry_w(victim))
-   {
-      act(AT_PLAIN, "$N can't carry that much weight.", ch, NULL, victim, TO_CHAR);
-      return;
-   }
-
-   if (!can_see_obj(victim, obj))
-   {
-      act(AT_PLAIN, "$N can't see it.", ch, NULL, victim, TO_CHAR);
-      return;
-   }
-
-   if (IS_OBJ_STAT(obj, ITEM_PROTOTYPE) && !can_take_proto(victim))
-   {
-      act(AT_PLAIN, "You cannot give that to $N!", ch, NULL, victim, TO_CHAR);
-      return;
-   }
-
-   separate_obj(obj);
-   obj_from_char(obj);
-   act(AT_ACTION, "$n gives $p to $N.", ch, obj, victim, TO_NOTVICT);
-   act(AT_ACTION, "$n gives you $p.", ch, obj, victim, TO_VICT);
-   act(AT_ACTION, "You give $p to $N.", ch, obj, victim, TO_CHAR);
-   obj = obj_to_char(obj, victim);
-   if (!IS_NPC(ch) && !IS_NPC(victim) && IS_IMMORTAL(ch))
-   {
-      log_printf("%s gives %s to %s.", ch->name, obj->short_descr, victim->name);
-   }
-
-   mprog_give_trigger(victim, ch, obj);
-   if (IS_SET(sysdata.save_flags, SV_GIVE) && !char_died(ch))
-      save_char_obj(ch);
-   if (IS_SET(sysdata.save_flags, SV_RECEIVE) && !char_died(victim))
-      save_char_obj(victim);
-   return;
-}
-
-/*
- * Damage an object.						-Thoric
- * Affect player's AC if necessary.
- * Make object into scraps if necessary.
- * Send message about damaged object.
- */
-obj_ret damage_obj(OBJ_DATA *obj)
-{
-   CHAR_DATA *ch;
-   obj_ret objcode;
-
-   ch = obj->carried_by;
-   objcode = rNONE;
-
-   separate_obj(obj);
-   if (ch)
-      act(AT_OBJECT, "($p gets damaged)", ch, obj, NULL, TO_CHAR);
-   else if (obj->in_room && (ch = obj->in_room->first_person) != NULL)
-   {
-      act(AT_OBJECT, "($p gets damaged)", ch, obj, NULL, TO_ROOM);
-      act(AT_OBJECT, "($p gets damaged)", ch, obj, NULL, TO_CHAR);
-      ch = NULL;
-   }
-
-   oprog_damage_trigger(ch, obj);
-   if (obj_extracted(obj))
-      return global_objcode;
-
-   switch (obj->item_type)
-   {
-   default:
-      make_scraps(obj);
-      objcode = rOBJ_SCRAPPED;
-      break;
-   case ITEM_CONTAINER:
-      if (--obj->value[3] <= 0)
-      {
-         make_scraps(obj);
-         objcode = rOBJ_SCRAPPED;
-      }
-      break;
-   case ITEM_ARMOR:
-      if (ch && obj->value[0] >= 1)
-         ch->armor += apply_ac(obj, obj->wear_loc);
-      if (--obj->value[0] <= 0)
-      {
-         make_scraps(obj);
-         objcode = rOBJ_SCRAPPED;
-      }
-      else if (ch && obj->value[0] >= 1)
-         ch->armor -= apply_ac(obj, obj->wear_loc);
-      break;
-   case ITEM_WEAPON:
-      if (--obj->value[0] <= 0)
-      {
-         make_scraps(obj);
-         objcode = rOBJ_SCRAPPED;
-      }
-      break;
-   }
-   if (ch != NULL)
-      save_char_obj(ch); /* Stop scrap duping - Samson 1-2-00 */
-   return objcode;
-}
-
-/*
- * Remove an object.
- */
-bool remove_obj(CHAR_DATA *ch, int iWear, bool fReplace)
-{
-   OBJ_DATA *obj, *tmpobj;
-
-   if ((obj = get_eq_char(ch, iWear)) == NULL)
-      return TRUE;
-
-   if (!fReplace && ch->carry_number + get_obj_number(obj) > can_carry_n(ch))
-   {
-      act(AT_PLAIN, "$d: you can't carry that many items.", ch, NULL, obj->name, TO_CHAR);
-      return FALSE;
-   }
-
-   if (!fReplace)
-      return FALSE;
-
-   if (IS_OBJ_STAT(obj, ITEM_NOREMOVE))
-   {
-      act(AT_PLAIN, "You can't remove $p.", ch, obj, NULL, TO_CHAR);
-      return FALSE;
-   }
-
-   if (obj == get_eq_char(ch, WEAR_WIELD) && (tmpobj = get_eq_char(ch, WEAR_DUAL_WIELD)) != NULL)
-      tmpobj->wear_loc = WEAR_WIELD;
-
-   unequip_char(ch, obj);
-
-   act(AT_ACTION, "$n stops using $p.", ch, obj, NULL, TO_ROOM);
-   act(AT_ACTION, "You stop using $p.", ch, obj, NULL, TO_CHAR);
-   oprog_remove_trigger(ch, obj);
-   return TRUE;
-}
-
-/*
- * See if char could be capable of dual-wielding		-Thoric
- */
-bool could_dual(CHAR_DATA *ch)
-{
-   if (IS_NPC(ch) || ch->pcdata->learned[gsn_dual_wield])
-      return TRUE;
-
-   return FALSE;
-}
-
-bool can_dual(CHAR_DATA *ch)
-{
-   bool wield = FALSE, nwield = FALSE;
-
-   if (!could_dual(ch))
-      return FALSE;
-   if (get_eq_char(ch, WEAR_WIELD))
-      wield = TRUE;
-   /* Check for missile wield or dual wield */
-   if (get_eq_char(ch, WEAR_MISSILE_WIELD) || get_eq_char(ch, WEAR_DUAL_WIELD))
-      nwield = TRUE;
-   if (wield && nwield)
-   {
-      send_to_char("You are already wielding two weapons... grow some more arms!\r\n", ch);
-      return FALSE;
-   }
-   if ((wield || nwield) && get_eq_char(ch, WEAR_HOLD))
-   {
-      send_to_char("You cannot hold another weapon, you're already holding something in that hand!\r\n", ch);
-      return FALSE;
-   }
-   return TRUE;
-}
-
-/*
- * Check to see if there is room to wear another object on this location
- * (Layered clothing support)
- */
-bool can_layer(CHAR_DATA *ch, OBJ_DATA *obj, short wear_loc)
-{
-   OBJ_DATA *otmp;
-   short bitlayers = 0;
-   short objlayers = obj->pIndexData->layers;
-
-   for (otmp = ch->first_carrying; otmp; otmp = otmp->next_content)
-      if (otmp->wear_loc == wear_loc)
-      {
-         if (!otmp->pIndexData->layers)
-            return FALSE;
-         else
-            bitlayers |= otmp->pIndexData->layers;
-      }
-   if ((bitlayers && !objlayers) || bitlayers > objlayers)
-      return FALSE;
-   if (!bitlayers || ((bitlayers & ~objlayers) == bitlayers))
-      return TRUE;
-   return FALSE;
-}
-
-/*
- * Wear one object.
- * Optional replacement of existing objects.
- * Big repetitive code, ick.
- * Restructured a bit to allow for specifying body location	-Thoric
- */
-void wear_obj(CHAR_DATA *ch, OBJ_DATA *obj, bool fReplace, short wear_bit)
-{
-   OBJ_DATA *tmpobj;
-   short bit, tmp;
-   bool check_size;
-
-   separate_obj(obj);
-
-   if (wear_bit > -1)
-   {
-      bit = wear_bit;
-      if (!CAN_WEAR(obj, 1 << bit))
-      {
-         if (fReplace)
-         {
-            switch (1 << bit)
-            {
-            case ITEM_HOLD:
-               send_to_char("You cannot hold that.\r\n", ch);
-               break;
-            case ITEM_WIELD:
-               send_to_char("You cannot wield that.\r\n", ch);
-               break;
-            default:
-               ch_printf(ch, "You cannot wear that on your %s.\r\n", w_flags[bit]);
-            }
-         }
-         return;
-      }
-   }
-   else
-   {
-      for (bit = -1, tmp = 1; tmp < 31; tmp++)
-      {
-         if (CAN_WEAR(obj, 1 << tmp))
-         {
-            bit = tmp;
-            break;
-         }
-      }
-   }
-
-   check_size = FALSE;
-
-   if (1 << bit == ITEM_WIELD || 1 << bit == ITEM_HOLD || obj->item_type == ITEM_LIGHT || 1 << bit == ITEM_WEAR_SHIELD)
-      check_size = FALSE;
-   else if (ch->race == RACE_DEFEL)
-      check_size = TRUE;
-   else if (!IS_NPC(ch))
-      switch (ch->race)
-      {
-      default:
-      case RACE_TRANDOSHAN:
-      case RACE_VERPINE:
-      case RACE_HUMAN:
-      case RACE_ADARIAN:
-      case RACE_RODIAN:
-      case RACE_TWI_LEK:
-
-         if (!IS_OBJ_STAT(obj, ITEM_HUMAN_SIZE))
-            check_size = TRUE;
-         break;
-
-      case RACE_HUTT:
-
-         if (!IS_OBJ_STAT(obj, ITEM_HUTT_SIZE))
-            check_size = TRUE;
-         break;
-
-      case RACE_GAMORREAN:
-      case RACE_MON_CALAMARI:
-      case RACE_QUARREN:
-      case RACE_WOOKIEE:
-
-         if (!IS_OBJ_STAT(obj, ITEM_LARGE_SIZE))
-            check_size = TRUE;
-         break;
-
-      case RACE_EWOK:
-      case RACE_NOGHRI:
-      case RACE_JAWA:
-
-         if (!IS_OBJ_STAT(obj, ITEM_SMALL_SIZE))
-            check_size = TRUE;
+         argument++;
          break;
       }
-
-   /*
-    * this seems redundant but it enables both multiple sized objects to be
-    * used as well as objects with no size flags at all
-    */
-
-   if (check_size)
-   {
-      if (ch->race == RACE_DEFEL)
-      {
-         act(AT_MAGIC, "It is against your nature to wear anything that might make you visible.", ch, NULL, NULL, TO_CHAR);
-         act(AT_ACTION, "$n wants to use $p, but doesn't.", ch, obj, NULL, TO_ROOM);
-         return;
-      }
-
-      if (IS_OBJ_STAT(obj, ITEM_HUTT_SIZE))
-      {
-         act(AT_MAGIC, "That item is too big for you.", ch, NULL, NULL, TO_CHAR);
-         act(AT_ACTION, "$n tries to use $p, but it is too big.", ch, obj, NULL, TO_ROOM);
-         return;
-      }
-
-      if (IS_OBJ_STAT(obj, ITEM_LARGE_SIZE) || IS_OBJ_STAT(obj, ITEM_HUMAN_SIZE))
-      {
-         act(AT_MAGIC, "That item is the wrong size for you.", ch, NULL, NULL, TO_CHAR);
-         act(AT_ACTION, "$n tries to use $p, but can't.", ch, obj, NULL, TO_ROOM);
-         return;
-      }
-
-      if (IS_OBJ_STAT(obj, ITEM_SMALL_SIZE))
-      {
-         act(AT_MAGIC, "That item is too small for you.", ch, NULL, NULL, TO_CHAR);
-         act(AT_ACTION, "$n tries to use $p, but it is too small.", ch, obj, NULL, TO_ROOM);
-         return;
-      }
+      *arg_first++ = *argument++;
    }
+   *arg_first = '\0';
 
-   /*
-    * currently cannot have a light in non-light position
-    */
-   if (obj->item_type == ITEM_LIGHT)
+   while( isspace( *argument ) )
+      argument++;
+
+   return argument;
+}
+
+char *wordwrap( char *txt, short wrap )
+{
+   static char buf[MAX_STRING_LENGTH];
+   char *bufp;
+
+   buf[0] = '\0';
+   bufp = buf;
+   if( txt != NULL )
    {
-      if (!remove_obj(ch, WEAR_LIGHT, fReplace))
-         return;
-      if (!oprog_use_trigger(ch, obj, NULL, NULL, NULL))
+      char line[MAX_STRING_LENGTH];
+      char temp[MAX_STRING_LENGTH];
+      char *ptr, *p;
+      int ln, x;
+
+      ++bufp;
+      line[0] = '\0';
+      ptr = txt;
+      while( *ptr )
       {
-         if (!obj->action_desc || obj->action_desc[0] == '\0')
+         ptr = grab_word( ptr, temp );
+         ln = strlen( line );
+         x = strlen( temp );
+         if( ( ln + x + 1 ) < wrap )
          {
-            act(AT_ACTION, "$n holds $p as a light.", ch, obj, NULL, TO_ROOM);
-            act(AT_ACTION, "You hold $p as your light.", ch, obj, NULL, TO_CHAR);
-         }
-         else
-            actiondesc(ch, obj, NULL);
-      }
-      equip_char(ch, obj, WEAR_LIGHT);
-      oprog_wear_trigger(ch, obj);
-      return;
-   }
-
-   if (bit == -1)
-   {
-      if (fReplace)
-         send_to_char("You can't wear, wield, or hold that.\r\n", ch);
-      return;
-   }
-
-   switch (1 << bit)
-   {
-   default:
-      bug("%s: uknown/unused item_wear bit %d", __func__, bit);
-      if (fReplace)
-         send_to_char("You can't wear, wield, or hold that.\r\n", ch);
-      return;
-
-   case ITEM_WEAR_FINGER:
-      if (get_eq_char(ch, WEAR_FINGER_L) && get_eq_char(ch, WEAR_FINGER_R) && !remove_obj(ch, WEAR_FINGER_L, fReplace) && !remove_obj(ch, WEAR_FINGER_R, fReplace))
-         return;
-
-      if (!get_eq_char(ch, WEAR_FINGER_L))
-      {
-         if (!oprog_use_trigger(ch, obj, NULL, NULL, NULL))
-         {
-            if (!obj->action_desc || obj->action_desc[0] == '\0')
-            {
-               act(AT_ACTION, "$n slips $s left finger into $p.", ch, obj, NULL, TO_ROOM);
-               act(AT_ACTION, "You slip your left finger into $p.", ch, obj, NULL, TO_CHAR);
-            }
+            if( line[ln - 1] == '.' )
+               strcat( line, "  " );
             else
-               actiondesc(ch, obj, NULL);
-         }
-         equip_char(ch, obj, WEAR_FINGER_L);
-         oprog_wear_trigger(ch, obj);
-         return;
-      }
-
-      if (!get_eq_char(ch, WEAR_FINGER_R))
-      {
-         if (!oprog_use_trigger(ch, obj, NULL, NULL, NULL))
-         {
-            if (!obj->action_desc || obj->action_desc[0] == '\0')
+               strcat( line, " " );
+            strcat( line, temp );
+            p = strchr( line, '\n' );
+            if( !p )
+               p = strchr( line, '\r' );
+            if( p )
             {
-               act(AT_ACTION, "$n slips $s right finger into $p.", ch, obj, NULL, TO_ROOM);
-               act(AT_ACTION, "You slip your right finger into $p.", ch, obj, NULL, TO_CHAR);
+               strcat( buf, line );
+               line[0] = '\0';
             }
-            else
-               actiondesc(ch, obj, NULL);
-         }
-         equip_char(ch, obj, WEAR_FINGER_R);
-         oprog_wear_trigger(ch, obj);
-         return;
-      }
-
-      bug("%s: no free finger.", __func__);
-      send_to_char("You already wear something on both fingers.\r\n", ch);
-      return;
-
-   case ITEM_WEAR_NECK:
-      if (get_eq_char(ch, WEAR_NECK_1) != NULL && get_eq_char(ch, WEAR_NECK_2) != NULL && !remove_obj(ch, WEAR_NECK_1, fReplace) && !remove_obj(ch, WEAR_NECK_2, fReplace))
-         return;
-
-      if (!get_eq_char(ch, WEAR_NECK_1))
-      {
-         if (!oprog_use_trigger(ch, obj, NULL, NULL, NULL))
-         {
-            if (!obj->action_desc || obj->action_desc[0] == '\0')
-            {
-               act(AT_ACTION, "$n wears $p around $s neck.", ch, obj, NULL, TO_ROOM);
-               act(AT_ACTION, "You wear $p around your neck.", ch, obj, NULL, TO_CHAR);
-            }
-            else
-               actiondesc(ch, obj, NULL);
-         }
-         equip_char(ch, obj, WEAR_NECK_1);
-         oprog_wear_trigger(ch, obj);
-         return;
-      }
-
-      if (!get_eq_char(ch, WEAR_NECK_2))
-      {
-         if (!oprog_use_trigger(ch, obj, NULL, NULL, NULL))
-         {
-            if (!obj->action_desc || obj->action_desc[0] == '\0')
-            {
-               act(AT_ACTION, "$n wears $p around $s neck.", ch, obj, NULL, TO_ROOM);
-               act(AT_ACTION, "You wear $p around your neck.", ch, obj, NULL, TO_CHAR);
-            }
-            else
-               actiondesc(ch, obj, NULL);
-         }
-         equip_char(ch, obj, WEAR_NECK_2);
-         oprog_wear_trigger(ch, obj);
-         return;
-      }
-
-      bug("%s: no free neck.", __func__);
-      send_to_char("You already wear two neck items.\r\n", ch);
-      return;
-
-   case ITEM_WEAR_BODY:
-      /*
-       * if ( !remove_obj( ch, WEAR_BODY, fReplace ) )
-       * return;
-       */
-      if (!can_layer(ch, obj, WEAR_BODY))
-      {
-         send_to_char("It won't fit overtop of what you're already wearing.\r\n", ch);
-         return;
-      }
-      if (!oprog_use_trigger(ch, obj, NULL, NULL, NULL))
-      {
-         if (!obj->action_desc || obj->action_desc[0] == '\0')
-         {
-            act(AT_ACTION, "$n fits $p on $s body.", ch, obj, NULL, TO_ROOM);
-            act(AT_ACTION, "You fit $p on your body.", ch, obj, NULL, TO_CHAR);
          }
          else
-            actiondesc(ch, obj, NULL);
-      }
-      equip_char(ch, obj, WEAR_BODY);
-      oprog_wear_trigger(ch, obj);
-      return;
-
-   case ITEM_WEAR_HEAD:
-      if (ch->race == RACE_VERPINE || ch->race == RACE_TWI_LEK)
-      {
-         send_to_char("You cant wear anything on your head.\r\n", ch);
-         return;
-      }
-      if (!remove_obj(ch, WEAR_HEAD, fReplace))
-         return;
-      if (!oprog_use_trigger(ch, obj, NULL, NULL, NULL))
-      {
-         if (!obj->action_desc || obj->action_desc[0] == '\0')
          {
-            act(AT_ACTION, "$n dons $p upon $s head.", ch, obj, NULL, TO_ROOM);
-            act(AT_ACTION, "You don $p upon your head.", ch, obj, NULL, TO_CHAR);
-         }
-         else
-            actiondesc(ch, obj, NULL);
-      }
-      equip_char(ch, obj, WEAR_HEAD);
-      oprog_wear_trigger(ch, obj);
-      return;
-
-   case ITEM_WEAR_EYES:
-      if (!remove_obj(ch, WEAR_EYES, fReplace))
-         return;
-      if (!oprog_use_trigger(ch, obj, NULL, NULL, NULL))
-      {
-         if (!obj->action_desc || obj->action_desc[0] == '\0')
-         {
-            act(AT_ACTION, "$n places $p on $s eyes.", ch, obj, NULL, TO_ROOM);
-            act(AT_ACTION, "You place $p on your eyes.", ch, obj, NULL, TO_CHAR);
-         }
-         else
-            actiondesc(ch, obj, NULL);
-      }
-      equip_char(ch, obj, WEAR_EYES);
-      oprog_wear_trigger(ch, obj);
-      return;
-   case ITEM_WEAR_BACK:
-      if (!can_layer(ch, obj, WEAR_BACK))
-      {
-         send_to_char("It won't fit overtop of what you're already wearing.\r\n", ch);
-         return;
-      }
-      if (!oprog_use_trigger(ch, obj, NULL, NULL, NULL))
-      {
-         if (!obj->action_desc || obj->action_desc[0] == '\0')
-         {
-            act(AT_ACTION, "$n fits $p on $s back.", ch, obj, NULL, TO_ROOM);
-            act(AT_ACTION, "You fit $p on your back.", ch, obj, NULL, TO_CHAR);
-         }
-         else
-            actiondesc(ch, obj, NULL);
-      }
-      equip_char(ch, obj, WEAR_BACK);
-      oprog_wear_trigger(ch, obj);
-      return;
-   case ITEM_WEAR_EARS:
-      if (ch->race == RACE_VERPINE)
-      {
-         send_to_char("What ears?.\r\n", ch);
-         return;
-      }
-      if (!remove_obj(ch, WEAR_EARS, fReplace))
-         return;
-      if (!oprog_use_trigger(ch, obj, NULL, NULL, NULL))
-      {
-         if (!obj->action_desc || obj->action_desc[0] == '\0')
-         {
-            act(AT_ACTION, "$n wears $p on $s ears.", ch, obj, NULL, TO_ROOM);
-            act(AT_ACTION, "You wear $p on your ears.", ch, obj, NULL, TO_CHAR);
-         }
-         else
-            actiondesc(ch, obj, NULL);
-      }
-      equip_char(ch, obj, WEAR_EARS);
-      oprog_wear_trigger(ch, obj);
-      return;
-
-   case ITEM_WEAR_LEGS:
-      /*
-             if ( !remove_obj( ch, WEAR_LEGS, fReplace ) )
-               return;
-      */
-      if (ch->race == RACE_HUTT)
-      {
-         send_to_char("Hutts don't have legs.\r\n", ch);
-         return;
-      }
-      if (!can_layer(ch, obj, WEAR_LEGS))
-      {
-         send_to_char("It won't fit overtop of what you're already wearing.\r\n", ch);
-         return;
-      }
-      if (!oprog_use_trigger(ch, obj, NULL, NULL, NULL))
-      {
-         if (!obj->action_desc || obj->action_desc[0] == '\0')
-         {
-            act(AT_ACTION, "$n slips into $p.", ch, obj, NULL, TO_ROOM);
-            act(AT_ACTION, "You slip into $p.", ch, obj, NULL, TO_CHAR);
-         }
-         else
-            actiondesc(ch, obj, NULL);
-      }
-      equip_char(ch, obj, WEAR_LEGS);
-      oprog_wear_trigger(ch, obj);
-      return;
-
-   case ITEM_WEAR_FEET:
-      /*
-             if ( !remove_obj( ch, WEAR_FEET, fReplace ) )
-               return;
-      */
-      if (ch->race == RACE_HUTT)
-      {
-         send_to_char("Hutts don't have feet!\r\n", ch);
-         return;
-      }
-      if (!can_layer(ch, obj, WEAR_FEET))
-      {
-         send_to_char("It won't fit overtop of what you're already wearing.\r\n", ch);
-         return;
-      }
-      if (!oprog_use_trigger(ch, obj, NULL, NULL, NULL))
-      {
-         if (!obj->action_desc || obj->action_desc[0] == '\0')
-         {
-            act(AT_ACTION, "$n wears $p on $s feet.", ch, obj, NULL, TO_ROOM);
-            act(AT_ACTION, "You wear $p on your feet.", ch, obj, NULL, TO_CHAR);
-         }
-         else
-            actiondesc(ch, obj, NULL);
-      }
-      equip_char(ch, obj, WEAR_FEET);
-      oprog_wear_trigger(ch, obj);
-      return;
-
-   case ITEM_WEAR_HOLSTER1:
-      /*
-             if ( !remove_obj( ch, WEAR_FEET, fReplace ) )
-               return;
-      */
-      if (!can_layer(ch, obj, WEAR_HOLSTER_L))
-      {
-         send_to_char("It won't fit overtop of what you're already wearing.\r\n", ch);
-         return;
-      }
-      if (!oprog_use_trigger(ch, obj, NULL, NULL, NULL))
-      {
-         if (!obj->action_desc || obj->action_desc[0] == '\0')
-         {
-            act(AT_ACTION, "$n straps $p on $s left hip.", ch, obj, NULL, TO_ROOM);
-            act(AT_ACTION, "You wear $p on left hip.", ch, obj, NULL, TO_CHAR);
-         }
-         else
-            actiondesc(ch, obj, NULL);
-      }
-      equip_char(ch, obj, WEAR_HOLSTER_L);
-      oprog_wear_trigger(ch, obj);
-      return;
-
-   case ITEM_WEAR_HOLSTER2:
-      /*
-             if ( !remove_obj( ch, WEAR_FEET, fReplace ) )
-               return;
-      */
-      if (!can_layer(ch, obj, WEAR_HOLSTER_R))
-      {
-         send_to_char("It won't fit overtop of what you're already wearing.\r\n", ch);
-         return;
-      }
-      if (!oprog_use_trigger(ch, obj, NULL, NULL, NULL))
-      {
-         if (!obj->action_desc || obj->action_desc[0] == '\0')
-         {
-            act(AT_ACTION, "$n straps $p on $s right hip.", ch, obj, NULL, TO_ROOM);
-            act(AT_ACTION, "You wear $p on right hip.", ch, obj, NULL, TO_CHAR);
-         }
-         else
-            actiondesc(ch, obj, NULL);
-      }
-      equip_char(ch, obj, WEAR_HOLSTER_R);
-      oprog_wear_trigger(ch, obj);
-      return;
-
-   case ITEM_WEAR_HANDS:
-      /*
-             if ( !remove_obj( ch, WEAR_HANDS, fReplace ) )
-               return;
-      */
-      if (!can_layer(ch, obj, WEAR_HANDS))
-      {
-         send_to_char("It won't fit overtop of what you're already wearing.\r\n", ch);
-         return;
-      }
-      if (!oprog_use_trigger(ch, obj, NULL, NULL, NULL))
-      {
-         if (!obj->action_desc || obj->action_desc[0] == '\0')
-         {
-            act(AT_ACTION, "$n wears $p on $s hands.", ch, obj, NULL, TO_ROOM);
-            act(AT_ACTION, "You wear $p on your hands.", ch, obj, NULL, TO_CHAR);
-         }
-         else
-            actiondesc(ch, obj, NULL);
-      }
-      equip_char(ch, obj, WEAR_HANDS);
-      oprog_wear_trigger(ch, obj);
-      return;
-
-   case ITEM_WEAR_ARMS:
-      /*
-             if ( !remove_obj( ch, WEAR_ARMS, fReplace ) )
-               return;
-      */
-      if (!can_layer(ch, obj, WEAR_ARMS))
-      {
-         send_to_char("It won't fit overtop of what you're already wearing.\r\n", ch);
-         return;
-      }
-      if (!oprog_use_trigger(ch, obj, NULL, NULL, NULL))
-      {
-         if (!obj->action_desc || obj->action_desc[0] == '\0')
-         {
-            act(AT_ACTION, "$n wears $p on $s arms.", ch, obj, NULL, TO_ROOM);
-            act(AT_ACTION, "You wear $p on your arms.", ch, obj, NULL, TO_CHAR);
-         }
-         else
-            actiondesc(ch, obj, NULL);
-      }
-      equip_char(ch, obj, WEAR_ARMS);
-      oprog_wear_trigger(ch, obj);
-      return;
-
-   case ITEM_WEAR_ABOUT:
-      /*
-       * if ( !remove_obj( ch, WEAR_ABOUT, fReplace ) )
-       * return;
-       */
-      if (!can_layer(ch, obj, WEAR_ABOUT))
-      {
-         send_to_char("It won't fit overtop of what you're already wearing.\r\n", ch);
-         return;
-      }
-      if (!oprog_use_trigger(ch, obj, NULL, NULL, NULL))
-      {
-         if (!obj->action_desc || obj->action_desc[0] == '\0')
-         {
-            act(AT_ACTION, "$n wears $p about $s body.", ch, obj, NULL, TO_ROOM);
-            act(AT_ACTION, "You wear $p about your body.", ch, obj, NULL, TO_CHAR);
-         }
-         else
-            actiondesc(ch, obj, NULL);
-      }
-      equip_char(ch, obj, WEAR_ABOUT);
-      oprog_wear_trigger(ch, obj);
-      return;
-
-   case ITEM_WEAR_WAIST:
-      /*
-             if ( !remove_obj( ch, WEAR_WAIST, fReplace ) )
-               return;
-      */
-      if (!can_layer(ch, obj, WEAR_WAIST))
-      {
-         send_to_char("It won't fit overtop of what you're already wearing.\r\n", ch);
-         return;
-      }
-      if (!oprog_use_trigger(ch, obj, NULL, NULL, NULL))
-      {
-         if (!obj->action_desc || obj->action_desc[0] == '\0')
-         {
-            act(AT_ACTION, "$n wears $p about $s waist.", ch, obj, NULL, TO_ROOM);
-            act(AT_ACTION, "You wear $p about your waist.", ch, obj, NULL, TO_CHAR);
-         }
-         else
-            actiondesc(ch, obj, NULL);
-      }
-      equip_char(ch, obj, WEAR_WAIST);
-      oprog_wear_trigger(ch, obj);
-      return;
-
-   case ITEM_WEAR_WRIST:
-      if (get_eq_char(ch, WEAR_WRIST_L) && get_eq_char(ch, WEAR_WRIST_R) && !remove_obj(ch, WEAR_WRIST_L, fReplace) && !remove_obj(ch, WEAR_WRIST_R, fReplace))
-         return;
-
-      if (!get_eq_char(ch, WEAR_WRIST_L))
-      {
-         if (!oprog_use_trigger(ch, obj, NULL, NULL, NULL))
-         {
-            if (!obj->action_desc || obj->action_desc[0] == '\0')
-            {
-               act(AT_ACTION, "$n fits $p around $s left wrist.", ch, obj, NULL, TO_ROOM);
-               act(AT_ACTION, "You fit $p around your left wrist.", ch, obj, NULL, TO_CHAR);
-            }
-            else
-               actiondesc(ch, obj, NULL);
-         }
-         equip_char(ch, obj, WEAR_WRIST_L);
-         oprog_wear_trigger(ch, obj);
-         return;
-      }
-
-      if (!get_eq_char(ch, WEAR_WRIST_R))
-      {
-         if (!oprog_use_trigger(ch, obj, NULL, NULL, NULL))
-         {
-            if (!obj->action_desc || obj->action_desc[0] == '\0')
-            {
-               act(AT_ACTION, "$n fits $p around $s right wrist.", ch, obj, NULL, TO_ROOM);
-               act(AT_ACTION, "You fit $p around your right wrist.", ch, obj, NULL, TO_CHAR);
-            }
-            else
-               actiondesc(ch, obj, NULL);
-         }
-         equip_char(ch, obj, WEAR_WRIST_R);
-         oprog_wear_trigger(ch, obj);
-         return;
-      }
-
-      bug("%s: no free wrist.", __func__);
-      send_to_char("You already wear two wrist items.\r\n", ch);
-      return;
-
-   case ITEM_WEAR_SHIELD:
-      if (!remove_obj(ch, WEAR_SHIELD, fReplace))
-         return;
-      if (!oprog_use_trigger(ch, obj, NULL, NULL, NULL))
-      {
-         act(AT_ACTION, "$n uses $p as an energy shield.", ch, obj, NULL, TO_ROOM);
-         act(AT_ACTION, "You use $p as an energy shield.", ch, obj, NULL, TO_CHAR);
-      }
-      equip_char(ch, obj, WEAR_SHIELD);
-      oprog_wear_trigger(ch, obj);
-      return;
-
-   case ITEM_MISSILE_WIELD:
-   case ITEM_WIELD:
-      if (!could_dual(ch))
-      {
-         if (!remove_obj(ch, WEAR_MISSILE_WIELD, fReplace))
-            return;
-         if (!remove_obj(ch, WEAR_WIELD, fReplace))
-            return;
-         tmpobj = NULL;
-      }
-      else
-      {
-         OBJ_DATA *mw, *dw, *hd;
-         tmpobj = get_eq_char(ch, WEAR_WIELD);
-         mw = get_eq_char(ch, WEAR_MISSILE_WIELD);
-         dw = get_eq_char(ch, WEAR_DUAL_WIELD);
-         hd = get_eq_char(ch, WEAR_HOLD);
-
-         if (tmpobj)
-         {
-            if (!can_dual(ch))
-               return;
-
-            if (get_obj_weight(obj) + get_obj_weight(tmpobj) > str_app[get_curr_str(ch)].wield)
-            {
-               send_to_char("It is too heavy for you to wield.\r\n", ch);
-               return;
-            }
-
-            if (mw || dw)
-            {
-               send_to_char("You're already wielding two weapons.\r\n", ch);
-               return;
-            }
-
-            if (hd)
-            {
-               send_to_char("You're already wielding a weapon AND holding something.\r\n", ch);
-               return;
-            }
-
-            if (!oprog_use_trigger(ch, obj, NULL, NULL, NULL))
-            {
-               act(AT_ACTION, "$n dual-wields $p.", ch, obj, NULL, TO_ROOM);
-               act(AT_ACTION, "You dual-wield $p.", ch, obj, NULL, TO_CHAR);
-            }
-            if (1 << bit == ITEM_MISSILE_WIELD)
-               equip_char(ch, obj, WEAR_MISSILE_WIELD);
-            else
-               equip_char(ch, obj, WEAR_DUAL_WIELD);
-            oprog_wear_trigger(ch, obj);
-            return;
-         }
-
-         if (mw)
-         {
-            if (!can_dual(ch))
-               return;
-
-            if (1 << bit == ITEM_MISSILE_WIELD)
-            {
-               send_to_char("You're already wielding a missile weapon.\r\n", ch);
-               return;
-            }
-
-            if (get_obj_weight(obj) + get_obj_weight(mw) > str_app[get_curr_str(ch)].wield)
-            {
-               send_to_char("It is too heavy for you to wield.\r\n", ch);
-               return;
-            }
-
-            if (tmpobj || dw)
-            {
-               send_to_char("You're already wielding two weapons.\r\n", ch);
-               return;
-            }
-
-            if (hd)
-            {
-               send_to_char("You're already wielding a weapon AND holding something.\r\n", ch);
-               return;
-            }
-
-            if (!oprog_use_trigger(ch, obj, NULL, NULL, NULL))
-            {
-               act(AT_ACTION, "$n wields $p.", ch, obj, NULL, TO_ROOM);
-               act(AT_ACTION, "You wield $p.", ch, obj, NULL, TO_CHAR);
-            }
-            equip_char(ch, obj, WEAR_WIELD);
-            oprog_wear_trigger(ch, obj);
-            return;
+            strcat( line, "\r\n" );
+            strcat( buf, line );
+            strcpy( line, temp );
          }
       }
-
-      if (get_obj_weight(obj) > str_app[get_curr_str(ch)].wield)
-      {
-         send_to_char("It is too heavy for you to wield.\r\n", ch);
-         return;
-      }
-
-      if (!oprog_use_trigger(ch, obj, NULL, NULL, NULL))
-      {
-         act(AT_ACTION, "$n wields $p.", ch, obj, NULL, TO_ROOM);
-         act(AT_ACTION, "You wield $p.", ch, obj, NULL, TO_CHAR);
-      }
-      if (1 << bit == ITEM_MISSILE_WIELD)
-         equip_char(ch, obj, WEAR_MISSILE_WIELD);
-      else
-         equip_char(ch, obj, WEAR_WIELD);
-      oprog_wear_trigger(ch, obj);
-      return;
-
-   case ITEM_HOLD:
-      if (get_eq_char(ch, WEAR_DUAL_WIELD) || (get_eq_char(ch, WEAR_WIELD) && (get_eq_char(ch, WEAR_MISSILE_WIELD))))
-      {
-         send_to_char("You cannot hold something AND two weapons!\r\n", ch);
-         return;
-      }
-      if (!remove_obj(ch, WEAR_HOLD, fReplace))
-         return;
-      if (obj->item_type == ITEM_DEVICE || obj->item_type == ITEM_GRENADE || obj->item_type == ITEM_FOOD || obj->item_type == ITEM_PILL || obj->item_type == ITEM_POTION || obj->item_type == ITEM_DRINK_CON || obj->item_type == ITEM_PIPE || obj->item_type == ITEM_HERB || obj->item_type == ITEM_SALVE || obj->item_type == ITEM_KEY || !oprog_use_trigger(ch, obj, NULL, NULL, NULL))
-      {
-         act(AT_ACTION, "$n holds $p in $s hands.", ch, obj, NULL, TO_ROOM);
-         act(AT_ACTION, "You hold $p in your hands.", ch, obj, NULL, TO_CHAR);
-      }
-      equip_char(ch, obj, WEAR_HOLD);
-      oprog_wear_trigger(ch, obj);
-      return;
-
-   case ITEM_WEAR_BOTHWRISTS:
-      if (!remove_obj(ch, WEAR_BOTH_WRISTS, fReplace))
-         return;
-      if (!oprog_use_trigger(ch, obj, NULL, NULL, NULL))
-      {
-         if (!obj->action_desc || obj->action_desc[0] == '\0')
-         {
-            act(AT_ACTION, "$n wears $p on both wrists.", ch, obj, NULL, TO_ROOM);
-            act(AT_ACTION, "You wear $p on both wrists.", ch, obj, NULL, TO_CHAR);
-         }
-         else
-            actiondesc(ch, obj, NULL);
-      }
-      equip_char(ch, obj, WEAR_BOTH_WRISTS);
-      oprog_wear_trigger(ch, obj);
-      return;
+      if( line[0] != '\0' )
+         strcat( buf, line );
    }
+   return bufp;
 }
 
-void do_wear(CHAR_DATA *ch, const char *argument)
+void decorate_room( ROOM_INDEX_DATA * room )
 {
-   char arg1[MAX_INPUT_LENGTH];
-   char arg2[MAX_INPUT_LENGTH];
-   OBJ_DATA *obj;
-   short wear_bit;
-
-   argument = one_argument(argument, arg1);
-   argument = one_argument(argument, arg2);
-   if ((!str_cmp(arg2, "on") || !str_cmp(arg2, "upon") || !str_cmp(arg2, "around")) && argument[0] != '\0')
-      argument = one_argument(argument, arg2);
-
-   if (arg1[0] == '\0')
-   {
-      send_to_char("Wear, wield, or hold what?\r\n", ch);
-      return;
-   }
-
-   if (ms_find_obj(ch))
-      return;
-
-   if (!str_cmp(arg1, "all"))
-   {
-      OBJ_DATA *obj_next;
-
-      for (obj = ch->first_carrying; obj; obj = obj_next)
-      {
-         obj_next = obj->next_content;
-         if (obj->item_type == ITEM_BINDERS)
-         {
-            send_to_char("You're into that S&&M stuff, eh?\r\n", ch);
-            return;
-         }
-         if (obj->wear_loc == WEAR_NONE && can_see_obj(ch, obj))
-            wear_obj(ch, obj, FALSE, -1);
-      }
-      return;
-   }
-   else
-   {
-      if ((obj = get_obj_carry(ch, arg1)) == NULL)
-      {
-         send_to_char("You do not have that item.\r\n", ch);
-         return;
-      }
-      if (obj->item_type == ITEM_BINDERS)
-      {
-         send_to_char("You're into that S&&M stuff, eh?\r\n", ch);
-         return;
-      }
-      if (arg2[0] != '\0')
-         wear_bit = get_wflag(arg2);
-      else
-         wear_bit = -1;
-      wear_obj(ch, obj, TRUE, wear_bit);
-   }
-
-   return;
-}
-
-void do_remove(CHAR_DATA *ch, const char *argument)
-{
-   char arg[MAX_INPUT_LENGTH];
-   OBJ_DATA *obj, *obj_next;
-
-   one_argument(argument, arg);
-
-   if (arg[0] == '\0')
-   {
-      send_to_char("Remove what?\r\n", ch);
-      return;
-   }
-
-   if (ms_find_obj(ch))
-      return;
-
-   if (!str_cmp(arg, "all")) /* SB Remove all */
-   {
-      for (obj = ch->first_carrying; obj != NULL; obj = obj_next)
-      {
-         obj_next = obj->next_content;
-         if (obj->wear_loc != WEAR_NONE && can_see_obj(ch, obj) && obj->item_type != ITEM_BINDERS)
-            remove_obj(ch, obj->wear_loc, TRUE);
-      }
-      return;
-   }
-
-   if ((obj = get_obj_wear(ch, arg)) == NULL)
-   {
-      send_to_char("You are not using that item.\r\n", ch);
-      return;
-   }
-   if ((obj_next = get_eq_char(ch, obj->wear_loc)) != obj)
-   {
-      act(AT_PLAIN, "You must remove $p first.", ch, obj_next, NULL, TO_CHAR);
-      return;
-   }
-   if (obj->item_type == ITEM_BINDERS)
-   {
-      send_to_char("You find it very difficult to remove your bindings.\r\n", ch);
-      return;
-   }
-
-   remove_obj(ch, obj->wear_loc, TRUE);
-   return;
-}
-
-void do_bury(CHAR_DATA *ch, const char *argument)
-{
-   char arg[MAX_INPUT_LENGTH];
-   OBJ_DATA *obj;
-   bool shovel;
-   short move;
-
-   one_argument(argument, arg);
-
-   if (arg[0] == '\0')
-   {
-      send_to_char("What do you wish to bury?\r\n", ch);
-      return;
-   }
-
-   if (ms_find_obj(ch))
-      return;
-
-   shovel = FALSE;
-   for (obj = ch->first_carrying; obj; obj = obj->next_content)
-      if (obj->item_type == ITEM_SHOVEL)
-      {
-         shovel = TRUE;
-         break;
-      }
-
-   obj = get_obj_list_rev(ch, arg, ch->in_room->last_content);
-   if (!obj)
-   {
-      send_to_char("You can't find it.\r\n", ch);
-      return;
-   }
-
-   separate_obj(obj);
-   if (!CAN_WEAR(obj, ITEM_TAKE))
-   {
-      act(AT_PLAIN, "You cannot bury $p.", ch, obj, 0, TO_CHAR);
-      return;
-   }
-
-   switch (ch->in_room->sector_type)
-   {
-   case SECT_CITY:
-   case SECT_INSIDE:
-      send_to_char("The floor is too hard to dig through.\r\n", ch);
-      return;
-   case SECT_WATER_SWIM:
-   case SECT_WATER_NOSWIM:
-   case SECT_UNDERWATER:
-      send_to_char("You cannot bury something here.\r\n", ch);
-      return;
-   case SECT_AIR:
-      send_to_char("What?  In the air?!\r\n", ch);
-      return;
-   }
-
-   if (obj->weight > (UMAX(5, (can_carry_w(ch) / 10))) && !shovel)
-   {
-      send_to_char("You'd need a shovel to bury something that big.\r\n", ch);
-      return;
-   }
-
-   move = (obj->weight * 50 * (shovel ? 1 : 5)) / UMAX(1, can_carry_w(ch));
-   move = URANGE(2, move, 1000);
-   if (move > ch->move)
-   {
-      send_to_char("You don't have the energy to bury something of that size.\r\n", ch);
-      return;
-   }
-   ch->move -= move;
-
-   act(AT_ACTION, "You solemnly bury $p...", ch, obj, NULL, TO_CHAR);
-   act(AT_ACTION, "$n solemnly buries $p...", ch, obj, NULL, TO_ROOM);
-   SET_BIT(obj->extra_flags, ITEM_BURRIED);
-   WAIT_STATE(ch, URANGE(10, move / 2, 100));
-   return;
-}
-
-void do_sacrifice(CHAR_DATA *ch, const char *argument)
-{
-   char arg[MAX_INPUT_LENGTH];
-   OBJ_DATA *obj;
-
-   one_argument(argument, arg);
-
-   if (arg[0] == '\0' || !str_cmp(arg, ch->name))
-   {
-      act(AT_ACTION, "$n offers $mself to $s deity, who graciously declines.", ch, NULL, NULL, TO_ROOM);
-      send_to_char("Your deity appreciates your offer and may accept it later.", ch);
-      return;
-   }
-
-   if (ms_find_obj(ch))
-      return;
-
-   obj = get_obj_list_rev(ch, arg, ch->in_room->last_content);
-   if (!obj)
-   {
-      send_to_char("You can't find it.\r\n", ch);
-      return;
-   }
-
-   separate_obj(obj);
-   if (!CAN_WEAR(obj, ITEM_TAKE))
-   {
-      act(AT_PLAIN, "$p is not an acceptable sacrifice.", ch, obj, 0, TO_CHAR);
-      return;
-   }
-
-   oprog_sac_trigger(ch, obj);
-   if (obj_extracted(obj))
-      return;
-   if (cur_obj == obj->serial)
-      global_objcode = rOBJ_SACCED;
-   separate_obj(obj);
-   extract_obj(obj);
-   return;
-}
-
-void do_brandish(CHAR_DATA *ch, const char *argument)
-{
-   CHAR_DATA *vch;
-   CHAR_DATA *vch_next;
-   OBJ_DATA *staff;
-   ch_ret retcode;
-   int sn;
-
-   if ((staff = get_eq_char(ch, WEAR_HOLD)) == NULL)
-   {
-      send_to_char("You hold nothing in your hand.\r\n", ch);
-      return;
-   }
-
-   if (staff->item_type != ITEM_STAFF)
-   {
-      send_to_char("You can brandish only with a staff.\r\n", ch);
-      return;
-   }
-
-   if ((sn = staff->value[3]) < 0 || sn >= top_sn || skill_table[sn]->spell_fun == NULL)
-   {
-      bug("%s: bad sn %d.", __func__, sn);
-      return;
-   }
-
-   WAIT_STATE(ch, 2 * PULSE_VIOLENCE);
-
-   if (staff->value[2] > 0)
-   {
-      if (!oprog_use_trigger(ch, staff, NULL, NULL, NULL))
-      {
-         act(AT_MAGIC, "$n brandishes $p.", ch, staff, NULL, TO_ROOM);
-         act(AT_MAGIC, "You brandish $p.", ch, staff, NULL, TO_CHAR);
-      }
-      for (vch = ch->in_room->first_person; vch; vch = vch_next)
-      {
-         vch_next = vch->next_in_room;
-         if (!IS_NPC(vch) && IS_SET(vch->act, PLR_WIZINVIS) && vch->pcdata->wizinvis >= LEVEL_IMMORTAL)
-            continue;
-         else
-            switch (skill_table[sn]->target)
-            {
-            default:
-               bug("%s: bad target for sn %d.", __func__, sn);
-               return;
-
-            case TAR_IGNORE:
-               if (vch != ch)
-                  continue;
-               break;
-
-            case TAR_CHAR_OFFENSIVE:
-               if (IS_NPC(ch) ? IS_NPC(vch) : !IS_NPC(vch))
-                  continue;
-               break;
-
-            case TAR_CHAR_DEFENSIVE:
-               if (IS_NPC(ch) ? !IS_NPC(vch) : IS_NPC(vch))
-                  continue;
-               break;
-
-            case TAR_CHAR_SELF:
-               if (vch != ch)
-                  continue;
-               break;
-            }
-
-         retcode = obj_cast_spell(staff->value[3], staff->value[0], ch, vch, NULL);
-         if (retcode == rCHAR_DIED || retcode == rBOTH_DIED)
-         {
-            bug("%s: char died", __func__);
-            return;
-         }
-      }
-   }
-
-   if (--staff->value[2] <= 0)
-   {
-      act(AT_MAGIC, "$p blazes bright and vanishes from $n's hands!", ch, staff, NULL, TO_ROOM);
-      act(AT_MAGIC, "$p blazes bright and is gone!", ch, staff, NULL, TO_CHAR);
-      if (staff->serial == cur_obj)
-         global_objcode = rOBJ_USED;
-      extract_obj(staff);
-   }
-}
-
-void do_zap(CHAR_DATA *ch, const char *argument)
-{
-   char arg[MAX_INPUT_LENGTH];
-   CHAR_DATA *victim;
-   OBJ_DATA *wand;
-   OBJ_DATA *obj;
-   ch_ret retcode;
-
-   one_argument(argument, arg);
-   if (arg[0] == '\0' && !ch->fighting)
-   {
-      send_to_char("Zap whom or what?\r\n", ch);
-      return;
-   }
-
-   if ((wand = get_eq_char(ch, WEAR_HOLD)) == NULL)
-   {
-      send_to_char("You hold nothing in your hand.\r\n", ch);
-      return;
-   }
-
-   if (wand->item_type != ITEM_WAND)
-   {
-      send_to_char("You can zap only with a wand.\r\n", ch);
-      return;
-   }
-
-   obj = NULL;
-   if (arg[0] == '\0')
-   {
-      if (ch->fighting)
-      {
-         victim = who_fighting(ch);
-      }
-      else
-      {
-         send_to_char("Zap whom or what?\r\n", ch);
-         return;
-      }
-   }
-   else
-   {
-      if ((victim = get_char_room(ch, arg)) == NULL && (obj = get_obj_here(ch, arg)) == NULL)
-      {
-         send_to_char("You can't find it.\r\n", ch);
-         return;
-      }
-   }
-
-   WAIT_STATE(ch, 1 * PULSE_VIOLENCE);
-
-   if (wand->value[2] > 0)
-   {
-      if (victim)
-      {
-         if (!oprog_use_trigger(ch, wand, victim, NULL, NULL))
-         {
-            act(AT_MAGIC, "$n aims $p at $N.", ch, wand, victim, TO_ROOM);
-            act(AT_MAGIC, "You aim $p at $N.", ch, wand, victim, TO_CHAR);
-         }
-      }
-      else
-      {
-         if (!oprog_use_trigger(ch, wand, NULL, obj, NULL))
-         {
-            act(AT_MAGIC, "$n aims $p at $P.", ch, wand, obj, TO_ROOM);
-            act(AT_MAGIC, "You aim $p at $P.", ch, wand, obj, TO_CHAR);
-         }
-      }
-
-      retcode = obj_cast_spell(wand->value[3], wand->value[0], ch, victim, obj);
-      if (retcode == rCHAR_DIED || retcode == rBOTH_DIED)
-      {
-         bug("%s: char died", __func__);
-         return;
-      }
-   }
-
-   if (--wand->value[2] <= 0)
-   {
-      act(AT_MAGIC, "$p explodes into fragments.", ch, wand, NULL, TO_ROOM);
-      act(AT_MAGIC, "$p explodes into fragments.", ch, wand, NULL, TO_CHAR);
-      if (wand->serial == cur_obj)
-         global_objcode = rOBJ_USED;
-      extract_obj(wand);
-   }
-}
-
-/*
- * Save items in a clan storage room			-Scryn & Thoric
- */
-void save_clan_storeroom(CHAR_DATA *ch, CLAN_DATA *clan)
-{
-   FILE *fp;
-   char filename[256];
-   short templvl;
-   OBJ_DATA *contents;
-
-   if (!clan)
-   {
-      bug("%s: Null clan pointer!", __func__);
-      return;
-   }
-
-   if (!ch)
-   {
-      bug("%s: Null ch pointer!", __func__);
-      return;
-   }
-
-   snprintf(filename, 256, "%s%s.vault", CLAN_DIR, clan->filename);
-   if ((fp = fopen(filename, "w")) == NULL)
-   {
-      bug("%s: fopen", __func__);
-      perror(filename);
-   }
-   else
-   {
-      templvl = ch->top_level;
-      ch->top_level = LEVEL_HERO; /* make sure EQ doesn't get lost */
-      contents = ch->in_room->last_content;
-      if (contents)
-         fwrite_obj(ch, contents, fp, 0, OS_CARRY, FALSE);
-      fprintf(fp, "#END\n");
-      ch->top_level = templvl;
-      FCLOSE(fp);
-      return;
-   }
-}
-
-/* put an item on auction, or see the stats on the current item or bet */
-void do_auction(CHAR_DATA *ch, const char *argument)
-{
-   OBJ_DATA *obj;
-   char arg1[MAX_INPUT_LENGTH];
-   char arg2[MAX_INPUT_LENGTH];
    char buf[MAX_STRING_LENGTH];
-   AFFECT_DATA *paf;
+   char buf2[MAX_STRING_LENGTH];
+   int nRand;
+   int iRand, len;
+   int previous[8];
+   int sector = room->sector_type;
 
-   argument = one_argument(argument, arg1);
+   if( room->name )
+      STRFREE( room->name );
+   if( room->description )
+      STRFREE( room->description );
 
-   if (IS_NPC(ch)) /* NPC can be extracted at any time and thus can't auction! */
-      return;
+   room->name = STRALLOC( sect_names[sector][0] );
+   buf[0] = '\0';
+   nRand = number_range( 1, UMIN( 8, sent_total[sector] ) );
 
-   if (arg1[0] == '\0')
+   for( iRand = 0; iRand < nRand; iRand++ )
+      previous[iRand] = -1;
+
+   for( iRand = 0; iRand < nRand; iRand++ )
    {
-      if (auction->item != NULL)
+      while( previous[iRand] == -1 )
       {
-         if (ch == auction->seller && !IS_IMMORTAL(ch))
+         int x, z;
+
+         x = number_range( 0, sent_total[sector] - 1 );
+
+         for( z = 0; z < iRand; z++ )
+            if( previous[z] == x )
+               break;
+
+         if( z < iRand )
+            continue;
+
+         previous[iRand] = x;
+
+         len = strlen( buf );
+         sprintf( buf2, "%s", room_sents[sector][x] );
+         if( len > 5 && buf[len - 1] == '.' )
          {
-            send_to_char("You can't check on the stats of your own item!\r\n", ch);
-            return;
+            strcat( buf, "  " );
+            buf2[0] = UPPER( buf2[0] );
          }
-
-         obj = auction->item;
-
-         /*
-          * show item data here
-          */
-         if (auction->bet > 0)
-            snprintf(buf, MAX_STRING_LENGTH, "%d", auction->bet);
-         else
-            mudstrlcpy(buf, "zero", MAX_STRING_LENGTH);
-         ch_printf(ch, "\r\n&W++\r\n&z||&w Item:&G %s  &wType:&G %s\r\n", obj->short_descr,
-                   aoran(item_type_name(obj)));
-         ch_printf(ch, "&z|| &wCurrent bid on this item is &Y%s&w credits.\r\n", buf);
-         ch_printf(ch, "&z||&w Cost:&G %d  &wWeight:&G %d  &wWorn on:&G %s\r\n",
-                   obj->cost, obj->weight, flag_string(obj->wear_flags - 1, w_flags));
-         ch_printf(ch, "&W++\r\n");
-
-         switch (obj->item_type)
-         {
-
-         case ITEM_RLAUNCHER:
-            if (obj->value[5] == 0)
-               ch_printf(ch, "&z|| &wIt isn't loaded with anything.\r\n");
-            else
-               ch_printf(ch, "&z|| &wIt is loaded with an &R%s&w missile.\r\n",
-                         obj->value[1] == 1 ? "incendiary" : "explosive");
-            if (obj->value[2] == 1)
-               ch_printf(ch, "&z|| &wIt is equipped with a guidance system.\r\n");
-            ch_printf(ch, "&W++\r\n");
-
-            break;
-         case ITEM_ARMOR:
-            ch_printf(ch, "&z|| &wCurrent Armor Class: &G%d&w  Maximum: &G%d\r\n", obj->value[0], obj->value[1]);
-            ch_printf(ch, "&W++\r\n");
-            break;
-         case ITEM_WEAPON:
-            ch_printf(ch, "&z|| &wIt is a &G%s&w.  Average Damage: &G%d&w\r\n",
-                      obj->value[3] == WEAPON_VIBRO_BLADE ? "vibro blade" : obj->value[3] == WEAPON_BOWCASTER ? "bowcaster"
-                                                                        : obj->value[3] == WEAPON_FORCE_PIKE  ? "force pike"
-                                                                        : obj->value[3] == WEAPON_BLASTER     ? "blaster"
-                                                                        : obj->value[3] == WEAPON_LIGHTSABER  ? "lightsaber"
-                                                                                                              : "weapon",
-                      (obj->value[1] + obj->value[2]) / 2);
-            if (obj->value[3] == WEAPON_BLASTER || obj->value[3] == WEAPON_VIBRO_BLADE || obj->value[3] == WEAPON_LIGHTSABER || obj->value[3] == WEAPON_FORCE_PIKE)
-               ch_printf(ch, "&z|| &wEnergy cell rating: &G%d\r\n", obj->value[5]);
-            ch_printf(ch, "&W++\r\n");
-            break;
-         }
-         set_char_color(AT_WHITE, ch);
-         for (paf = obj->pIndexData->first_affect; paf; paf = paf->next)
-            showaffect(ch, paf);
-
-         for (paf = obj->first_affect; paf; paf = paf->next)
-            showaffect(ch, paf);
-         if ((obj->item_type == ITEM_CONTAINER) && (obj->first_content))
-         {
-            ch_printf(ch, "&z||&w Contents of &G%s&w:\r\n\r\n", obj->short_descr);
-            set_char_color(AT_LBLUE, ch);
-            show_list_to_char(obj->first_content, ch, TRUE, FALSE);
-            set_char_color(AT_WHITE, ch);
-            send_to_char("\r\n&z||&w\r\n&W++\r\n", ch);
-         }
-
-         if (IS_IMMORTAL(ch))
-         {
-            snprintf(buf, MAX_STRING_LENGTH, "Seller: %s.  Bidder: %s.  Round: %d.\r\n",
-                     auction->seller->name, auction->buyer->name, (auction->going + 1));
-            send_to_char(buf, ch);
-            snprintf(buf, MAX_STRING_LENGTH, "Time left in round: %d seconds\r\n", auction->pulse / 4);
-            send_to_char(buf, ch);
-         }
-         return;
-      }
-      else
-      {
-         set_char_color(AT_LBLUE, ch);
-         send_to_char("\r\nThere is nothing being auctioned right now.  What would you like to auction?\r\n", ch);
-         return;
+         else if( len == 0 )
+            buf2[0] = UPPER( buf2[0] );
+         strcat( buf, buf2 );
       }
    }
+   sprintf( buf2, "%s\r\n", wordwrap( buf, 78 ) );
+   room->description = STRALLOC( buf2 );
+}
 
-   if (IS_IMMORTAL(ch) && !str_cmp(arg1, "stop"))
+/*
+ * Remove any unused virtual rooms				-Thoric
+ */
+void clear_vrooms(  )
+{
+   int hash;
+   ROOM_INDEX_DATA *room, *room_next, *prev;
+
+   for( hash = 0; hash < 64; hash++ )
    {
-      if (auction->item == NULL)
+      while( vroom_hash[hash] && !vroom_hash[hash]->first_person && !vroom_hash[hash]->first_content )
       {
-         send_to_char("There is no auction to stop.\r\n", ch);
-         return;
+         room = vroom_hash[hash];
+         vroom_hash[hash] = room->next;
+         clean_room( room );
+         DISPOSE( room );
+         --top_vroom;
       }
-      else /* stop the auction */
+      prev = NULL;
+      for( room = vroom_hash[hash]; room; room = room_next )
       {
-         set_char_color(AT_LBLUE, ch);
-         snprintf(buf, MAX_STRING_LENGTH, "Sale of %s has been stopped by an Immortal.", auction->item->short_descr);
-         talk_auction(buf);
-         obj_to_char(auction->item, auction->seller);
-         if (IS_SET(sysdata.save_flags, SV_AUCTION))
-            save_char_obj(auction->seller);
-         auction->item = NULL;
-         if (auction->buyer != NULL && auction->buyer != auction->seller) /* return money to the buyer */
+         room_next = room->next;
+         if( !room->first_person && !room->first_content )
          {
-            auction->buyer->gold += auction->bet;
-            send_to_char("Your money has been returned.\r\n", auction->buyer);
+            if( prev )
+               prev->next = room_next;
+            clean_room( room );
+            DISPOSE( room );
+            --top_vroom;
          }
-         return;
+         if( room )
+            prev = room;
       }
-   }
-   if (!str_cmp(arg1, "bid"))
-   {
-      if (auction->item != NULL)
-      {
-         int newbet;
-
-         if (ch == auction->seller)
-         {
-            send_to_char("You can't bid on your own item!\r\n", ch);
-            return;
-         }
-
-         /*
-          * make - perhaps - a bet now
-          */
-         if (argument[0] == '\0')
-         {
-            send_to_char("Bid how much?\r\n", ch);
-            return;
-         }
-
-         newbet = parsebet(auction->bet, argument);
-         /*	    ch_printf( ch, "Bid: %d\r\n",newbet);	*/
-
-         if (newbet < auction->starting)
-         {
-            send_to_char("You must place a bid that is higher than the starting bet.\r\n", ch);
-            return;
-         }
-
-         /*
-          * to avoid slow auction, use a bigger amount than 100 if the bet
-          * is higher up - changed to 10000 for our high economy
-          */
-
-         if (newbet < (auction->bet + 100))
-         {
-            send_to_char("You must at least bid 100 credits over the current bid.\r\n", ch);
-            return;
-         }
-
-         if (newbet > ch->gold)
-         {
-            send_to_char("You don't have that much money!\r\n", ch);
-            return;
-         }
-
-         if (newbet > 2000000000)
-         {
-            send_to_char("You can't bid over 2 billion credits.\r\n", ch);
-            return;
-         }
-
-         /*
-          * the actual bet is OK!
-          */
-
-         /*
-          * return the gold to the last buyer, if one exists
-          */
-         if (auction->buyer != NULL && auction->buyer != auction->seller)
-            auction->buyer->gold += auction->bet;
-
-         ch->gold -= newbet; /* substract the gold - important :) */
-         if (IS_SET(sysdata.save_flags, SV_AUCTION))
-            save_char_obj(ch);
-         auction->buyer = ch;
-         auction->bet = newbet;
-         auction->going = 0;
-         auction->pulse = PULSE_AUCTION; /* start the auction over again */
-
-         snprintf(buf, MAX_STRING_LENGTH, "&WNew bidder: &Y%d &Wcredits for %s.\r\n", newbet, auction->item->short_descr);
-         talk_auction(buf);
-         return;
-      }
-      else
-      {
-         send_to_char("There isn't anything being auctioned right now.\r\n", ch);
-         return;
-      }
-   }
-   /* finally... */
-   if (ms_find_obj(ch))
-      return;
-
-   obj = get_obj_carry(ch, arg1); /* does char have the item ? */
-
-   if (obj == NULL)
-   {
-      send_to_char("You aren't carrying that.\r\n", ch);
-      return;
-   }
-
-   if (obj->timer > 0)
-   {
-      send_to_char("You can't auction objects that are decaying.\r\n", ch);
-      return;
-   }
-
-   argument = one_argument(argument, arg2);
-
-   if (arg2[0] == '\0')
-   {
-      auction->starting = 0;
-      mudstrlcpy(arg2, "0", MAX_INPUT_LENGTH);
-   }
-
-   if (!is_number(arg2))
-   {
-      send_to_char("You must input a number at which to start the auction.\r\n", ch);
-      return;
-   }
-
-   if (atoi(arg2) < 0)
-   {
-      send_to_char("You can't auction something for less than 0 credits!\r\n", ch);
-      return;
-   }
-
-   if (auction->item == NULL)
-      switch (obj->item_type)
-      {
-
-      default:
-         act(AT_TELL, "You cannot auction $Ts.", ch, NULL, item_type_name(obj), TO_CHAR);
-         return;
-
-         /* insert any more item types here... items with a timer MAY NOT BE
-            AUCTIONED!
-         */
-      case ITEM_LIGHT:
-      case ITEM_TREASURE:
-      case ITEM_RARE_METAL:
-      case ITEM_CRYSTAL:
-      case ITEM_BOOK:
-      case ITEM_FABRIC:
-      case ITEM_PAPER:
-      case ITEM_ARMOR:
-      case ITEM_COMLINK:
-      case ITEM_WEAPON:
-      case ITEM_GLAUNCHER:
-      case ITEM_RLAUNCHER:
-      case ITEM_GRENADE:
-      case ITEM_SHIPBOMB:
-
-      case ITEM_MISSILE:
-      case ITEM_CONTAINER:
-      case ITEM_GOGGLES:
-         separate_obj(obj);
-         obj_from_char(obj);
-         if (IS_SET(sysdata.save_flags, SV_AUCTION))
-            save_char_obj(ch);
-         auction->item = obj;
-         auction->bet = 0;
-         auction->buyer = ch;
-         auction->seller = ch;
-         auction->pulse = PULSE_AUCTION;
-         auction->going = 0;
-         auction->starting = atoi(arg2);
-
-         if (auction->starting > 0)
-            auction->bet = auction->starting;
-
-         snprintf(buf, MAX_STRING_LENGTH, "&WNew item: %s&W at &Y%d&W credits.", obj->short_descr, auction->starting);
-         talk_auction(buf);
-
-         return;
-
-      } /* switch */
-   else
-   {
-      act(AT_TELL, "Try again later - $p is being auctioned right now!", ch, auction->item, NULL, TO_CHAR);
-      WAIT_STATE(ch, (int)1.5 * PULSE_VIOLENCE);
-      return;
    }
 }
 
-/* Make objects in rooms that are nofloor fall - Scryn 1/23/96 */
+/*
+ * Function to get the equivelant exit of DIR 0-MAXDIR out of linked list.
+ * Made to allow old-style diku-merc exit functions to work.	-Thoric
+ */
+EXIT_DATA *get_exit( ROOM_INDEX_DATA * room, short dir )
+{
+   EXIT_DATA *xit;
 
-void obj_fall(OBJ_DATA *obj, bool through)
+   if( !room )
+   {
+      bug( "%s: NULL room", __func__ );
+      return NULL;
+   }
+
+   for( xit = room->first_exit; xit; xit = xit->next )
+      if( xit->vdir == dir )
+         return xit;
+   return NULL;
+}
+
+/*
+ * Function to get an exit, leading the the specified room
+ */
+EXIT_DATA *get_exit_to( ROOM_INDEX_DATA * room, short dir, int vnum )
+{
+   EXIT_DATA *xit;
+
+   if( !room )
+   {
+      bug( "%s: NULL room", __func__ );
+      return NULL;
+   }
+
+   for( xit = room->first_exit; xit; xit = xit->next )
+      if( xit->vdir == dir && xit->vnum == vnum )
+         return xit;
+   return NULL;
+}
+
+/*
+ * Function to get the nth exit of a room			-Thoric
+ */
+EXIT_DATA *get_exit_num( ROOM_INDEX_DATA * room, short count )
+{
+   EXIT_DATA *xit;
+   int cnt;
+
+   if( !room )
+   {
+      bug( "%s: NULL room", __func__ );
+      return NULL;
+   }
+
+   for( cnt = 0, xit = room->first_exit; xit; xit = xit->next )
+      if( ++cnt == count )
+         return xit;
+   return NULL;
+}
+
+/*
+ * Modify movement due to encumbrance				-Thoric
+ */
+short encumbrance( CHAR_DATA * ch, short move )
+{
+   int cur, max;
+
+   max = can_carry_w( ch );
+   cur = ch->carry_weight;
+   if( cur >= max )
+      return ( short )move * 4;
+   else if( cur >= max * 0.95 )
+      return ( short )move * 3.5;
+   else if( cur >= max * 0.90 )
+      return ( short )move * 3;
+   else if( cur >= max * 0.85 )
+      return ( short )move * 2.5;
+   else if( cur >= max * 0.80 )
+      return ( short )move * 2;
+   else if( cur >= max * 0.75 )
+      return ( short )move * 1.5;
+   else
+      return move;
+}
+
+/*
+ * Check to see if a character can fall down, checks for looping   -Thoric
+ */
+bool will_fall( CHAR_DATA * ch, int fall )
+{
+   if( IS_SET( ch->in_room->room_flags, ROOM_NOFLOOR )
+       && CAN_GO( ch, DIR_DOWN )
+       && ( !IS_AFFECTED( ch, AFF_FLYING ) || ( ch->mount && !IS_AFFECTED( ch->mount, AFF_FLYING ) ) ) )
+   {
+      if( fall > 80 )
+      {
+         bug( "%s: Falling (in a loop?) more than 80 rooms: vnum %d", __func__, ch->in_room->vnum );
+         char_from_room( ch );
+         char_to_room( ch, get_room_index( wherehome( ch ) ) );
+         fall = 0;
+         return TRUE;
+      }
+      set_char_color( AT_FALLING, ch );
+      send_to_char( "You're falling down...\r\n", ch );
+      move_char( ch, get_exit( ch->in_room, DIR_DOWN ), ++fall );
+      return TRUE;
+   }
+   return FALSE;
+}
+
+/*
+ * create a 'virtual' room					-Thoric
+ */
+ROOM_INDEX_DATA *generate_exit( ROOM_INDEX_DATA * in_room, EXIT_DATA ** pexit )
+{
+   EXIT_DATA *xit, *bxit;
+   EXIT_DATA *orig_exit = ( EXIT_DATA * ) * pexit;
+   ROOM_INDEX_DATA *room, *backroom;
+   int brvnum;
+   int serial;
+   int roomnum;
+   int distance = -1;
+   int vdir = orig_exit->vdir;
+   short hash;
+   bool found = FALSE;
+
+   if( in_room->vnum > 32767 )   /* room is virtual */
+   {
+      serial = in_room->vnum;
+      roomnum = in_room->tele_vnum;
+      if( ( serial & 65535 ) == orig_exit->vnum )
+      {
+         brvnum = serial >> 16;
+         --roomnum;
+         distance = roomnum;
+      }
+      else
+      {
+         brvnum = serial & 65535;
+         ++roomnum;
+         distance = orig_exit->distance - 1;
+      }
+      backroom = get_room_index( brvnum );
+   }
+   else
+   {
+      int r1 = in_room->vnum;
+      int r2 = orig_exit->vnum;
+
+      brvnum = r1;
+      backroom = in_room;
+      serial = ( UMAX( r1, r2 ) << 16 ) | UMIN( r1, r2 );
+      distance = orig_exit->distance - 1;
+      roomnum = r1 < r2 ? 1 : distance;
+   }
+   hash = serial % 64;
+
+   for( room = vroom_hash[hash]; room; room = room->next )
+      if( room->vnum == serial && room->tele_vnum == roomnum )
+      {
+         found = TRUE;
+         break;
+      }
+   if( !found )
+   {
+      CREATE( room, ROOM_INDEX_DATA, 1 );
+      room->area = in_room->area;
+      room->vnum = serial;
+      room->tele_vnum = roomnum;
+      room->sector_type = in_room->sector_type;
+      room->room_flags = in_room->room_flags;
+      decorate_room( room );
+      room->next = vroom_hash[hash];
+      vroom_hash[hash] = room;
+      ++top_vroom;
+   }
+   if( !found || ( xit = get_exit( room, vdir ) ) == NULL )
+   {
+      xit = make_exit( room, orig_exit->to_room, vdir );
+      xit->keyword = STRALLOC( "" );
+      xit->description = STRALLOC( "" );
+      xit->key = -1;
+      xit->distance = distance;
+   }
+   if( !found )
+   {
+      bxit = make_exit( room, backroom, rev_dir[vdir] );
+      bxit->keyword = STRALLOC( "" );
+      bxit->description = STRALLOC( "" );
+      bxit->key = -1;
+      if( ( serial & 65535 ) != orig_exit->vnum )
+         bxit->distance = roomnum;
+      else
+      {
+         EXIT_DATA *tmp = get_exit( backroom, vdir );
+         int fulldist = tmp->distance;
+
+         bxit->distance = fulldist - distance;
+      }
+   }
+   *pexit = xit;
+   return room;
+}
+
+ch_ret move_char( CHAR_DATA * ch, EXIT_DATA * pexit, int fall )
+{
+   ROOM_INDEX_DATA *in_room, *to_room, *from_room;
+   char buf[MAX_STRING_LENGTH];
+   const char *txt, *dtxt;
+   ch_ret retcode;
+   short door, distance;
+   bool drunk = FALSE, brief = FALSE;
+
+   if( !IS_NPC( ch ) )
+      if( IS_DRUNK( ch, 2 ) && ( ch->position != POS_SHOVE ) && ( ch->position != POS_DRAG ) )
+         drunk = TRUE;
+
+   if( drunk && !fall )
+   {
+      door = number_door(  );
+      pexit = get_exit( ch->in_room, door );
+   }
+
+   retcode = rNONE;
+   txt = NULL;
+
+   if( IS_NPC( ch ) && IS_SET( ch->act, ACT_MOUNTED ) )
+      return retcode;
+
+   in_room = ch->in_room;
+   from_room = in_room;
+   if( !pexit || ( to_room = pexit->to_room ) == NULL )
+   {
+      if( drunk )
+         send_to_char( "You hit a wall in your drunken state.\r\n", ch );
+      else
+         send_to_char( "Alas, you cannot go that way.\r\n", ch );
+      return rNONE;
+   }
+
+   door = pexit->vdir;
+   distance = pexit->distance;
+
+   /*
+    * Exit is only a "window", there is no way to travel in that direction
+    * unless it's a door with a window in it      -Thoric
+    */
+   if( IS_AFFECTED( ch, AFF_PARALYSIS ) )
+   {
+      send_to_char( "You are unable to move.\r\n", ch );
+      return rNONE;
+   }
+
+   if( IS_SET( pexit->exit_info, EX_WINDOW ) && !IS_SET( pexit->exit_info, EX_ISDOOR ) )
+   {
+      send_to_char( "Alas, you cannot go that way.\r\n", ch );
+      return rNONE;
+   }
+
+   if( IS_SET( pexit->exit_info, EX_PORTAL ) && IS_NPC( ch ) )
+   {
+      act( AT_PLAIN, "Mobs can't use portals.", ch, NULL, NULL, TO_CHAR );
+      return rNONE;
+   }
+
+   if( IS_SET( pexit->exit_info, EX_NOMOB ) && IS_NPC( ch ) )
+   {
+      act( AT_PLAIN, "Mobs can't enter there.", ch, NULL, NULL, TO_CHAR );
+      return rNONE;
+   }
+
+   if( IS_SET( to_room->room_flags, ROOM_NO_MOB ) && IS_NPC( ch ) )
+   {
+      act( AT_PLAIN, "Mobs can't enter there.", ch, NULL, NULL, TO_CHAR );
+      return rNONE;
+   }
+
+   if( IS_SET( pexit->exit_info, EX_CLOSED )
+       && ( !IS_AFFECTED( ch, AFF_PASS_DOOR ) || IS_SET( pexit->exit_info, EX_NOPASSDOOR ) ) )
+   {
+      if( !IS_SET( pexit->exit_info, EX_SECRET ) && !IS_SET( pexit->exit_info, EX_DIG ) )
+      {
+         if( drunk )
+         {
+            act( AT_PLAIN, "$n runs into the $d in $s drunken state.", ch, NULL, pexit->keyword, TO_ROOM );
+            act( AT_PLAIN, "You run into the $d in your drunken state.", ch, NULL, pexit->keyword, TO_CHAR );
+         }
+         else
+            act( AT_PLAIN, "The $d is closed.", ch, NULL, pexit->keyword, TO_CHAR );
+      }
+      else
+      {
+         if( drunk )
+            send_to_char( "You hit a wall in your drunken state.\r\n", ch );
+         else
+            send_to_char( "Alas, you cannot go that way.\r\n", ch );
+      }
+
+      return rNONE;
+   }
+
+   /*
+    * Crazy virtual room idea, created upon demand.     -Thoric
+    */
+   if( distance > 1 )
+      if( ( to_room = generate_exit( in_room, &pexit ) ) == NULL )
+         send_to_char( "Alas, you cannot go that way.\r\n", ch );
+
+   if( !fall && IS_AFFECTED( ch, AFF_CHARM ) && ch->master && in_room == ch->master->in_room )
+   {
+      send_to_char( "What?  And leave your beloved master?\r\n", ch );
+      return rNONE;
+   }
+
+   if( room_is_private( ch, to_room ) )
+   {
+      send_to_char( "That room is private right now.\r\n", ch );
+      return rNONE;
+   }
+
+   if( !IS_IMMORTAL( ch ) && !IS_NPC( ch ) && ch->in_room->area != to_room->area )
+   {
+      if( ch->top_level < to_room->area->low_hard_range )
+      {
+         set_char_color( AT_TELL, ch );
+         switch ( to_room->area->low_hard_range - ch->top_level )
+         {
+            case 1:
+               send_to_char( "A voice in your mind says, 'You are nearly ready to go that way...'", ch );
+               break;
+            case 2:
+               send_to_char( "A voice in your mind says, 'Soon you shall be ready to travel down this path... soon.'", ch );
+               break;
+            case 3:
+               send_to_char( "A voice in your mind says, 'You are not ready to go down that path... yet.'.\r\n", ch );
+               break;
+            default:
+               send_to_char( "A voice in your mind says, 'You are not ready to go down that path.'.\r\n", ch );
+         }
+         return rNONE;
+      }
+      else if( ch->top_level > to_room->area->hi_hard_range )
+      {
+         set_char_color( AT_TELL, ch );
+         send_to_char( "A voice in your mind says, 'There is nothing more for you down that path.'", ch );
+         return rNONE;
+      }
+   }
+
+   if( !fall && !IS_NPC( ch ) )
+   {
+      /*
+       * int iClass;
+       */
+      int move;
+/* Pretty sure we don't need to check for guilds anymore now that we have
+   the new dh. -- Narn
+*/
+/*
+	for ( iClass = 0; iClass < MAX_CLASS; iClass++ )
+	{
+	    if ( iClass != ch->sclass
+	    &&   to_room->vnum == class_table[iClass]->guild )
+	    {
+		send_to_char( "You aren't allowed in there.\r\n", ch );
+		return rNONE;
+	    }
+	}
+*/
+
+/* Prevent deadlies from entering a nopkill-flagged area from a 
+   non-flagged area, but allow them to move around if already
+   inside a nopkill area. - Blodkai
+*/
+
+      if( in_room->sector_type == SECT_AIR || to_room->sector_type == SECT_AIR || IS_SET( pexit->exit_info, EX_FLY ) )
+      {
+         if( ch->mount && !IS_AFFECTED( ch->mount, AFF_FLYING ) )
+         {
+            send_to_char( "Your mount can't fly.\r\n", ch );
+            return rNONE;
+         }
+         if( !ch->mount && !IS_AFFECTED( ch, AFF_FLYING ) )
+         {
+            send_to_char( "You'd need to fly to go there.\r\n", ch );
+            return rNONE;
+         }
+      }
+
+      if( in_room->sector_type == SECT_WATER_NOSWIM || to_room->sector_type == SECT_WATER_NOSWIM )
+      {
+         OBJ_DATA *obj;
+         bool found;
+
+         found = FALSE;
+         if( ch->mount )
+         {
+            if( IS_AFFECTED( ch->mount, AFF_FLYING ) || IS_AFFECTED( ch->mount, AFF_FLOATING ) )
+               found = TRUE;
+         }
+         else if( IS_AFFECTED( ch, AFF_FLYING ) || IS_AFFECTED( ch, AFF_FLOATING ) )
+            found = TRUE;
+
+         /*
+          * Look for a boat.
+          */
+         if( !found )
+            for( obj = ch->first_carrying; obj; obj = obj->next_content )
+            {
+               if( obj->item_type == ITEM_BOAT )
+               {
+                  found = TRUE;
+                  if( drunk )
+                     txt = "paddles unevenly";
+                  else
+                     txt = "paddles";
+                  break;
+               }
+            }
+
+         if( !found )
+         {
+            send_to_char( "You'd need a boat to go there.\r\n", ch );
+            return rNONE;
+         }
+      }
+
+      if( IS_SET( pexit->exit_info, EX_CLIMB ) )
+      {
+         bool found;
+
+         found = FALSE;
+         if( ch->mount && IS_AFFECTED( ch->mount, AFF_FLYING ) )
+            found = TRUE;
+         else if( IS_AFFECTED( ch, AFF_FLYING ) )
+            found = TRUE;
+
+         if( !found && !ch->mount )
+         {
+            if( ( !IS_NPC( ch ) && number_percent(  ) > ch->pcdata->learned[gsn_climb] ) || drunk || ch->mental_state < -90 )
+            {
+               send_to_char( "You start to climb... but lose your grip and fall!\r\n", ch );
+               learn_from_failure( ch, gsn_climb );
+               if( pexit->vdir == DIR_DOWN )
+               {
+                  retcode = move_char( ch, pexit, 1 );
+                  return retcode;
+               }
+               set_char_color( AT_HURT, ch );
+               send_to_char( "OUCH! You hit the ground!\r\n", ch );
+               WAIT_STATE( ch, 20 );
+               retcode = damage( ch, ch, ( pexit->vdir == DIR_UP ? 10 : 5 ), TYPE_UNDEFINED );
+               return retcode;
+            }
+            found = TRUE;
+            learn_from_success( ch, gsn_climb );
+            WAIT_STATE( ch, skill_table[gsn_climb]->beats );
+            txt = "climbs";
+         }
+
+         if( !found )
+         {
+            send_to_char( "You can't climb.\r\n", ch );
+            return rNONE;
+         }
+      }
+
+      if( ch->mount )
+      {
+         switch ( ch->mount->position )
+         {
+            case POS_DEAD:
+               send_to_char( "Your mount is dead!\r\n", ch );
+               return rNONE;
+               break;
+
+            case POS_MORTAL:
+            case POS_INCAP:
+               send_to_char( "Your mount is hurt far too badly to move.\r\n", ch );
+               return rNONE;
+               break;
+
+            case POS_STUNNED:
+               send_to_char( "Your mount is too stunned to do that.\r\n", ch );
+               return rNONE;
+               break;
+
+            case POS_SLEEPING:
+               send_to_char( "Your mount is sleeping.\r\n", ch );
+               return rNONE;
+               break;
+
+            case POS_RESTING:
+               send_to_char( "Your mount is resting.\r\n", ch );
+               return rNONE;
+               break;
+
+            case POS_SITTING:
+               send_to_char( "Your mount is sitting down.\r\n", ch );
+               return rNONE;
+               break;
+
+            default:
+               break;
+         }
+
+         if( !IS_AFFECTED( ch->mount, AFF_FLYING ) && !IS_AFFECTED( ch->mount, AFF_FLOATING ) )
+            move = movement_loss[UMIN( SECT_MAX - 1, in_room->sector_type )];
+         else
+            move = 1;
+         if( ch->mount->move < move )
+         {
+            send_to_char( "Your mount is too exhausted.\r\n", ch );
+            return rNONE;
+         }
+      }
+      else
+      {
+         if( !IS_AFFECTED( ch, AFF_FLYING ) && !IS_AFFECTED( ch, AFF_FLOATING ) )
+            move = encumbrance( ch, movement_loss[UMIN( SECT_MAX - 1, in_room->sector_type )] );
+         else
+            move = 1;
+         if( ch->move < move )
+         {
+            send_to_char( "You are too exhausted.\r\n", ch );
+            return rNONE;
+         }
+      }
+
+      WAIT_STATE( ch, move );
+      if( ch->mount )
+         ch->mount->move -= move;
+      else
+         ch->move -= move;
+   }
+
+   /*
+    * Check if player can fit in the room
+    */
+   if( to_room->tunnel > 0 )
+   {
+      CHAR_DATA *ctmp;
+      int count = ch->mount ? 1 : 0;
+
+      for( ctmp = to_room->first_person; ctmp; ctmp = ctmp->next_in_room )
+         if( ++count >= to_room->tunnel )
+         {
+            if( ch->mount && count == to_room->tunnel )
+               send_to_char( "There is no room for both you and your mount in there.\r\n", ch );
+            else
+               send_to_char( "There is no room for you in there.\r\n", ch );
+            return rNONE;
+         }
+   }
+
+   /*
+    * check for traps on exit - later 
+    */
+
+   if( !IS_AFFECTED( ch, AFF_SNEAK ) && ( IS_NPC( ch ) || !IS_SET( ch->act, PLR_WIZINVIS ) ) )
+   {
+      if( fall )
+         txt = "falls";
+      else if( !txt )
+      {
+         if( ch->mount )
+         {
+            if( IS_AFFECTED( ch->mount, AFF_FLOATING ) )
+               txt = "floats";
+            else if( IS_AFFECTED( ch->mount, AFF_FLYING ) )
+               txt = "flys";
+            else
+               txt = "rides";
+         }
+         else
+         {
+            if( IS_AFFECTED( ch, AFF_FLOATING ) )
+            {
+               if( drunk )
+                  txt = "floats unsteadily";
+               else
+                  txt = "floats";
+            }
+            else if( IS_AFFECTED( ch, AFF_FLYING ) )
+            {
+               if( drunk )
+                  txt = "flys shakily";
+               else
+                  txt = "flys";
+            }
+            else if( ch->position == POS_SHOVE )
+               txt = "is shoved";
+            else if( ch->position == POS_DRAG )
+               txt = "is dragged";
+            else
+            {
+               if( drunk )
+                  txt = "stumbles drunkenly";
+               else
+               {
+                  if( ch->race == RACE_ASTROMECH_DROID )
+                     txt = "rolls";
+                  else
+                     txt = "leaves";
+               }
+            }
+         }
+      }
+      if( ch->mount )
+      {
+         sprintf( buf, "$n %s %s upon $N.", txt, dir_name[door] );
+         act( AT_ACTION, buf, ch, NULL, ch->mount, TO_NOTVICT );
+      }
+      else
+      {
+         sprintf( buf, "$n %s $T.", txt );
+         act( AT_ACTION, buf, ch, NULL, dir_name[door], TO_ROOM );
+      }
+   }
+
+   rprog_leave_trigger( ch );
+   if( char_died( ch ) )
+      return global_retcode;
+
+   char_from_room( ch );
+   char_to_room( ch, to_room );
+   if( ch->mount )
+   {
+      rprog_leave_trigger( ch->mount );
+
+      /*
+       * Mount bug fix test. -Orion
+       */
+      if( char_died( ch->mount ) )
+         return global_retcode;
+
+      if( ch->mount )
+      {
+         char_from_room( ch->mount );
+         char_to_room( ch->mount, to_room );
+      }
+   }
+
+   if( !IS_AFFECTED( ch, AFF_SNEAK ) && ( IS_NPC( ch ) || !IS_SET( ch->act, PLR_WIZINVIS ) ) )
+   {
+      if( fall )
+         txt = "falls";
+      else if( ch->mount )
+      {
+         if( IS_AFFECTED( ch->mount, AFF_FLOATING ) )
+            txt = "floats in";
+         else if( IS_AFFECTED( ch->mount, AFF_FLYING ) )
+            txt = "flys in";
+         else
+            txt = "rides in";
+      }
+      else
+      {
+         if( IS_AFFECTED( ch, AFF_FLOATING ) )
+         {
+            if( drunk )
+               txt = "floats in unsteadily";
+            else
+               txt = "floats in";
+         }
+         else if( IS_AFFECTED( ch, AFF_FLYING ) )
+         {
+            if( drunk )
+               txt = "flys in shakily";
+            else
+               txt = "flys in";
+         }
+         else if( ch->position == POS_SHOVE )
+            txt = "is shoved in";
+         else if( ch->position == POS_DRAG )
+            txt = "is dragged in";
+         else
+         {
+            if( drunk )
+               txt = "stumbles drunkenly in";
+            else
+            {
+               if( ch->race == RACE_ASTROMECH_DROID )
+                  txt = "rolls in";
+               else
+                  txt = "arrives";
+            }
+         }
+      }
+      switch ( door )
+      {
+         default:
+            dtxt = "somewhere";
+            break;
+         case 0:
+            dtxt = "the south";
+            break;
+         case 1:
+            dtxt = "the west";
+            break;
+         case 2:
+            dtxt = "the north";
+            break;
+         case 3:
+            dtxt = "the east";
+            break;
+         case 4:
+            dtxt = "below";
+            break;
+         case 5:
+            dtxt = "above";
+            break;
+         case 6:
+            dtxt = "the south-west";
+            break;
+         case 7:
+            dtxt = "the south-east";
+            break;
+         case 8:
+            dtxt = "the north-west";
+            break;
+         case 9:
+            dtxt = "the north-east";
+            break;
+      }
+      if( ch->mount )
+      {
+         sprintf( buf, "$n %s from %s upon $N.", txt, dtxt );
+         act( AT_ACTION, buf, ch, NULL, ch->mount, TO_ROOM );
+      }
+      else
+      {
+         sprintf( buf, "$n %s from %s.", txt, dtxt );
+         act( AT_ACTION, buf, ch, NULL, NULL, TO_ROOM );
+      }
+   }
+
+   if( !IS_IMMORTAL( ch ) && !IS_NPC( ch ) && ch->in_room->area != to_room->area )
+   {
+      if( ch->top_level < to_room->area->low_soft_range )
+      {
+         set_char_color( AT_MAGIC, ch );
+         send_to_char( "You feel uncomfortable being in this strange land...\r\n", ch );
+      }
+      else if( ch->top_level > to_room->area->hi_soft_range )
+      {
+         set_char_color( AT_MAGIC, ch );
+         send_to_char( "You feel there is not much to gain visiting this place...\r\n", ch );
+      }
+   }
+
+   do_look( ch, "auto" );
+   if( brief )
+      SET_BIT( ch->act, PLR_BRIEF );
+
+
+   /*
+    * BIG ugly looping problem here when the character is mptransed back
+    * to the starting room.  To avoid this, check how many chars are in 
+    * the room at the start and stop processing followers after doing
+    * the right number of them.  -- Narn
+    */
+   if( !fall )
+   {
+      CHAR_DATA *fch;
+      CHAR_DATA *nextinroom;
+      int chars = 0, count = 0;
+
+      for( fch = from_room->first_person; fch; fch = fch->next_in_room )
+         chars++;
+
+      for( fch = from_room->first_person; fch && ( count < chars ); fch = nextinroom )
+      {
+         nextinroom = fch->next_in_room;
+         count++;
+         if( fch != ch  /* loop room bug fix here by Thoric */
+             && fch->master == ch && fch->position == POS_STANDING )
+         {
+            if( !get_exit( from_room, door ) )
+            {
+              act( AT_ACTION, "The entrance closes behind $N, preventing you from following!", fch, NULL, ch, TO_CHAR );
+              continue;
+            }
+            act( AT_ACTION, "You follow $N.", fch, NULL, ch, TO_CHAR );
+            move_char( fch, pexit, 0 );
+         }
+      }
+   }
+
+   if( ch->in_room->first_content )
+      retcode = check_room_for_traps( ch, TRAP_ENTER_ROOM );
+   if( retcode != rNONE )
+      return retcode;
+
+   if( char_died( ch ) )
+      return retcode;
+
+   mprog_entry_trigger( ch );
+   if( char_died( ch ) )
+      return retcode;
+
+   rprog_enter_trigger( ch );
+   if( char_died( ch ) )
+      return retcode;
+
+   mprog_greet_trigger( ch );
+   if( char_died( ch ) )
+      return retcode;
+
+   oprog_greet_trigger( ch );
+   if( char_died( ch ) )
+      return retcode;
+
+   if( !will_fall( ch, fall ) && fall > 0 )
+   {
+      if( !IS_AFFECTED( ch, AFF_FLOATING ) || ( ch->mount && !IS_AFFECTED( ch->mount, AFF_FLOATING ) ) )
+      {
+         set_char_color( AT_HURT, ch );
+         send_to_char( "OUCH! You hit the ground!\r\n", ch );
+         WAIT_STATE( ch, 20 );
+         retcode = damage( ch, ch, 50 * fall, TYPE_UNDEFINED );
+      }
+      else
+      {
+         set_char_color( AT_MAGIC, ch );
+         send_to_char( "You lightly float down to the ground.\r\n", ch );
+      }
+   }
+   return retcode;
+}
+
+
+void do_north( CHAR_DATA * ch, const char *argument )
+{
+   if( !IS_NPC( ch ) && IS_SET( ch->pcdata->act2, ACT_BOUND ) )
+   {
+      send_to_char( "You struggle in your bindings, but to no avail.\r\n", ch );
+      return;
+   }
+
+   move_char( ch, get_exit( ch->in_room, DIR_NORTH ), 0 );
+   return;
+}
+
+
+void do_east( CHAR_DATA * ch, const char *argument )
+{
+   if( !IS_NPC( ch ) && IS_SET( ch->pcdata->act2, ACT_BOUND ) )
+   {
+      send_to_char( "You struggle in your bindings, but to no avail.\r\n", ch );
+      return;
+   }
+
+   move_char( ch, get_exit( ch->in_room, DIR_EAST ), 0 );
+   return;
+}
+
+
+void do_south( CHAR_DATA * ch, const char *argument )
+{
+   if( !IS_NPC( ch ) && IS_SET( ch->pcdata->act2, ACT_BOUND ) )
+   {
+      send_to_char( "You struggle in your bindings, but to no avail.\r\n", ch );
+      return;
+   }
+
+   move_char( ch, get_exit( ch->in_room, DIR_SOUTH ), 0 );
+   return;
+}
+
+
+void do_west( CHAR_DATA * ch, const char *argument )
+{
+   if( !IS_NPC( ch ) && IS_SET( ch->pcdata->act2, ACT_BOUND ) )
+   {
+      send_to_char( "You struggle in your bindings, but to no avail.\r\n", ch );
+      return;
+   }
+
+   move_char( ch, get_exit( ch->in_room, DIR_WEST ), 0 );
+   return;
+}
+
+
+void do_up( CHAR_DATA * ch, const char *argument )
+{
+   if( !IS_NPC( ch ) && IS_SET( ch->pcdata->act2, ACT_BOUND ) )
+   {
+      send_to_char( "You struggle in your bindings, but to no avail.\r\n", ch );
+      return;
+   }
+
+   move_char( ch, get_exit( ch->in_room, DIR_UP ), 0 );
+   return;
+}
+
+
+void do_down( CHAR_DATA * ch, const char *argument )
+{
+   if( !IS_NPC( ch ) && IS_SET( ch->pcdata->act2, ACT_BOUND ) )
+   {
+      send_to_char( "You struggle in your bindings, but to no avail.\r\n", ch );
+      return;
+   }
+
+   move_char( ch, get_exit( ch->in_room, DIR_DOWN ), 0 );
+   return;
+}
+
+void do_northeast( CHAR_DATA * ch, const char *argument )
+{
+   if( !IS_NPC( ch ) && IS_SET( ch->pcdata->act2, ACT_BOUND ) )
+   {
+      send_to_char( "You struggle in your bindings, but to no avail.\r\n", ch );
+      return;
+   }
+
+   move_char( ch, get_exit( ch->in_room, DIR_NORTHEAST ), 0 );
+   return;
+}
+
+void do_northwest( CHAR_DATA * ch, const char *argument )
+{
+   if( !IS_NPC( ch ) && IS_SET( ch->pcdata->act2, ACT_BOUND ) )
+   {
+      send_to_char( "You struggle in your bindings, but to no avail.\r\n", ch );
+      return;
+   }
+
+   move_char( ch, get_exit( ch->in_room, DIR_NORTHWEST ), 0 );
+   return;
+}
+
+void do_southeast( CHAR_DATA * ch, const char *argument )
+{
+   if( !IS_NPC( ch ) && IS_SET( ch->pcdata->act2, ACT_BOUND ) )
+   {
+      send_to_char( "You struggle in your bindings, but to no avail.\r\n", ch );
+      return;
+   }
+
+   move_char( ch, get_exit( ch->in_room, DIR_SOUTHEAST ), 0 );
+   return;
+}
+
+void do_southwest( CHAR_DATA * ch, const char *argument )
+{
+   if( !IS_NPC( ch ) && IS_SET( ch->pcdata->act2, ACT_BOUND ) )
+   {
+      send_to_char( "You struggle in your bindings, but to no avail.\r\n", ch );
+      return;
+   }
+
+   move_char( ch, get_exit( ch->in_room, DIR_SOUTHWEST ), 0 );
+   return;
+}
+
+EXIT_DATA *find_door( CHAR_DATA * ch, const char *arg, bool quiet )
 {
    EXIT_DATA *pexit;
-   ROOM_INDEX_DATA *to_room;
-   static int fall_count;
-   static bool is_falling; /* Stop loops from the call to obj_to_room()  -- Altrag */
+   int door;
 
-   if (!obj->in_room || is_falling)
-      return;
+   if( arg == NULL || !str_cmp( arg, "" ) )
+      return NULL;
 
-   if (fall_count > 30)
+   pexit = NULL;
+   if( !str_cmp( arg, "n" ) || !str_cmp( arg, "north" ) )
+      door = 0;
+   else if( !str_cmp( arg, "e" ) || !str_cmp( arg, "east" ) )
+      door = 1;
+   else if( !str_cmp( arg, "s" ) || !str_cmp( arg, "south" ) )
+      door = 2;
+   else if( !str_cmp( arg, "w" ) || !str_cmp( arg, "west" ) )
+      door = 3;
+   else if( !str_cmp( arg, "u" ) || !str_cmp( arg, "up" ) )
+      door = 4;
+   else if( !str_cmp( arg, "d" ) || !str_cmp( arg, "down" ) )
+      door = 5;
+   else if( !str_cmp( arg, "ne" ) || !str_cmp( arg, "northeast" ) )
+      door = 6;
+   else if( !str_cmp( arg, "nw" ) || !str_cmp( arg, "northwest" ) )
+      door = 7;
+   else if( !str_cmp( arg, "se" ) || !str_cmp( arg, "southeast" ) )
+      door = 8;
+   else if( !str_cmp( arg, "sw" ) || !str_cmp( arg, "southwest" ) )
+      door = 9;
+   else
    {
-      bug("%s: object falling in loop more than 30 times", __func__);
-      extract_obj(obj);
-      fall_count = 0;
+      for( pexit = ch->in_room->first_exit; pexit; pexit = pexit->next )
+      {
+         if( ( quiet || IS_SET( pexit->exit_info, EX_ISDOOR ) ) && pexit->keyword && nifty_is_name( arg, pexit->keyword ) )
+            return pexit;
+      }
+      if( !quiet )
+         act( AT_PLAIN, "You see no $T here.", ch, NULL, arg, TO_CHAR );
+      return NULL;
+   }
+
+   if( ( pexit = get_exit( ch->in_room, door ) ) == NULL )
+   {
+      if( !quiet )
+         act( AT_PLAIN, "You see no $T here.", ch, NULL, arg, TO_CHAR );
+      return NULL;
+   }
+
+   if( quiet )
+      return pexit;
+
+   if( IS_SET( pexit->exit_info, EX_SECRET ) )
+   {
+      act( AT_PLAIN, "You see no $T here.", ch, NULL, arg, TO_CHAR );
+      return NULL;
+   }
+
+   if( !IS_SET( pexit->exit_info, EX_ISDOOR ) )
+   {
+      send_to_char( "You can't do that.\r\n", ch );
+      return NULL;
+   }
+
+   return pexit;
+}
+
+
+void toggle_bexit_flag( EXIT_DATA * pexit, int flag )
+{
+   EXIT_DATA *pexit_rev;
+
+   TOGGLE_BIT( pexit->exit_info, flag );
+   if( ( pexit_rev = pexit->rexit ) != NULL && pexit_rev != pexit )
+      TOGGLE_BIT( pexit_rev->exit_info, flag );
+}
+
+void set_bexit_flag( EXIT_DATA * pexit, int flag )
+{
+   EXIT_DATA *pexit_rev;
+
+   SET_BIT( pexit->exit_info, flag );
+   if( ( pexit_rev = pexit->rexit ) != NULL && pexit_rev != pexit )
+      SET_BIT( pexit_rev->exit_info, flag );
+}
+
+void remove_bexit_flag( EXIT_DATA * pexit, int flag )
+{
+   EXIT_DATA *pexit_rev;
+
+   REMOVE_BIT( pexit->exit_info, flag );
+   if( ( pexit_rev = pexit->rexit ) != NULL && pexit_rev != pexit )
+      REMOVE_BIT( pexit_rev->exit_info, flag );
+}
+
+void do_open( CHAR_DATA * ch, const char *argument )
+{
+   char arg[MAX_INPUT_LENGTH];
+   OBJ_DATA *obj;
+   EXIT_DATA *pexit;
+   int door;
+
+   one_argument( argument, arg );
+
+   if( arg[0] == '\0' )
+   {
+      do_openhatch( ch, "" );
       return;
    }
 
-   if (IS_SET(obj->in_room->room_flags, ROOM_NOFLOOR) && CAN_GO(obj, DIR_DOWN) && !IS_OBJ_STAT(obj, ITEM_MAGIC))
+   if( ( pexit = find_door( ch, arg, TRUE ) ) != NULL )
    {
+      /*
+       * 'open door' 
+       */
+      EXIT_DATA *pexit_rev;
 
-      pexit = get_exit(obj->in_room, DIR_DOWN);
-      to_room = pexit->to_room;
-
-      if (through)
-         fall_count++;
-      else
-         fall_count = 0;
-
-      if (obj->in_room == to_room)
+      if( !IS_SET( pexit->exit_info, EX_ISDOOR ) )
       {
-         bug("%s: Object falling into same room, room %d", __func__, to_room->vnum);
-         extract_obj(obj);
+         send_to_char( "You can't do that.\r\n", ch );
+         return;
+      }
+      if( !IS_SET( pexit->exit_info, EX_CLOSED ) )
+      {
+         send_to_char( "It's already open.\r\n", ch );
+         return;
+      }
+      if( IS_SET( pexit->exit_info, EX_LOCKED ) )
+      {
+         send_to_char( "It's locked.\r\n", ch );
          return;
       }
 
-      if (obj->in_room->first_person)
+      if( !IS_SET( pexit->exit_info, EX_SECRET ) || ( pexit->keyword && nifty_is_name( arg, pexit->keyword ) ) )
       {
-         act(AT_PLAIN, "$p falls far below...", obj->in_room->first_person, obj, NULL, TO_ROOM);
-         act(AT_PLAIN, "$p falls far below...", obj->in_room->first_person, obj, NULL, TO_CHAR);
-      }
-      obj_from_room(obj);
-      is_falling = TRUE;
-      obj = obj_to_room(obj, to_room);
-      is_falling = FALSE;
-
-      if (obj->in_room->first_person)
-      {
-         act(AT_PLAIN, "$p falls from above...", obj->in_room->first_person, obj, NULL, TO_ROOM);
-         act(AT_PLAIN, "$p falls from above...", obj->in_room->first_person, obj, NULL, TO_CHAR);
-      }
-
-      if (!IS_SET(obj->in_room->room_flags, ROOM_NOFLOOR) && through)
-      {
-         /*		int dam = (int)9.81*sqrt(fall_count*2/9.81)*obj->weight/2;
-          */
-         int dam = fall_count * obj->weight / 2;
-         /*
-          * Damage players
-          */
-         if (obj->in_room->first_person && number_percent() > 15)
+         act( AT_ACTION, "$n opens the $d.", ch, NULL, pexit->keyword, TO_ROOM );
+         act( AT_ACTION, "You open the $d.", ch, NULL, pexit->keyword, TO_CHAR );
+         if( ( pexit_rev = pexit->rexit ) != NULL && pexit_rev->to_room == ch->in_room )
          {
             CHAR_DATA *rch;
-            CHAR_DATA *vch = NULL;
-            int chcnt = 0;
 
-            for (rch = obj->in_room->first_person; rch; rch = rch->next_in_room, chcnt++)
-               if (number_range(0, chcnt) == 0)
-                  vch = rch;
-
-            if (vch)
-            {
-               act(AT_WHITE, "$p falls on $n!", vch, obj, NULL, TO_ROOM);
-               act(AT_WHITE, "$p falls on you!", vch, obj, NULL, TO_CHAR);
-               damage(vch, vch, dam * vch->top_level, TYPE_UNDEFINED);
-            }
+            for( rch = pexit->to_room->first_person; rch; rch = rch->next_in_room )
+               act( AT_ACTION, "The $d opens.", rch, NULL, pexit_rev->keyword, TO_CHAR );
+            sound_to_room( pexit->to_room, "!!SOUND(door)" );
          }
+         remove_bexit_flag( pexit, EX_CLOSED );
+         if( ( door = pexit->vdir ) >= 0 && door < 10 )
+            check_room_for_traps( ch, trap_door[door] );
 
-         /*
-          * Damage objects
-          */
-         switch (obj->item_type)
-         {
-         case ITEM_WEAPON:
-         case ITEM_ARMOR:
-            if ((obj->value[0] - dam) <= 0)
-            {
-               if (obj->in_room->first_person)
-               {
-                  act(AT_PLAIN, "$p is destroyed by the fall!", obj->in_room->first_person, obj, NULL, TO_ROOM);
-                  act(AT_PLAIN, "$p is destroyed by the fall!", obj->in_room->first_person, obj, NULL, TO_CHAR);
-               }
-               make_scraps(obj);
-            }
-            else
-               obj->value[0] -= dam;
-            break;
-         default:
-            if ((dam * 15) > get_obj_resistance(obj))
-            {
-               if (obj->in_room->first_person)
-               {
-                  act(AT_PLAIN, "$p is destroyed by the fall!", obj->in_room->first_person, obj, NULL, TO_ROOM);
-                  act(AT_PLAIN, "$p is destroyed by the fall!", obj->in_room->first_person, obj, NULL, TO_CHAR);
-               }
-               make_scraps(obj);
-            }
-            break;
-         }
+         sound_to_room( ch->in_room, "!!SOUND(door)" );
+         return;
       }
-      obj_fall(obj, TRUE);
    }
+
+   if( ( obj = get_obj_here( ch, arg ) ) != NULL )
+   {
+      /*
+       * 'open object' 
+       */
+      if( obj->item_type != ITEM_CONTAINER )
+      {
+         ch_printf( ch, "%s isn't a container.\r\n", capitalize( obj->short_descr ) );
+         return;
+      }
+      if( !IS_SET( obj->value[1], CONT_CLOSED ) )
+      {
+         ch_printf( ch, "%s is already open.\r\n", capitalize( obj->short_descr ) );
+         return;
+      }
+      if( !IS_SET( obj->value[1], CONT_CLOSEABLE ) )
+      {
+         ch_printf( ch, "%s cannot be opened or closed.\r\n", capitalize( obj->short_descr ) );
+         return;
+      }
+      if( IS_SET( obj->value[1], CONT_LOCKED ) )
+      {
+         ch_printf( ch, "%s is locked.\r\n", capitalize( obj->short_descr ) );
+         return;
+      }
+
+      REMOVE_BIT( obj->value[1], CONT_CLOSED );
+      act( AT_ACTION, "You open $p.", ch, obj, NULL, TO_CHAR );
+      act( AT_ACTION, "$n opens $p.", ch, obj, NULL, TO_ROOM );
+      check_for_trap( ch, obj, TRAP_OPEN );
+      return;
+   }
+
+   if( !str_cmp( arg, "hatch" ) )
+   {
+      do_openhatch( ch, argument );
+      return;
+   }
+
+   do_openhatch( ch, arg );
+   return;
+}
+
+void do_close( CHAR_DATA * ch, const char *argument )
+{
+   char arg[MAX_INPUT_LENGTH];
+   OBJ_DATA *obj;
+   EXIT_DATA *pexit;
+   int door;
+
+   one_argument( argument, arg );
+
+   if( arg[0] == '\0' )
+   {
+      do_closehatch( ch, "" );
+      return;
+   }
+
+   if( ( pexit = find_door( ch, arg, TRUE ) ) != NULL )
+   {
+      /*
+       * 'close door' 
+       */
+      EXIT_DATA *pexit_rev;
+
+      if( !IS_SET( pexit->exit_info, EX_ISDOOR ) )
+      {
+         send_to_char( "You can't do that.\r\n", ch );
+         return;
+      }
+      if( IS_SET( pexit->exit_info, EX_CLOSED ) )
+      {
+         send_to_char( "It's already closed.\r\n", ch );
+         return;
+      }
+
+      act( AT_ACTION, "$n closes the $d.", ch, NULL, pexit->keyword, TO_ROOM );
+      act( AT_ACTION, "You close the $d.", ch, NULL, pexit->keyword, TO_CHAR );
+
+      /*
+       * close the other side 
+       */
+      if( ( pexit_rev = pexit->rexit ) != NULL && pexit_rev->to_room == ch->in_room )
+      {
+         CHAR_DATA *rch;
+
+         SET_BIT( pexit_rev->exit_info, EX_CLOSED );
+         for( rch = pexit->to_room->first_person; rch; rch = rch->next_in_room )
+            act( AT_ACTION, "The $d closes.", rch, NULL, pexit_rev->keyword, TO_CHAR );
+      }
+      set_bexit_flag( pexit, EX_CLOSED );
+      if( ( door = pexit->vdir ) >= 0 && door < 10 )
+         check_room_for_traps( ch, trap_door[door] );
+      return;
+   }
+
+   if( ( obj = get_obj_here( ch, arg ) ) != NULL )
+   {
+      /*
+       * 'close object' 
+       */
+      if( obj->item_type != ITEM_CONTAINER )
+      {
+         ch_printf( ch, "%s isn't a container.\r\n", capitalize( obj->short_descr ) );
+         return;
+      }
+      if( IS_SET( obj->value[1], CONT_CLOSED ) )
+      {
+         ch_printf( ch, "%s is already closed.\r\n", capitalize( obj->short_descr ) );
+         return;
+      }
+      if( !IS_SET( obj->value[1], CONT_CLOSEABLE ) )
+      {
+         ch_printf( ch, "%s cannot be opened or closed.\r\n", capitalize( obj->short_descr ) );
+         return;
+      }
+
+      SET_BIT( obj->value[1], CONT_CLOSED );
+      act( AT_ACTION, "You close $p.", ch, obj, NULL, TO_CHAR );
+      act( AT_ACTION, "$n closes $p.", ch, obj, NULL, TO_ROOM );
+      check_for_trap( ch, obj, TRAP_CLOSE );
+      return;
+   }
+
+   if( !str_cmp( arg, "hatch" ) )
+   {
+      do_closehatch( ch, argument );
+      return;
+   }
+
+   do_closehatch( ch, arg );
+   return;
+}
+
+
+bool has_key( CHAR_DATA * ch, int key )
+{
+   OBJ_DATA *obj;
+
+   for( obj = ch->first_carrying; obj; obj = obj->next_content )
+      if( obj->pIndexData->vnum == key || obj->value[0] == key )
+         return TRUE;
+
+   return FALSE;
+}
+
+
+void do_lock( CHAR_DATA * ch, const char *argument )
+{
+   char arg[MAX_INPUT_LENGTH];
+   OBJ_DATA *obj;
+   EXIT_DATA *pexit;
+
+   one_argument( argument, arg );
+
+   if( arg[0] == '\0' )
+   {
+      send_to_char( "Lock what?\r\n", ch );
+      return;
+   }
+
+   if( ( pexit = find_door( ch, arg, TRUE ) ) != NULL )
+   {
+      /*
+       * 'lock door' 
+       */
+
+      if( !IS_SET( pexit->exit_info, EX_ISDOOR ) )
+      {
+         send_to_char( "You can't do that.\r\n", ch );
+         return;
+      }
+      if( !IS_SET( pexit->exit_info, EX_CLOSED ) )
+      {
+         send_to_char( "It's not closed.\r\n", ch );
+         return;
+      }
+      if( pexit->key < 0 )
+      {
+         send_to_char( "It can't be locked.\r\n", ch );
+         return;
+      }
+      if( !has_key( ch, pexit->key ) )
+      {
+         send_to_char( "You lack the key.\r\n", ch );
+         return;
+      }
+      if( IS_SET( pexit->exit_info, EX_LOCKED ) )
+      {
+         send_to_char( "It's already locked.\r\n", ch );
+         return;
+      }
+
+      if( !IS_SET( pexit->exit_info, EX_SECRET ) || ( pexit->keyword && nifty_is_name( arg, pexit->keyword ) ) )
+      {
+         send_to_char( "*Click*\r\n", ch );
+         act( AT_ACTION, "$n locks the $d.", ch, NULL, pexit->keyword, TO_ROOM );
+         set_bexit_flag( pexit, EX_LOCKED );
+         return;
+      }
+   }
+
+   if( ( obj = get_obj_here( ch, arg ) ) != NULL )
+   {
+      /*
+       * 'lock object' 
+       */
+      if( obj->item_type != ITEM_CONTAINER )
+      {
+         send_to_char( "That's not a container.\r\n", ch );
+         return;
+      }
+      if( !IS_SET( obj->value[1], CONT_CLOSED ) )
+      {
+         send_to_char( "It's not closed.\r\n", ch );
+         return;
+      }
+      if( obj->value[2] < 0 )
+      {
+         send_to_char( "It can't be locked.\r\n", ch );
+         return;
+      }
+      if( !has_key( ch, obj->value[2] ) )
+      {
+         send_to_char( "You lack the key.\r\n", ch );
+         return;
+      }
+      if( IS_SET( obj->value[1], CONT_LOCKED ) )
+      {
+         send_to_char( "It's already locked.\r\n", ch );
+         return;
+      }
+
+      SET_BIT( obj->value[1], CONT_LOCKED );
+      send_to_char( "*Click*\r\n", ch );
+      act( AT_ACTION, "$n locks $p.", ch, obj, NULL, TO_ROOM );
+      return;
+   }
+
+   ch_printf( ch, "You see no %s here.\r\n", arg );
+   return;
+}
+
+
+
+void do_unlock( CHAR_DATA * ch, const char *argument )
+{
+   char arg[MAX_INPUT_LENGTH];
+   OBJ_DATA *obj;
+   EXIT_DATA *pexit;
+
+   one_argument( argument, arg );
+
+   if( arg[0] == '\0' )
+   {
+      send_to_char( "Unlock what?\r\n", ch );
+      return;
+   }
+
+   if( ( pexit = find_door( ch, arg, TRUE ) ) != NULL )
+   {
+      /*
+       * 'unlock door' 
+       */
+
+      if( !IS_SET( pexit->exit_info, EX_ISDOOR ) )
+      {
+         send_to_char( "You can't do that.\r\n", ch );
+         return;
+      }
+      if( !IS_SET( pexit->exit_info, EX_CLOSED ) )
+      {
+         send_to_char( "It's not closed.\r\n", ch );
+         return;
+      }
+      if( pexit->key < 0 )
+      {
+         send_to_char( "It can't be unlocked.\r\n", ch );
+         return;
+      }
+      if( !has_key( ch, pexit->key ) )
+      {
+         send_to_char( "You lack the key.\r\n", ch );
+         return;
+      }
+      if( !IS_SET( pexit->exit_info, EX_LOCKED ) )
+      {
+         send_to_char( "It's already unlocked.\r\n", ch );
+         return;
+      }
+
+      if( !IS_SET( pexit->exit_info, EX_SECRET ) || ( pexit->keyword && nifty_is_name( arg, pexit->keyword ) ) )
+      {
+         send_to_char( "*Click*\r\n", ch );
+         act( AT_ACTION, "$n unlocks the $d.", ch, NULL, pexit->keyword, TO_ROOM );
+         remove_bexit_flag( pexit, EX_LOCKED );
+         return;
+      }
+   }
+
+   if( ( obj = get_obj_here( ch, arg ) ) != NULL )
+   {
+      /*
+       * 'unlock object' 
+       */
+      if( obj->item_type != ITEM_CONTAINER )
+      {
+         send_to_char( "That's not a container.\r\n", ch );
+         return;
+      }
+      if( !IS_SET( obj->value[1], CONT_CLOSED ) )
+      {
+         send_to_char( "It's not closed.\r\n", ch );
+         return;
+      }
+      if( obj->value[2] < 0 )
+      {
+         send_to_char( "It can't be unlocked.\r\n", ch );
+         return;
+      }
+      if( !has_key( ch, obj->value[2] ) )
+      {
+         send_to_char( "You lack the key.\r\n", ch );
+         return;
+      }
+      if( !IS_SET( obj->value[1], CONT_LOCKED ) )
+      {
+         send_to_char( "It's already unlocked.\r\n", ch );
+         return;
+      }
+
+      REMOVE_BIT( obj->value[1], CONT_LOCKED );
+      send_to_char( "*Click*\r\n", ch );
+      act( AT_ACTION, "$n unlocks $p.", ch, obj, NULL, TO_ROOM );
+      return;
+   }
+
+   ch_printf( ch, "You see no %s here.\r\n", arg );
+   return;
+}
+
+void do_bashdoor( CHAR_DATA * ch, const char *argument )
+{
+   EXIT_DATA *pexit;
+   char arg[MAX_INPUT_LENGTH];
+
+   if( !IS_NPC( ch ) && ch->pcdata->learned[gsn_bashdoor] <= 0 )
+   {
+      send_to_char( "You're not enough of a warrior to bash doors!\r\n", ch );
+      return;
+   }
+
+   one_argument( argument, arg );
+
+   if( arg[0] == '\0' )
+   {
+      send_to_char( "Bash what?\r\n", ch );
+      return;
+   }
+
+   if( ch->fighting )
+   {
+      send_to_char( "You can't break off your fight.\r\n", ch );
+      return;
+   }
+
+   if( ( pexit = find_door( ch, arg, FALSE ) ) != NULL )
+   {
+      ROOM_INDEX_DATA *to_room;
+      EXIT_DATA *pexit_rev;
+      int schance;
+      const char *keyword;
+
+      if( !IS_SET( pexit->exit_info, EX_CLOSED ) )
+      {
+         send_to_char( "Calm down.  It is already open.\r\n", ch );
+         return;
+      }
+
+      WAIT_STATE( ch, skill_table[gsn_bashdoor]->beats );
+
+      if( IS_SET( pexit->exit_info, EX_SECRET ) )
+         keyword = "wall";
+      else
+         keyword = pexit->keyword;
+      if( !IS_NPC( ch ) )
+         schance = ch->pcdata->learned[gsn_bashdoor] / 2;
+      else
+         schance = 90;
+
+      if( !IS_SET( pexit->exit_info, EX_BASHPROOF )
+          && ch->move >= 15 && number_percent(  ) < ( schance + 4 * ( get_curr_str( ch ) - 19 ) ) )
+      {
+         REMOVE_BIT( pexit->exit_info, EX_CLOSED );
+         if( IS_SET( pexit->exit_info, EX_LOCKED ) )
+            REMOVE_BIT( pexit->exit_info, EX_LOCKED );
+         SET_BIT( pexit->exit_info, EX_BASHED );
+
+         act( AT_SKILL, "Crash!  You bashed open the $d!", ch, NULL, keyword, TO_CHAR );
+         act( AT_SKILL, "$n bashes open the $d!", ch, NULL, keyword, TO_ROOM );
+         learn_from_success( ch, gsn_bashdoor );
+
+         if( ( to_room = pexit->to_room ) != NULL
+             && ( pexit_rev = pexit->rexit ) != NULL && pexit_rev->to_room == ch->in_room )
+         {
+            CHAR_DATA *rch;
+
+            REMOVE_BIT( pexit_rev->exit_info, EX_CLOSED );
+            if( IS_SET( pexit_rev->exit_info, EX_LOCKED ) )
+               REMOVE_BIT( pexit_rev->exit_info, EX_LOCKED );
+            SET_BIT( pexit_rev->exit_info, EX_BASHED );
+
+            for( rch = to_room->first_person; rch; rch = rch->next_in_room )
+            {
+               act( AT_SKILL, "The $d crashes open!", rch, NULL, pexit_rev->keyword, TO_CHAR );
+            }
+         }
+         damage( ch, ch, ( ch->max_hit / 20 ), gsn_bashdoor );
+
+      }
+      else
+      {
+         act( AT_SKILL, "WHAAAAM!!!  You bash against the $d, but it doesn't budge.", ch, NULL, keyword, TO_CHAR );
+         act( AT_SKILL, "WHAAAAM!!!  $n bashes against the $d, but it holds strong.", ch, NULL, keyword, TO_ROOM );
+         damage( ch, ch, ( ch->max_hit / 20 ) + 10, gsn_bashdoor );
+         learn_from_failure( ch, gsn_bashdoor );
+      }
+   }
+   else
+   {
+      act( AT_SKILL, "WHAAAAM!!!  You bash against the wall, but it doesn't budge.", ch, NULL, NULL, TO_CHAR );
+      act( AT_SKILL, "WHAAAAM!!!  $n bashes against the wall, but it holds strong.", ch, NULL, NULL, TO_ROOM );
+      damage( ch, ch, ( ch->max_hit / 20 ) + 10, gsn_bashdoor );
+      learn_from_failure( ch, gsn_bashdoor );
+   }
+   return;
+}
+
+
+void do_stand( CHAR_DATA * ch, const char *argument )
+{
+   switch ( ch->position )
+   {
+      case POS_SLEEPING:
+         if( IS_AFFECTED( ch, AFF_SLEEP ) )
+         {
+            send_to_char( "You can't seem to wake up!\r\n", ch );
+            return;
+         }
+
+         send_to_char( "You wake and climb quickly to your feet.\r\n", ch );
+         act( AT_ACTION, "$n arises from $s slumber.", ch, NULL, NULL, TO_ROOM );
+         ch->position = POS_STANDING;
+         break;
+
+      case POS_RESTING:
+         send_to_char( "You gather yourself and stand up.\r\n", ch );
+         act( AT_ACTION, "$n rises from $s rest.", ch, NULL, NULL, TO_ROOM );
+         ch->position = POS_STANDING;
+         break;
+
+      case POS_SITTING:
+         send_to_char( "You move quickly to your feet.\r\n", ch );
+         act( AT_ACTION, "$n rises up.", ch, NULL, NULL, TO_ROOM );
+         ch->position = POS_STANDING;
+         break;
+
+      case POS_STANDING:
+         send_to_char( "You are already standing.\r\n", ch );
+         break;
+
+      case POS_FIGHTING:
+         send_to_char( "You are already fighting!\r\n", ch );
+         break;
+   }
+
+   return;
+}
+
+
+void do_sit( CHAR_DATA * ch, const char *argument )
+{
+   switch ( ch->position )
+   {
+      case POS_SLEEPING:
+         if( IS_AFFECTED( ch, AFF_SLEEP ) )
+         {
+            send_to_char( "You can't seem to wake up!\r\n", ch );
+            return;
+         }
+
+         send_to_char( "You wake and sit up.\r\n", ch );
+         act( AT_ACTION, "$n wakes and sits up.", ch, NULL, NULL, TO_ROOM );
+         ch->position = POS_SITTING;
+         break;
+
+      case POS_RESTING:
+         send_to_char( "You stop resting and sit up.\r\n", ch );
+         act( AT_ACTION, "$n stops resting and sits up.", ch, NULL, NULL, TO_ROOM );
+         ch->position = POS_SITTING;
+         break;
+
+      case POS_STANDING:
+         send_to_char( "You sit down.\r\n", ch );
+         act( AT_ACTION, "$n sits down.", ch, NULL, NULL, TO_ROOM );
+         ch->position = POS_SITTING;
+         break;
+      case POS_SITTING:
+         send_to_char( "You are already sitting.\r\n", ch );
+         return;
+
+      case POS_FIGHTING:
+         send_to_char( "You are busy fighting!\r\n", ch );
+         return;
+      case POS_MOUNTED:
+         send_to_char( "You are already sitting - on your mount.\r\n", ch );
+         return;
+   }
+
+   return;
+}
+
+
+void do_rest( CHAR_DATA * ch, const char *argument )
+{
+   switch ( ch->position )
+   {
+      case POS_SLEEPING:
+         if( IS_AFFECTED( ch, AFF_SLEEP ) )
+         {
+            send_to_char( "You can't seem to wake up!\r\n", ch );
+            return;
+         }
+
+         send_to_char( "You rouse from your slumber.\r\n", ch );
+         act( AT_ACTION, "$n rouses from $s slumber.", ch, NULL, NULL, TO_ROOM );
+         ch->position = POS_RESTING;
+         break;
+
+      case POS_RESTING:
+         send_to_char( "You are already resting.\r\n", ch );
+         return;
+
+      case POS_STANDING:
+         send_to_char( "You sprawl out haphazardly.\r\n", ch );
+         act( AT_ACTION, "$n sprawls out haphazardly.", ch, NULL, NULL, TO_ROOM );
+         ch->position = POS_RESTING;
+         break;
+
+      case POS_SITTING:
+         send_to_char( "You lie back and sprawl out to rest.\r\n", ch );
+         act( AT_ACTION, "$n lies back and sprawls out to rest.", ch, NULL, NULL, TO_ROOM );
+         ch->position = POS_RESTING;
+         break;
+
+      case POS_FIGHTING:
+         send_to_char( "You are busy fighting!\r\n", ch );
+         return;
+      case POS_MOUNTED:
+         send_to_char( "You'd better dismount first.\r\n", ch );
+         return;
+   }
+
+   rprog_rest_trigger( ch );
+   return;
+}
+
+
+void do_sleep( CHAR_DATA * ch, const char *argument )
+{
+   switch ( ch->position )
+   {
+      case POS_SLEEPING:
+         send_to_char( "You are already sleeping.\r\n", ch );
+         return;
+
+      case POS_RESTING:
+         if( ch->mental_state > 30 && ( number_percent(  ) + 10 ) < ch->mental_state )
+         {
+            send_to_char( "You just can't seem to calm yourself down enough to sleep.\r\n", ch );
+            act( AT_ACTION, "$n closes $s eyes for a few moments, but just can't seem to go to sleep.", ch, NULL, NULL,
+                 TO_ROOM );
+            return;
+         }
+         send_to_char( "You close your eyes and drift into slumber.\r\n", ch );
+         act( AT_ACTION, "$n closes $s eyes and drifts into a deep slumber.", ch, NULL, NULL, TO_ROOM );
+         ch->position = POS_SLEEPING;
+         break;
+
+      case POS_SITTING:
+         if( ch->mental_state > 30 && ( number_percent(  ) + 5 ) < ch->mental_state )
+         {
+            send_to_char( "You just can't seem to calm yourself down enough to sleep.\r\n", ch );
+            act( AT_ACTION, "$n closes $s eyes for a few moments, but just can't seem to go to sleep.", ch, NULL, NULL,
+                 TO_ROOM );
+            return;
+         }
+         send_to_char( "You slump over and fall dead asleep.\r\n", ch );
+         act( AT_ACTION, "$n nods off and slowly slumps over, dead asleep.", ch, NULL, NULL, TO_ROOM );
+         ch->position = POS_SLEEPING;
+         break;
+
+      case POS_STANDING:
+         if( ch->mental_state > 30 && number_percent(  ) < ch->mental_state )
+         {
+            send_to_char( "You just can't seem to calm yourself down enough to sleep.\r\n", ch );
+            act( AT_ACTION, "$n closes $s eyes for a few moments, but just can't seem to go to sleep.", ch, NULL, NULL,
+                 TO_ROOM );
+            return;
+         }
+         send_to_char( "You collapse into a deep sleep.\r\n", ch );
+         act( AT_ACTION, "$n collapses into a deep sleep.", ch, NULL, NULL, TO_ROOM );
+         ch->position = POS_SLEEPING;
+         break;
+
+      case POS_FIGHTING:
+         send_to_char( "You are busy fighting!\r\n", ch );
+         return;
+      case POS_MOUNTED:
+         send_to_char( "You really should dismount first.\r\n", ch );
+         return;
+   }
+
+   rprog_sleep_trigger( ch );
+   return;
+}
+
+
+void do_wake( CHAR_DATA * ch, const char *argument )
+{
+   char arg[MAX_INPUT_LENGTH];
+   CHAR_DATA *victim;
+
+   one_argument( argument, arg );
+   if( arg[0] == '\0' )
+   {
+      do_stand( ch, argument );
+      return;
+   }
+
+   if( !IS_AWAKE( ch ) )
+   {
+      send_to_char( "You are asleep yourself!\r\n", ch );
+      return;
+   }
+
+   if( ( victim = get_char_room( ch, arg ) ) == NULL )
+   {
+      send_to_char( "They aren't here.\r\n", ch );
+      return;
+   }
+
+   if( IS_AWAKE( victim ) )
+   {
+      act( AT_PLAIN, "$N is already awake.", ch, NULL, victim, TO_CHAR );
+      return;
+   }
+
+   if( IS_AFFECTED( victim, AFF_SLEEP ) || victim->position < POS_SLEEPING )
+   {
+      act( AT_PLAIN, "You can't seem to wake $M!", ch, NULL, victim, TO_CHAR );
+      return;
+   }
+
+   act( AT_ACTION, "You wake $M.", ch, NULL, victim, TO_CHAR );
+   victim->position = POS_STANDING;
+   act( AT_ACTION, "$n wakes you.", ch, NULL, victim, TO_VICT );
+   return;
+}
+
+
+/*
+ * teleport a character to another room
+ */
+void teleportch( CHAR_DATA * ch, ROOM_INDEX_DATA * room, bool show )
+{
+   if( room_is_private( ch, room ) )
+      return;
+   act( AT_ACTION, "$n disappears suddenly!", ch, NULL, NULL, TO_ROOM );
+   char_from_room( ch );
+   char_to_room( ch, room );
+   act( AT_ACTION, "$n arrives suddenly!", ch, NULL, NULL, TO_ROOM );
+   if( show )
+      do_look( ch, "auto" );
+}
+
+void teleport( CHAR_DATA * ch, int room, int flags )
+{
+   CHAR_DATA *nch, *nch_next;
+   ROOM_INDEX_DATA *pRoomIndex;
+   bool show;
+
+   pRoomIndex = get_room_index( room );
+   if( !pRoomIndex )
+   {
+      bug( "%s: bad room vnum %d", __func__, room );
+      return;
+   }
+
+   if( IS_SET( flags, TELE_SHOWDESC ) )
+      show = TRUE;
+   else
+      show = FALSE;
+   if( !IS_SET( flags, TELE_TRANSALL ) )
+   {
+      teleportch( ch, pRoomIndex, show );
+      return;
+   }
+   for( nch = ch->in_room->first_person; nch; nch = nch_next )
+   {
+      nch_next = nch->next_in_room;
+      teleportch( nch, pRoomIndex, show );
+   }
+}
+
+/*
+ * "Climb" in a certain direction.				-Thoric
+ */
+void do_climb( CHAR_DATA * ch, const char *argument )
+{
+   EXIT_DATA *pexit;
+
+   if( argument[0] == '\0' )
+   {
+      for( pexit = ch->in_room->first_exit; pexit; pexit = pexit->next )
+         if( IS_SET( pexit->exit_info, EX_xCLIMB ) || IS_SET( pexit->exit_info, EX_CLIMB ) )
+         {
+            move_char( ch, pexit, 0 );
+            return;
+         }
+      send_to_char( "You cannot climb here.\r\n", ch );
+      return;
+   }
+
+   if( ( pexit = find_door( ch, argument, TRUE ) ) != NULL
+    && ( IS_SET( pexit->exit_info, EX_xCLIMB ) || IS_SET( pexit->exit_info, EX_CLIMB ) ) )
+   {
+      move_char( ch, pexit, 0 );
+      return;
+   }
+   send_to_char( "You cannot climb there.\r\n", ch );
+   return;
+}
+
+/*
+ * "enter" something (moves through an exit)			-Thoric
+ */
+void do_enter( CHAR_DATA * ch, const char *argument )
+{
+   EXIT_DATA *pexit;
+
+   if( argument[0] == '\0' )
+   {
+      for( pexit = ch->in_room->first_exit; pexit; pexit = pexit->next )
+         if( IS_SET( pexit->exit_info, EX_xENTER ) )
+         {
+            move_char( ch, pexit, 0 );
+            return;
+         }
+      send_to_char( "You cannot find an entrance here.\r\n", ch );
+      return;
+   }
+
+   if( ( pexit = find_door( ch, argument, TRUE ) ) != NULL && IS_SET( pexit->exit_info, EX_xENTER ) )
+   {
+      move_char( ch, pexit, 0 );
+      return;
+   }
+   do_board( ch, argument );
+   return;
+}
+
+/*
+ * Leave through an exit.					-Thoric
+ */
+void do_leave( CHAR_DATA * ch, const char *argument )
+{
+   EXIT_DATA *pexit;
+
+   if( argument[0] == '\0' )
+   {
+      for( pexit = ch->in_room->first_exit; pexit; pexit = pexit->next )
+         if( IS_SET( pexit->exit_info, EX_xLEAVE ) )
+         {
+            move_char( ch, pexit, 0 );
+            return;
+         }
+      do_leaveship( ch, "" );
+      return;
+   }
+
+   if( ( pexit = find_door( ch, argument, TRUE ) ) != NULL && IS_SET( pexit->exit_info, EX_xLEAVE ) )
+   {
+      move_char( ch, pexit, 0 );
+      return;
+   }
+   do_leaveship( ch, "" );
    return;
 }

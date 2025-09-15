@@ -1,29 +1,48 @@
-/* 
-
-SWFotE copyright (c) 2002 was created by
-Chris 'Tawnos' Dary (cadary@uwm.edu),
-Korey 'Eleven' King (no email),
-Matt 'Trillen' White (mwhite17@ureach.com),
-Daniel 'Danimal' Berrill (danimal924@yahoo.com),
-Richard 'Bambua' Berrill (email unknown),
-Stuart 'Ackbar' Unknown (email unknown)
-
-SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper
-based on a concept and ideas from the original SWR immortals: 
-Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn), 
-Ackbar, Satin, Streen and Bib as well as much input from our other builders 
-and players.
-
-Original SMAUG 1.4a written by Thoric (Derek Snider) with Altrag,
-Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,
-Grishnakh, Fireblade, and Nivek.
-
-Original MERC 2.1 code by Hatchet, Furey, and Kahn.
-
-Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,
-Michael Seifert, and Sebastian Hammer.
-
-*/
+/*********************************************************************************************************************************
+ *                                                                                                                   ;           *
+ *                                                                                                                  ED.          *
+ *                        ,;                             ,;                                                  :      E#Wi         *
+ *                      f#i          .    .            f#i j.         t                                      Ef     E###G.       *
+ *             ..     .E#t  GEEEEEEELDi   Dt         .E#t  EW,        Ej             ..           ..       : E#t    E#fD#W;      *
+ *            ;W,    i#W,   ,;;L#K;;.E#i  E#i       i#W,   E##j       E#,           ;W,          ,W,     .Et E#t    E#t t##L     *
+ *           j##,   L#D.       t#E   E#t  E#t      L#D.    E###D.     E#t          j##,         t##,    ,W#t E#t    E#t  .E#K,   *
+ *          G###, :K#Wfff;     t#E   E#t  E#t    :K#Wfff;  E#jG#W;    E#t         G###,        L###,   j###t E#t fi E#t    j##f  *
+ *        :E####, i##WLLLLt    t#E   E########f. i##WLLLLt E#t t##f   E#t       :E####,      .E#j##,  G#fE#t E#t L#jE#t    :E#K: *
+ *       ;W#DG##,  .E#L        t#E   E#j..K#j...  .E#L     E#t  :K#E: E#t      ;W#DG##,     ;WW; ##,:K#i E#t E#t L#LE#t   t##L   *
+ *      j###DW##,    f#E:      t#E   E#t  E#t       f#E:   E#KDDDD###iE#t     j###DW##,    j#E.  ##f#W,  E#t E#tf#E:E#t .D#W;    *
+ *     G##i,,G##,     ,WW;     t#E   E#t  E#t        ,WW;  E#f,t#Wi,,,E#t    G##i,,G##,  .D#L    ###K:   E#t E###f  E#tiW#G.     *
+ *   :K#K:   L##,      .D#;    t#E   f#t  f#t         .D#; E#t  ;#W:  E#t  :K#K:   L##, :K#t     ##D.    E#t E#K,   E#K##i       *
+ *  ;##D.    L##,        tt     fE    ii   ii           tt DWi   ,KK: E#t ;##D.    L##, ...      #G      ..  EL     E##D.        *
+ *  ,,,      .,,                 :                                    ,;. ,,,      .,,           j           :      E#t          *
+ *                                                                                                                  L:           *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                AetheriaMUD additions and changes from the Star Wars Reality code                                              *
+ *                copyright (c) 2025 /dev/null Industries - StygianRenegade                                                     *
+ *                                                                                                                               *
+ *                Star Wars Reality Code Additions and changes from the Smaug Code copyright (c) 1997                            *
+ *                by Sean Cooper                                                                                                 *
+ *                                                                                                                               *
+ *           Starwars and Starwars Names copyright(c) Disney Enterprises, Inc.... All hail the mouse overlord!                   *
+ *                                                                                                                               *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                                             SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper                       *
+ *                                                                                                                               *
+ *                           Based on a concept and ideas from the original SWR immortals:                                       *
+ *                Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn),                                  *
+ *                Ackbar, Satin, Streen and Bib as well as much input from our other builders and players.                       *
+ *                                                                                                                               *
+ *                           Original SMAUG 1.4a written by Thoric (Derek Snider) with:                                          *
+ *                Altrag, Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,                                      *
+ *                Grishnakh, Fireblade, and Nivek.                                                                               *
+ *                                                                                                                               *
+ *                           Original MERC 2.1 code by: Hatchet, Furey, and Kahn.                                                *
+ *                                                                                                                               *
+ *                           Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,                                 *
+ *                Michael Seifert, and Sebastian Hammer.                                                                         *
+ *                                                                                                                               *
+ *********************************************************************************************************************************/
 
 #include <math.h>
 #include <sys/types.h>
@@ -31,7 +50,7 @@ Michael Seifert, and Sebastian Hammer.
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include "mud.h"
+#include "mud.hpp"
 
 SHIP_DATA *first_ship;
 SHIP_DATA *last_ship;
@@ -264,7 +283,7 @@ void update_traffic(  )
    turbocar = ship_from_cockpit( ROOM_CORUSCANT_TURBOCAR );
    if( turbocar != NULL )
    {
-      mudstrlcpy( buf, "The turbocar doors close and it speeds out of the station.", MAX_STRING_LENGTH );
+      strlcpy( buf, "The turbocar doors close and it speeds out of the station.", MAX_STRING_LENGTH );
       echo_to_room( AT_YELLOW, get_room_index( turbocar->location ), buf );
       extract_ship( turbocar );
       turbocar->location = 0;
@@ -275,7 +294,7 @@ void update_traffic(  )
       turbocar->shipstate = SHIP_DOCKED;
       if( turbocar->starsystem )
          ship_from_starsystem( turbocar, turbocar->starsystem );
-      mudstrlcpy( buf, "A turbocar pulls into the platform and the doors slide open.", MAX_STRING_LENGTH );
+      strlcpy( buf, "A turbocar pulls into the platform and the doors slide open.", MAX_STRING_LENGTH );
       echo_to_room( AT_YELLOW, get_room_index( turbocar->location ), buf );
       snprintf( buf, MAX_STRING_LENGTH, "Welcome to %s.", station_name[turbocar_stop] );
       echo_to_ship( AT_CYAN, turbocar, buf );
@@ -1091,7 +1110,7 @@ void update_space(  )
          if( ship->starsystem )
             snprintf( buf, MAX_STRING_LENGTH, "&C%s&B system: ", ship->starsystem->name );
          else
-            mudstrlcpy( buf, "system: ", MAX_STRING_LENGTH );
+            strlcpy( buf, "system: ", MAX_STRING_LENGTH );
          echo_to_room_dnr( AT_BLUE, get_room_index( ship->pilotseat ), buf );
          snprintf( buf, MAX_STRING_LENGTH, "%.0f %.0f %.0f", ship->vx, ship->vy, ship->vz );
          echo_to_room( AT_LBLUE, get_room_index( ship->pilotseat ), buf );
@@ -1124,7 +1143,7 @@ void update_space(  )
             if( ship->starsystem )
                snprintf( buf, MAX_STRING_LENGTH, "&C%s&B system: ", ship->starsystem->name );
             else
-               mudstrlcpy( buf, "system: ", MAX_STRING_LENGTH );
+               strlcpy( buf, "system: ", MAX_STRING_LENGTH );
             echo_to_room_dnr( AT_BLUE, get_room_index( ship->coseat ), buf );
             snprintf( buf, MAX_STRING_LENGTH, "%.0f %.0f %.0f", ship->vx, ship->vy, ship->vz );
             echo_to_room( AT_LBLUE, get_room_index( ship->coseat ), buf );
@@ -2346,7 +2365,7 @@ void do_makestarsystem( CHAR_DATA * ch, const char *argument )
 
    argument = one_argument( argument, arg );
    snprintf( filename, 256, "%s.system", strlower( arg ) );
-   starsystem->filename = str_dup( filename );
+   starsystem->filename = strdup( filename );
    save_starsystem( starsystem );
    write_starsystem_list(  );
 }
@@ -4148,7 +4167,7 @@ void do_setship( CHAR_DATA * ch, const char *argument )
          send_to_char( "Old ship file deleted.\r\n", ch );
 
       DISPOSE( ship->filename );
-      ship->filename = str_dup( argument );
+      ship->filename = strdup( argument );
       send_to_char( "Done.\r\n", ch );
       save_ship( ship );
       write_ship_list(  );
@@ -4483,7 +4502,7 @@ void do_makeship( CHAR_DATA * ch, const char *argument )
    ship->target10 = NULL;
 
 
-   ship->filename = str_dup( arg );
+   ship->filename = strdup( arg );
    save_ship( ship );
    write_ship_list(  );
 
@@ -4544,7 +4563,7 @@ void do_copyship( CHAR_DATA * ch, const char *argument )
    ship->target1 = NULL;
    ship->target2 = NULL;
 
-   ship->filename = str_dup( arg2 );
+   ship->filename = strdup( arg2 );
    save_ship( ship );
    write_ship_list(  );
 }
@@ -6097,7 +6116,7 @@ void do_land( CHAR_DATA * ch, const char *argument )
    bool rfound = FALSE;
    int vnum;
 
-   mudstrlcpy( arg, argument, MAX_INPUT_LENGTH );
+   strlcpy( arg, argument, MAX_INPUT_LENGTH );
    argument = one_argument( argument, arg1 );
 
    if( ( ship = ship_from_pilotseat( ch->in_room->vnum ) ) == NULL )
@@ -6391,7 +6410,7 @@ void landship( SHIP_DATA * ship, char *argument )
    AREA_DATA *pArea;
    int vnum;
 
-   mudstrlcpy( arg, argument, MAX_INPUT_LENGTH );
+   strlcpy( arg, argument, MAX_INPUT_LENGTH );
    argument = one_argument( argument, arg1 );
 
    for( planet = ship->starsystem->first_planet; planet; planet = planet->next_in_system )
@@ -7672,7 +7691,7 @@ void do_target( CHAR_DATA * ch, const char *argument )
    SHIP_DATA *target;
    char buf[MAX_STRING_LENGTH];
 
-   mudstrlcpy( arg, argument, MAX_INPUT_LENGTH );
+   strlcpy( arg, argument, MAX_INPUT_LENGTH );
 
    switch ( ch->substate )
    {
@@ -7772,7 +7791,7 @@ void do_target( CHAR_DATA * ch, const char *argument )
             send_to_char( "&GTracking target.\r\n", ch );
             act( AT_PLAIN, "$n makes some adjustments on the targeting computer.", ch, NULL, argument, TO_ROOM );
             add_timer( ch, TIMER_DO_FUN, 1, do_target, 1 );
-            ch->dest_buf = str_dup( arg );
+            ch->dest_buf = strdup( arg );
             return;
          }
          send_to_char( "&RYou fail to work the controls properly.\r\n", ch );
@@ -7782,7 +7801,7 @@ void do_target( CHAR_DATA * ch, const char *argument )
       case 1:
          if( !ch->dest_buf )
             return;
-         mudstrlcpy( arg, ( const char * )ch->dest_buf, MAX_INPUT_LENGTH );
+         strlcpy( arg, ( const char * )ch->dest_buf, MAX_INPUT_LENGTH );
          DISPOSE( ch->dest_buf );
          break;
 
@@ -9697,7 +9716,7 @@ void do_tractorbeam( CHAR_DATA * ch, const char *argument )
    SHIP_DATA *target;
    char buf[MAX_STRING_LENGTH];
 
-   mudstrlcpy( arg, argument, MAX_INPUT_LENGTH );
+   strlcpy( arg, argument, MAX_INPUT_LENGTH );
 
    if( ( ship = ship_from_cockpit( ch->in_room->vnum ) ) == NULL )
    {
@@ -10917,7 +10936,7 @@ void do_sabotage( CHAR_DATA * ch, const char *argument )
    int schance;
    SHIP_DATA *ship;
 
-   mudstrlcpy( arg, argument, MAX_INPUT_LENGTH );
+   strlcpy( arg, argument, MAX_INPUT_LENGTH );
 
    switch ( ch->substate )
    {
@@ -10949,7 +10968,7 @@ void do_sabotage( CHAR_DATA * ch, const char *argument )
             send_to_char( "&GYou begin yanking at wires.\r\n", ch );
             act( AT_PLAIN, "$n starts ripping into the ships wires.", ch, NULL, argument, TO_ROOM );
             add_timer( ch, TIMER_DO_FUN, 5, do_sabotage, 1 );
-            ch->dest_buf = str_dup( arg );
+            ch->dest_buf = strdup( arg );
             return;
          }
          send_to_char( "&RYou fail to locate the proper cords to sever!\r\n", ch );
@@ -10959,7 +10978,7 @@ void do_sabotage( CHAR_DATA * ch, const char *argument )
       case 1:
          if( !ch->dest_buf )
             return;
-         mudstrlcpy( arg, ( const char * )ch->dest_buf, MAX_INPUT_LENGTH );
+         strlcpy( arg, ( const char * )ch->dest_buf, MAX_INPUT_LENGTH );
          DISPOSE( ch->dest_buf );
          break;
 
@@ -11015,7 +11034,7 @@ void do_makeshipbomb( CHAR_DATA * ch, const char *argument )
    int vnum;
    int circNum = 0, chemNum = 0;
 
-   mudstrlcpy( arg, argument, MAX_INPUT_LENGTH );
+   strlcpy( arg, argument, MAX_INPUT_LENGTH );
 
    switch ( ch->substate )
    {
@@ -11107,7 +11126,7 @@ void do_makeshipbomb( CHAR_DATA * ch, const char *argument )
             act( AT_PLAIN, "$n takes $s tools and a drink container and begins to work on something.", ch,
                  NULL, argument, TO_ROOM );
             add_timer( ch, TIMER_DO_FUN, 25, do_makeshipbomb, 1 );
-            ch->dest_buf = str_dup( arg );
+            ch->dest_buf = strdup( arg );
             return;
          }
          send_to_char( "&RYou can't figure out how to fit the parts together.\r\n", ch );
@@ -11117,7 +11136,7 @@ void do_makeshipbomb( CHAR_DATA * ch, const char *argument )
       case 1:
          if( !ch->dest_buf )
             return;
-         mudstrlcpy( arg, ( const char * )ch->dest_buf, MAX_INPUT_LENGTH );
+         strlcpy( arg, ( const char * )ch->dest_buf, MAX_INPUT_LENGTH );
          DISPOSE( ch->dest_buf );
          break;
 
@@ -11250,14 +11269,14 @@ void do_makeshipbomb( CHAR_DATA * ch, const char *argument )
    obj->level = level;
    obj->weight = weight;
    STRFREE( obj->name );
-   mudstrlcpy( buf, arg, MAX_INPUT_LENGTH );
-   mudstrlcat( buf, " bomb", MAX_INPUT_LENGTH );
+   strlcpy( buf, arg, MAX_INPUT_LENGTH );
+   strlcat( buf, " bomb", MAX_INPUT_LENGTH );
    obj->name = STRALLOC( buf );
-   mudstrlcpy( buf, arg, MAX_INPUT_LENGTH );
+   strlcpy( buf, arg, MAX_INPUT_LENGTH );
    STRFREE( obj->short_descr );
    obj->short_descr = STRALLOC( buf );
    STRFREE( obj->description );
-   mudstrlcat( buf, " was set here.", MAX_INPUT_LENGTH );
+   strlcat( buf, " was set here.", MAX_INPUT_LENGTH );
    obj->description = STRALLOC( buf );
    obj->value[0] = strength / 2;
    obj->value[1] = strength;
@@ -11287,7 +11306,7 @@ void do_shiprepair( CHAR_DATA * ch, const char *argument )
    int schance, change;
    SHIP_DATA *ship;
 
-   mudstrlcpy( arg, argument, MAX_INPUT_LENGTH );
+   strlcpy( arg, argument, MAX_INPUT_LENGTH );
 
    if( ( ch->pcdata->learned[gsn_shiprepair] ) <= 0 )
    {
@@ -11428,7 +11447,7 @@ void do_shiprepair( CHAR_DATA * ch, const char *argument )
                add_timer( ch, TIMER_DO_FUN, 15, do_shiprepair, 1 );
             else
                add_timer( ch, TIMER_DO_FUN, 5, do_shiprepair, 1 );
-            ch->dest_buf = str_dup( arg );
+            ch->dest_buf = strdup( arg );
             return;
          }
          send_to_char( "&RYou fail to locate the source of the problem.\r\n", ch );
@@ -11437,7 +11456,7 @@ void do_shiprepair( CHAR_DATA * ch, const char *argument )
       case 1:
          if( !ch->dest_buf )
             return;
-         mudstrlcpy( arg, ( const char * )ch->dest_buf, MAX_INPUT_LENGTH );
+         strlcpy( arg, ( const char * )ch->dest_buf, MAX_INPUT_LENGTH );
          DISPOSE( ch->dest_buf );
          break;
 
@@ -11690,61 +11709,61 @@ const char *ship_bit_name( int vector )
    buf[0] = '\0';
 
    if( vector & SHIP_NOHIJACK )
-      mudstrlcat( buf, " nohijack", 512 );
+      strlcat( buf, " nohijack", 512 );
    if( vector & SHIP_SHIELD_BOOST )
-      mudstrlcat( buf, " shield_boost", 512 );
+      strlcat( buf, " shield_boost", 512 );
    if( vector & SHIP_TORP_BOOST )
-      mudstrlcat( buf, " torp_boost", 512 );
+      strlcat( buf, " torp_boost", 512 );
    if( vector & SHIP_CHAFF_BOOST )
-      mudstrlcat( buf, " chaff_boost", 512 );
+      strlcat( buf, " chaff_boost", 512 );
    if( vector & SHIP_HULL_BOOST )
-      mudstrlcat( buf, " hull_boost", 512 );
+      strlcat( buf, " hull_boost", 512 );
    if( vector & SHIP_LASER_BOOST )
-      mudstrlcat( buf, " laser_boost", 512 );
+      strlcat( buf, " laser_boost", 512 );
    if( vector & SHIP_MISSILE_BOOST )
-      mudstrlcat( buf, " missile_boost", 512 );
+      strlcat( buf, " missile_boost", 512 );
    if( vector & SHIP_ROCKET_BOOST )
-      mudstrlcat( buf, " rocket_boost", 512 );
+      strlcat( buf, " rocket_boost", 512 );
    if( vector & SHIP_SIMULATOR )
-      mudstrlcat( buf, " simulator", 512 );
+      strlcat( buf, " simulator", 512 );
    if( vector & SHIP_NODESTROY )
-      mudstrlcat( buf, " nodestroy", 512 );
+      strlcat( buf, " nodestroy", 512 );
    if( vector & SHIP_NOSLICER )
-      mudstrlcat( buf, " noslicer", 512 );
+      strlcat( buf, " noslicer", 512 );
    if( vector & XSHIP_ION_LASERS )
-      mudstrlcat( buf, " ion_lasers", 512 );
+      strlcat( buf, " ion_lasers", 512 );
    if( vector & XSHIP_ION_DRIVE )
-      mudstrlcat( buf, " ion_drive", 512 );
+      strlcat( buf, " ion_drive", 512 );
    if( vector & XSHIP_ION_ION )
-      mudstrlcat( buf, " ion_ion", 512 );
+      strlcat( buf, " ion_ion", 512 );
    if( vector & XSHIP_ION_TURRET1 )
-      mudstrlcat( buf, " ion_turret1", 512 );
+      strlcat( buf, " ion_turret1", 512 );
    if( vector & XSHIP_ION_TURRET2 )
-      mudstrlcat( buf, " ion_turret2", 512 );
+      strlcat( buf, " ion_turret2", 512 );
    if( vector & XSHIP_ION_TURRET3 )
-      mudstrlcat( buf, " ion_turret3", 512 );
+      strlcat( buf, " ion_turret3", 512 );
    if( vector & XSHIP_ION_TURRET4 )
-      mudstrlcat( buf, " ion_turret4", 512 );
+      strlcat( buf, " ion_turret4", 512 );
    if( vector & XSHIP_ION_TURRET5 )
-      mudstrlcat( buf, " ion_turret5", 512 );
+      strlcat( buf, " ion_turret5", 512 );
    if( vector & XSHIP_ION_TURRET6 )
-      mudstrlcat( buf, " ion_turret6", 512 );
+      strlcat( buf, " ion_turret6", 512 );
    if( vector & XSHIP_ION_TURRET7 )
-      mudstrlcat( buf, " ion_turret7", 512 );
+      strlcat( buf, " ion_turret7", 512 );
    if( vector & XSHIP_ION_TURRET8 )
-      mudstrlcat( buf, " ion_turret8", 512 );
+      strlcat( buf, " ion_turret8", 512 );
    if( vector & XSHIP_ION_TURRET9 )
-      mudstrlcat( buf, " ion_turret9", 512 );
+      strlcat( buf, " ion_turret9", 512 );
    if( vector & XSHIP_ION_TURRET10 )
-      mudstrlcat( buf, " ion_turret10", 512 );
+      strlcat( buf, " ion_turret10", 512 );
    if( vector & SHIP_RESPAWN )
-      mudstrlcat( buf, " respawn", 512 );
+      strlcat( buf, " respawn", 512 );
    if( vector & XSHIP_ION_MISSILES )
-      mudstrlcat( buf, " ion_missiles", 512 );
+      strlcat( buf, " ion_missiles", 512 );
    if( vector & XSHIP_ION_HYPER )
-      mudstrlcat( buf, " ion_hyper", 512 );
+      strlcat( buf, " ion_hyper", 512 );
    if( vector & SHIP_CLOAK )
-      mudstrlcat( buf, " cloak", 512 );
+      strlcat( buf, " cloak", 512 );
 
    return ( buf[0] != '\0' ) ? buf + 1 : "none";
 }

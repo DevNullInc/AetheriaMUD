@@ -1,44 +1,90 @@
-/* 
-SWFotE copyright (c) 2002 was created by
-Chris 'Tawnos' Dary (cadary@uwm.edu),
-Korey 'Eleven' King (no email),
-Matt 'Trillen' White (mwhite17@ureach.com),
-Daniel 'Danimal' Berrill (danimal924@yahoo.com),
-Richard 'Bambua' Berrill (email unknown),
-Stuart 'Ackbar' Unknown (email unknown)
+/*********************************************************************************************************************************
+ *                                                                                                                   ;           *
+ *                                                                                                                  ED.          *
+ *                        ,;                             ,;                                                  :      E#Wi         *
+ *                      f#i          .    .            f#i j.         t                                      Ef     E###G.       *
+ *             ..     .E#t  GEEEEEEELDi   Dt         .E#t  EW,        Ej             ..           ..       : E#t    E#fD#W;      *
+ *            ;W,    i#W,   ,;;L#K;;.E#i  E#i       i#W,   E##j       E#,           ;W,          ,W,     .Et E#t    E#t t##L     *
+ *           j##,   L#D.       t#E   E#t  E#t      L#D.    E###D.     E#t          j##,         t##,    ,W#t E#t    E#t  .E#K,   *
+ *          G###, :K#Wfff;     t#E   E#t  E#t    :K#Wfff;  E#jG#W;    E#t         G###,        L###,   j###t E#t fi E#t    j##f  *
+ *        :E####, i##WLLLLt    t#E   E########f. i##WLLLLt E#t t##f   E#t       :E####,      .E#j##,  G#fE#t E#t L#jE#t    :E#K: *
+ *       ;W#DG##,  .E#L        t#E   E#j..K#j...  .E#L     E#t  :K#E: E#t      ;W#DG##,     ;WW; ##,:K#i E#t E#t L#LE#t   t##L   *
+ *      j###DW##,    f#E:      t#E   E#t  E#t       f#E:   E#KDDDD###iE#t     j###DW##,    j#E.  ##f#W,  E#t E#tf#E:E#t .D#W;    *
+ *     G##i,,G##,     ,WW;     t#E   E#t  E#t        ,WW;  E#f,t#Wi,,,E#t    G##i,,G##,  .D#L    ###K:   E#t E###f  E#tiW#G.     *
+ *   :K#K:   L##,      .D#;    t#E   f#t  f#t         .D#; E#t  ;#W:  E#t  :K#K:   L##, :K#t     ##D.    E#t E#K,   E#K##i       *
+ *  ;##D.    L##,        tt     fE    ii   ii           tt DWi   ,KK: E#t ;##D.    L##, ...      #G      ..  EL     E##D.        *
+ *  ,,,      .,,                 :                                    ,;. ,,,      .,,           j           :      E#t          *
+ *                                                                                                                  L:           *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                AetheriaMUD additions and changes from the Star Wars Reality code                                              *
+ *                copyright (c) 2025 /dev/null Industries - StygianRenegade                                                     *
+ *                                                                                                                               *
+ *                Star Wars Reality Code Additions and changes from the Smaug Code copyright (c) 1997                            *
+ *                by Sean Cooper                                                                                                 *
+ *                                                                                                                               *
+ *           Starwars and Starwars Names copyright(c) Disney Enterprises, Inc.... All hail the mouse overlord!                   *
+ *                                                                                                                               *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                                             SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper                       *
+ *                                                                                                                               *
+ *                           Based on a concept and ideas from the original SWR immortals:                                       *
+ *                Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn),                                  *
+ *                Ackbar, Satin, Streen and Bib as well as much input from our other builders and players.                       *
+ *                                                                                                                               *
+ *                           Original SMAUG 1.4a written by Thoric (Derek Snider) with:                                          *
+ *                Altrag, Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,                                      *
+ *                Grishnakh, Fireblade, and Nivek.                                                                               *
+ *                                                                                                                               *
+ *                           Original MERC 2.1 code by: Hatchet, Furey, and Kahn.                                                *
+ *                                                                                                                               *
+ *                           Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,                                 *
+ *                Michael Seifert, and Sebastian Hammer.                                                                         *
+ *                                                                                                                               *
+ *********************************************************************************************************************************/
 
-SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper
-based on a concept and ideas from the original SWR immortals: 
-Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn), 
-Ackbar, Satin, Streen and Bib as well as much input from our other builders 
-and players.
-
-Original SMAUG 1.4a written by Thoric (Derek Snider) with Altrag,
-Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,
-Grishnakh, Fireblade, and Nivek.
-
-Original MERC 2.1 code by Hatchet, Furey, and Kahn.
-
-Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,
-Michael Seifert, and Sebastian Hammer.
-*/
-
-#include <cstdlib>
-#include <climits>
+#include <stdlib.h>
+#include <limits.h>
 #include <sys/cdefs.h>
 #include <sys/time.h>
-#include <cmath>
+#include <math.h>
 #ifdef __cplusplus
 #include <typeinfo>
 #endif
 
-#define CODENAME "Aetheria"
-#define CODEVERSION "1.24b"
+using namespace std;
+
+#define CODENAME "SWFotEFUSS"
+#define CODEVERSION "1.5.3"
+
+// Backward compatibility for snippets and such.
+#define mudstrlcpy strlcpy
+#define mudstrlcat strlcat
+#define str_dup strdup
 
 typedef int ch_ret;
 typedef int obj_ret;
 
-// Function prototypes and DECLARE_DO_FUN/DECLARE_SPELL_FUN macros have been moved to mud_functions.hpp
+#ifdef __cplusplus
+#define DECLARE_DO_FUN( fun )    extern "C" { DO_FUN    fun; } DO_FUN fun##_mangled
+#define DECLARE_SPEC_FUN( fun )  extern "C" { SPEC_FUN  fun; } SPEC_FUN fun##_mangled
+#define DECLARE_SPELL_FUN( fun ) extern "C" { SPELL_FUN fun; } SPELL_FUN fun##_mangled
+#else
+#define DECLARE_DO_FUN( fun )     DO_FUN    fun; DO_FUN fun##_mangled
+#define DECLARE_SPEC_FUN( fun )   SPEC_FUN  fun; SPEC_FUN fun##_mangled
+#define DECLARE_SPELL_FUN( fun )  SPELL_FUN fun; SPELL_FUN fun##_mangled
+#endif
+
+/* Stuff from newarena.c */
+void show_jack_pot( void );
+void do_game( void );
+int num_in_arena( void );
+void find_game_winner( void );
+void do_end_game( void );
+void start_game( void );
+void silent_end( void );
+void write_fame_list( void );
 void load_hall_of_fame( void );
 
 /*
@@ -48,10 +94,6 @@ void load_hall_of_fame( void );
 const bool TRUE = true;
 const bool FALSE = false;
 const short BERR = 255;
-
-#ifndef __cplusplus
-typedef unsigned char bool;
-#endif
 
 #define KEY( literal, field, value )   \
 if ( !str_cmp( word, (literal) ) )     \
@@ -616,9 +658,10 @@ struct frc_app_type
 #define HUNTING_ABILITY		3
 #define SMUGGLING_ABILITY	4
 /*#define DIPLOMACY_ABILITY	5
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 #define LEADERSHIP_ABILITY	6*//*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         * Gonna replace the diplomacy and leadership abilities and make them POLITICIANs 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         */
+#define LEADERSHIP_ABILITY	6*/
+/*
+ * Gonna replace the diplomacy and leadership abilities and make them POLITICIANs 
+*/
 #define POLITICIAN_ABILITY	5
 #define FORCE_ABILITY		6
 #define SLICER_ABILITY		7
@@ -2100,7 +2143,6 @@ typedef enum
 #define ROOM_VNUM_ALTAR		  32144
 #define ROOM_VNUM_SCHOOL	    115
 #define ROOM_AUTH_START		  10300
-
 #define ROOM_START_HUMAN            211
 #define ROOM_START_WOOKIEE        28600
 #define ROOM_START_TWILEK         32148
@@ -3494,7 +3536,7 @@ do                                               \
    {                                             \
       if( !in_hash_table( (point) ) )            \
       {                                          \
-         log_printf( "&RSTRFREE called on str_dup pointer: %s, line %d\n", __FILE__, __LINE__ ); \
+         log_printf( "&RSTRFREE called on strdup pointer: %s, line %d\n", __FILE__, __LINE__ ); \
          log_string( "Attempting to correct." ); \
          free( (void*) (point) );                \
       }                                          \
@@ -5048,7 +5090,6 @@ void reset_area( AREA_DATA * pArea );
 char *fread_flagstring( FILE * fp );
 void show_file( CHAR_DATA * ch, const char *filename );
 bool is_valid_filename( CHAR_DATA * ch, const char *direct, const char *filename );
-char *str_dup( char const *str );
 const char *centertext( const char *text, size_t size );
 void boot_db( bool fCopyOver );
 void area_update( void );
@@ -5110,8 +5151,6 @@ void delete_obj( OBJ_INDEX_DATA * obj );
 void delete_mob( MOB_INDEX_DATA * mob );
 void sort_area( AREA_DATA * pArea, bool proto );
 void sort_area_by_name( AREA_DATA * pArea ); /* Fireblade */
-size_t mudstrlcat( char * __restrict dst, const char * __restrict src, size_t dsize );
-size_t mudstrlcpy( char * __restrict dst, const char * __restrict src, size_t dsize );
 
 /* build.c */
 bool can_rmodify( CHAR_DATA * ch, ROOM_INDEX_DATA * room );

@@ -1,35 +1,54 @@
-/* 
-
-SWFotE copyright (c) 2002 was created by
-Chris 'Tawnos' Dary (cadary@uwm.edu),
-Korey 'Eleven' King (no email),
-Matt 'Trillen' White (mwhite17@ureach.com),
-Daniel 'Danimal' Berrill (danimal924@yahoo.com),
-Richard 'Bambua' Berrill (email unknown),
-Stuart 'Ackbar' Unknown (email unknown)
-
-SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper
-based on a concept and ideas from the original SWR immortals: 
-Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn), 
-Ackbar, Satin, Streen and Bib as well as much input from our other builders 
-and players.
-
-Original SMAUG 1.4a written by Thoric (Derek Snider) with Altrag,
-Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,
-Grishnakh, Fireblade, and Nivek.
-
-Original MERC 2.1 code by Hatchet, Furey, and Kahn.
-
-Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,
-Michael Seifert, and Sebastian Hammer.
-
-*/
+/*********************************************************************************************************************************
+ *                                                                                                                   ;           *
+ *                                                                                                                  ED.          *
+ *                        ,;                             ,;                                                  :      E#Wi         *
+ *                      f#i          .    .            f#i j.         t                                      Ef     E###G.       *
+ *             ..     .E#t  GEEEEEEELDi   Dt         .E#t  EW,        Ej             ..           ..       : E#t    E#fD#W;      *
+ *            ;W,    i#W,   ,;;L#K;;.E#i  E#i       i#W,   E##j       E#,           ;W,          ,W,     .Et E#t    E#t t##L     *
+ *           j##,   L#D.       t#E   E#t  E#t      L#D.    E###D.     E#t          j##,         t##,    ,W#t E#t    E#t  .E#K,   *
+ *          G###, :K#Wfff;     t#E   E#t  E#t    :K#Wfff;  E#jG#W;    E#t         G###,        L###,   j###t E#t fi E#t    j##f  *
+ *        :E####, i##WLLLLt    t#E   E########f. i##WLLLLt E#t t##f   E#t       :E####,      .E#j##,  G#fE#t E#t L#jE#t    :E#K: *
+ *       ;W#DG##,  .E#L        t#E   E#j..K#j...  .E#L     E#t  :K#E: E#t      ;W#DG##,     ;WW; ##,:K#i E#t E#t L#LE#t   t##L   *
+ *      j###DW##,    f#E:      t#E   E#t  E#t       f#E:   E#KDDDD###iE#t     j###DW##,    j#E.  ##f#W,  E#t E#tf#E:E#t .D#W;    *
+ *     G##i,,G##,     ,WW;     t#E   E#t  E#t        ,WW;  E#f,t#Wi,,,E#t    G##i,,G##,  .D#L    ###K:   E#t E###f  E#tiW#G.     *
+ *   :K#K:   L##,      .D#;    t#E   f#t  f#t         .D#; E#t  ;#W:  E#t  :K#K:   L##, :K#t     ##D.    E#t E#K,   E#K##i       *
+ *  ;##D.    L##,        tt     fE    ii   ii           tt DWi   ,KK: E#t ;##D.    L##, ...      #G      ..  EL     E##D.        *
+ *  ,,,      .,,                 :                                    ,;. ,,,      .,,           j           :      E#t          *
+ *                                                                                                                  L:           *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                AetheriaMUD additions and changes from the Star Wars Reality code                                              *
+ *                copyright (c) 2025 /dev/null Industries - StygianRenegade                                                     *
+ *                                                                                                                               *
+ *                Star Wars Reality Code Additions and changes from the Smaug Code copyright (c) 1997                            *
+ *                by Sean Cooper                                                                                                 *
+ *                                                                                                                               *
+ *           Starwars and Starwars Names copyright(c) Disney Enterprises, Inc.... All hail the mouse overlord!                   *
+ *                                                                                                                               *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                                             SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper                       *
+ *                                                                                                                               *
+ *                           Based on a concept and ideas from the original SWR immortals:                                       *
+ *                Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn),                                  *
+ *                Ackbar, Satin, Streen and Bib as well as much input from our other builders and players.                       *
+ *                                                                                                                               *
+ *                           Original SMAUG 1.4a written by Thoric (Derek Snider) with:                                          *
+ *                Altrag, Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,                                      *
+ *                Grishnakh, Fireblade, and Nivek.                                                                               *
+ *                                                                                                                               *
+ *                           Original MERC 2.1 code by: Hatchet, Furey, and Kahn.                                                *
+ *                                                                                                                               *
+ *                           Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,                                 *
+ *                Michael Seifert, and Sebastian Hammer.                                                                         *
+ *                                                                                                                               *
+ *********************************************************************************************************************************/
 
 #include <sys/types.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include "mud.h"
+#include "mud.hpp"
 
 bool MOBtrigger;
 
@@ -373,7 +392,7 @@ int mprog_do_ifcheck( char *ifcheck, CHAR_DATA * mob, CHAR_DATA * actor, OBJ_DAT
       if( rhsvl < 1 )
          rhsvl = 1;
       if( !*opr )
-         mudstrlcpy( opr, "==", MAX_INPUT_LENGTH );
+         strlcpy( opr, "==", MAX_INPUT_LENGTH );
       return mprog_veval( lhsvl, opr, rhsvl, mob );
    }
    if( !str_cmp( chck, "timeskilled" ) )
@@ -410,7 +429,7 @@ int mprog_do_ifcheck( char *ifcheck, CHAR_DATA * mob, CHAR_DATA * actor, OBJ_DAT
       if( rhsvl < 1 )
          rhsvl = 1;
       if( !*opr )
-         mudstrlcpy( opr, "==", MAX_INPUT_LENGTH );
+         strlcpy( opr, "==", MAX_INPUT_LENGTH );
       return mprog_veval( lhsvl, opr, rhsvl, mob );
    }
    if( !str_cmp( chck, "otypehere" ) )
@@ -438,7 +457,7 @@ int mprog_do_ifcheck( char *ifcheck, CHAR_DATA * mob, CHAR_DATA * actor, OBJ_DAT
       if( rhsvl < 1 )
          rhsvl = 1;
       if( !*opr )
-         mudstrlcpy( opr, "==", MAX_INPUT_LENGTH );
+         strlcpy( opr, "==", MAX_INPUT_LENGTH );
       return mprog_veval( lhsvl, opr, rhsvl, mob );
    }
    if( !str_cmp( chck, "ovnumroom" ) )
@@ -459,7 +478,7 @@ int mprog_do_ifcheck( char *ifcheck, CHAR_DATA * mob, CHAR_DATA * actor, OBJ_DAT
       if( rhsvl < 1 )
          rhsvl = 1;
       if( !*opr )
-         mudstrlcpy( opr, "==", MAX_INPUT_LENGTH );
+         strlcpy( opr, "==", MAX_INPUT_LENGTH );
       return mprog_veval( lhsvl, opr, rhsvl, mob );
    }
    if( !str_cmp( chck, "otyperoom" ) )
@@ -484,7 +503,7 @@ int mprog_do_ifcheck( char *ifcheck, CHAR_DATA * mob, CHAR_DATA * actor, OBJ_DAT
       if( rhsvl < 1 )
          rhsvl = 1;
       if( !*opr )
-         mudstrlcpy( opr, "==", MAX_INPUT_LENGTH);
+         strlcpy( opr, "==", MAX_INPUT_LENGTH);
       return mprog_veval( lhsvl, opr, rhsvl, mob );
    }
    if( !str_cmp( chck, "ovnumcarry" ) )
@@ -505,7 +524,7 @@ int mprog_do_ifcheck( char *ifcheck, CHAR_DATA * mob, CHAR_DATA * actor, OBJ_DAT
       if( rhsvl < 1 )
          rhsvl = 1;
       if( !*opr )
-         mudstrlcpy( opr, "==", MAX_INPUT_LENGTH );
+         strlcpy( opr, "==", MAX_INPUT_LENGTH );
       return mprog_veval( lhsvl, opr, rhsvl, mob );
    }
    if( !str_cmp( chck, "otypecarry" ) )
@@ -530,7 +549,7 @@ int mprog_do_ifcheck( char *ifcheck, CHAR_DATA * mob, CHAR_DATA * actor, OBJ_DAT
       if( rhsvl < 1 )
          rhsvl = 1;
       if( !*opr )
-         mudstrlcpy( opr, "==", MAX_INPUT_LENGTH );
+         strlcpy( opr, "==", MAX_INPUT_LENGTH );
       return mprog_veval( lhsvl, opr, rhsvl, mob );
    }
    if( !str_cmp( chck, "ovnumwear" ) )
@@ -551,7 +570,7 @@ int mprog_do_ifcheck( char *ifcheck, CHAR_DATA * mob, CHAR_DATA * actor, OBJ_DAT
       if( rhsvl < 1 )
          rhsvl = 1;
       if( !*opr )
-         mudstrlcpy( opr, "==", MAX_INPUT_LENGTH );
+         strlcpy( opr, "==", MAX_INPUT_LENGTH );
       return mprog_veval( lhsvl, opr, rhsvl, mob );
    }
    if( !str_cmp( chck, "otypewear" ) )
@@ -576,7 +595,7 @@ int mprog_do_ifcheck( char *ifcheck, CHAR_DATA * mob, CHAR_DATA * actor, OBJ_DAT
       if( rhsvl < 1 )
          rhsvl = 1;
       if( !*opr )
-         mudstrlcpy( opr, "==", MAX_INPUT_LENGTH );
+         strlcpy( opr, "==", MAX_INPUT_LENGTH );
       return mprog_veval( lhsvl, opr, rhsvl, mob );
    }
    if( !str_cmp( chck, "ovnuminv" ) )
@@ -597,7 +616,7 @@ int mprog_do_ifcheck( char *ifcheck, CHAR_DATA * mob, CHAR_DATA * actor, OBJ_DAT
       if( rhsvl < 1 )
          rhsvl = 1;
       if( !*opr )
-         mudstrlcpy( opr, "==", MAX_INPUT_LENGTH );
+         strlcpy( opr, "==", MAX_INPUT_LENGTH );
       return mprog_veval( lhsvl, opr, rhsvl, mob );
    }
    if( !str_cmp( chck, "otypeinv" ) )
@@ -622,7 +641,7 @@ int mprog_do_ifcheck( char *ifcheck, CHAR_DATA * mob, CHAR_DATA * actor, OBJ_DAT
       if( rhsvl < 1 )
          rhsvl = 1;
       if( !*opr )
-         mudstrlcpy( opr, "==", MAX_INPUT_LENGTH );
+         strlcpy( opr, "==", MAX_INPUT_LENGTH );
       return mprog_veval( lhsvl, opr, rhsvl, mob );
    }
    if( chkchar )
@@ -1323,7 +1342,7 @@ void mprog_driver( char *com_list, CHAR_DATA * mob, CHAR_DATA * actor, OBJ_DATA 
          count++;
       }
 
-   mudstrlcpy( tmpcmndlst, com_list, MAX_STRING_LENGTH );
+   strlcpy( tmpcmndlst, com_list, MAX_STRING_LENGTH );
    command_list = tmpcmndlst;
 
    /*
@@ -1882,9 +1901,9 @@ bool mprog_keyword_check( const char *argu, const char *argl )
    char *arg, *arglist;
    char *start, *end;
 
-   mudstrlcpy( arg1, strlower( argu ), MAX_INPUT_LENGTH );
+   strlcpy( arg1, strlower( argu ), MAX_INPUT_LENGTH );
    arg = arg1;
-   mudstrlcpy( arg2, strlower( argl ), MAX_INPUT_LENGTH );
+   strlcpy( arg2, strlower( argl ), MAX_INPUT_LENGTH );
    arglist = arg2;
 
    for( i = 0; i < strlen( arglist ); i++ )
@@ -1935,11 +1954,11 @@ void mprog_wordlist_check( const char *arg, CHAR_DATA * mob, CHAR_DATA * actor, 
    for( mprg = mob->pIndexData->mudprogs; mprg; mprg = mprg->next )
       if( mprg->type & type )
       {
-         mudstrlcpy( temp1, mprg->arglist, MAX_STRING_LENGTH );
+         strlcpy( temp1, mprg->arglist, MAX_STRING_LENGTH );
          list = temp1;
          for( i = 0; i < strlen( list ); i++ )
             list[i] = LOWER( list[i] );
-         mudstrlcpy( temp2, arg, MAX_INPUT_LENGTH );
+         strlcpy( temp2, arg, MAX_INPUT_LENGTH );
          dupl = temp2;
          for( i = 0; i < strlen( dupl ); i++ )
             dupl[i] = LOWER( dupl[i] );
@@ -2104,7 +2123,7 @@ void mprog_act_trigger( char *buf, CHAR_DATA * mob, CHAR_DATA * ch, OBJ_DATA * o
          mob->mpact = tmp_act;
 
       tmp_act->next = NULL;
-      tmp_act->buf = str_dup( buf );
+      tmp_act->buf = strdup( buf );
       tmp_act->ch = ch;
       tmp_act->obj = obj;
       tmp_act->vo = vo;
@@ -2442,7 +2461,7 @@ int oprog_custom_trigger( const char *command, const char *argument, CHAR_DATA *
          {
             if( mprg->type & CUSTOM_PROG )
             {
-               temp = str_dup( mprg->arglist );
+               temp = strdup( mprg->arglist );
                temp = one_argument( temp, pcom );
                temp = one_argument( temp, parg );
                if( !strcmp( pcom, command ) )
@@ -2474,7 +2493,7 @@ int oprog_custom_trigger( const char *command, const char *argument, CHAR_DATA *
             {
                if( mprg->type & CUSTOM_PROG )
                {
-                  temp = str_dup( mprg->arglist );
+                  temp = strdup( mprg->arglist );
                   temp = one_argument( temp, pcom );
                   temp = one_argument( temp, parg );
                   if( !strcmp( pcom, command ) )
@@ -2523,7 +2542,7 @@ int mprog_custom_trigger( const char *command, const char *argument, CHAR_DATA *
          {
             if( mprg->type & CUSTOM_PROG )
             {
-               temp = str_dup( mprg->arglist );
+               temp = strdup( mprg->arglist );
                temp = one_argument( temp, pcom );
                temp = one_argument( temp, parg );
                if( !strcmp( pcom, command ) )
@@ -2564,7 +2583,7 @@ int rprog_custom_trigger( const char *command, const char *argument, CHAR_DATA *
    {
       if( mprg->type & CUSTOM_PROG )
       {
-         temp = str_dup( mprg->arglist );
+         temp = strdup( mprg->arglist );
          temp = one_argument( temp, pcom );
          temp = one_argument( temp, parg );
          if( !strcmp( pcom, command ) )
@@ -2873,7 +2892,7 @@ void oprog_act_trigger( char *buf, OBJ_DATA * mobj, CHAR_DATA * ch, OBJ_DATA * o
          mobj->mpact = tmp_act;
 
       tmp_act->next = NULL;
-      tmp_act->buf = str_dup( buf );
+      tmp_act->buf = strdup( buf );
       tmp_act->ch = ch;
       tmp_act->obj = obj;
       tmp_act->vo = vo;
@@ -2899,11 +2918,11 @@ void oprog_wordlist_check( const char *arg, CHAR_DATA * mob, CHAR_DATA * actor,
    for( mprg = iobj->pIndexData->mudprogs; mprg; mprg = mprg->next )
       if( mprg->type & type )
       {
-         mudstrlcpy( temp1, mprg->arglist, MAX_STRING_LENGTH );
+         strlcpy( temp1, mprg->arglist, MAX_STRING_LENGTH );
          list = temp1;
          for( i = 0; i < strlen( list ); i++ )
             list[i] = LOWER( list[i] );
-         mudstrlcpy( temp2, arg, MAX_INPUT_LENGTH );
+         strlcpy( temp2, arg, MAX_INPUT_LENGTH );
          dupl = temp2;
          for( i = 0; i < strlen( dupl ); i++ )
             dupl[i] = LOWER( dupl[i] );
@@ -3028,7 +3047,7 @@ void rprog_act_trigger( char *buf, ROOM_INDEX_DATA * room, CHAR_DATA * ch, OBJ_D
          room->mpact = tmp_act;
 
       tmp_act->next = NULL;
-      tmp_act->buf = str_dup( buf );
+      tmp_act->buf = strdup( buf );
       tmp_act->ch = ch;
       tmp_act->obj = obj;
       tmp_act->vo = vo;
@@ -3152,11 +3171,11 @@ void rprog_wordlist_check( const char *arg, CHAR_DATA * mob, CHAR_DATA * actor,
    for( mprg = room->mudprogs; mprg; mprg = mprg->next )
       if( mprg->type & type )
       {
-         mudstrlcpy( temp1, mprg->arglist, MAX_STRING_LENGTH );
+         strlcpy( temp1, mprg->arglist, MAX_STRING_LENGTH );
          list = temp1;
          for( i = 0; i < strlen( list ); i++ )
             list[i] = LOWER( list[i] );
-         mudstrlcpy( temp2, arg, MAX_INPUT_LENGTH );
+         strlcpy( temp2, arg, MAX_INPUT_LENGTH );
          dupl = temp2;
          for( i = 0; i < strlen( dupl ); i++ )
             dupl[i] = LOWER( dupl[i] );

@@ -51,7 +51,7 @@
  *                /-----\  |      | \  |  v  | |     | |  /                 *
  *               /       \ |      |  \ |     | +-----+ +-/                  *
  ****************************************************************************
- * AFKMud Copyright 1997-2019 by Roger Libiez (Samson),                     *
+ * AFKMud Copyright 1997-2025 by Roger Libiez (Samson),                     *
  * Levi Beckerson (Whir), Michael Ward (Tarl), Erik Wolfe (Dwip),           *
  * Cameron Carroll (Cam), Cyberfox, Karangi, Rathian, Raine,                *
  * Xorith, and Adjani.                                                      *
@@ -79,7 +79,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <errno.h>
-#include "mud.h"
+#include "mud.hpp"
 
 DNS_DATA *first_cache;
 DNS_DATA *last_cache;
@@ -128,7 +128,7 @@ void add_dns( const char *dhost, const char *address )
    save_dns(  );
 }
 
-char *in_dns_cache( char *ip )
+char *in_dns_cache( const char *ip )
 {
    DNS_DATA *cache;
    static char dnsbuf[MAX_STRING_LENGTH];
@@ -139,7 +139,7 @@ char *in_dns_cache( char *ip )
    {
       if( !str_cmp( ip, cache->ip ) )
       {
-         strncpy( dnsbuf, cache->name, MAX_STRING_LENGTH );
+         strlcpy( dnsbuf, cache->name, MAX_STRING_LENGTH );
          break;
       }
    }
@@ -366,6 +366,7 @@ bool read_from_dns( int fd, char *buffer )
 void process_dns( DESCRIPTOR_DATA * d )
 {
    char address[MAX_INPUT_LENGTH];
+   int status;
 
    address[0] = '\0';
 
@@ -374,9 +375,17 @@ void process_dns( DESCRIPTOR_DATA * d )
 
    if( address[0] != '\0' )
    {
-      add_dns( d->host, address );  /* Add entry to DNS cache */
-      STRFREE( d->host );
-      d->host = STRALLOC( address );
+      /*
+       * The resolver will only return 2 error states, described in the string comparisons here.
+       * If either of these come back from it, do not add it to the cache, and do not set the host on the descriptior to it either.
+       * The descriptor's IP will have alredy been set by default before the resolver was called.
+       */
+      if( str_cmp( address, "bad.resolver.call" ) && str_cmp( address, "somehow.has.no.ip?" ) )
+      {
+         add_dns( d->host, address );
+         STRFREE( d->host );
+         d->host = STRALLOC( address );
+      }
    }
 
    /*
@@ -387,10 +396,24 @@ void process_dns( DESCRIPTOR_DATA * d )
       close( d->ifd );
       d->ifd = -1;
    }
+
+   /*
+    * we don't have to check here, 
+    * cos the child is probably dead already. (but out of safety we do)
+    * 
+    * (later) I found this not to be true. The call to waitpid( ) is
+    * necessary, because otherwise the child processes become zombie
+    * and keep lingering around... The waitpid( ) removes them.
+    */
+   if( d->ipid != -1 )
+   {
+      waitpid( d->ipid, &status, 0 );
+      d->ipid = -1;
+   }
 }
 
 /* DNS Resolver hook. Code written by Trax of Forever's End */
-void resolve_dns( DESCRIPTOR_DATA * d, long ip )
+void resolve_dns( DESCRIPTOR_DATA * d, const char *ip )
 {
    int fds[2];
    pid_t pid;
@@ -424,7 +447,6 @@ void resolve_dns( DESCRIPTOR_DATA * d, long ip )
       /*
        * child process 
        */
-      char str_ip[64];
       int i;
 
       d->ifd = fds[0];
@@ -433,8 +455,7 @@ void resolve_dns( DESCRIPTOR_DATA * d, long ip )
       for( i = 2; i < 255; ++i )
          close( i );
 
-      snprintf( str_ip, 64, "%ld", ip );
-      execl( "../src/resolver", "AFKMud Resolver", str_ip, NULL );
+      execl( "../src/resolver", "AFKMud Resolver", ip, NULL );
       /*
        * Still here --> hmm. An error. 
        */
@@ -454,7 +475,7 @@ void resolve_dns( DESCRIPTOR_DATA * d, long ip )
    }
 }
 
-void do_cache( CHAR_DATA* ch, const char* argument)
+void do_cache( CHAR_DATA* ch, const char* argument )
 {
    DNS_DATA *cache;
    int ip = 0;

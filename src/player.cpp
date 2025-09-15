@@ -1,36 +1,55 @@
-/* 
-
-SWFotE copyright (c) 2002 was created by
-Chris 'Tawnos' Dary (cadary@uwm.edu),
-Korey 'Eleven' King (no email),
-Matt 'Trillen' White (mwhite17@ureach.com),
-Daniel 'Danimal' Berrill (danimal924@yahoo.com),
-Richard 'Bambua' Berrill (email unknown),
-Stuart 'Ackbar' Unknown (email unknown)
-
-SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper
-based on a concept and ideas from the original SWR immortals: 
-Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn), 
-Ackbar, Satin, Streen and Bib as well as much input from our other builders 
-and players.
-
-Original SMAUG 1.4a written by Thoric (Derek Snider) with Altrag,
-Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,
-Grishnakh, Fireblade, and Nivek.
-
-Original MERC 2.1 code by Hatchet, Furey, and Kahn.
-
-Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,
-Michael Seifert, and Sebastian Hammer.
-
-*/
+/*********************************************************************************************************************************
+ *                                                                                                                   ;           *
+ *                                                                                                                  ED.          *
+ *                        ,;                             ,;                                                  :      E#Wi         *
+ *                      f#i          .    .            f#i j.         t                                      Ef     E###G.       *
+ *             ..     .E#t  GEEEEEEELDi   Dt         .E#t  EW,        Ej             ..           ..       : E#t    E#fD#W;      *
+ *            ;W,    i#W,   ,;;L#K;;.E#i  E#i       i#W,   E##j       E#,           ;W,          ,W,     .Et E#t    E#t t##L     *
+ *           j##,   L#D.       t#E   E#t  E#t      L#D.    E###D.     E#t          j##,         t##,    ,W#t E#t    E#t  .E#K,   *
+ *          G###, :K#Wfff;     t#E   E#t  E#t    :K#Wfff;  E#jG#W;    E#t         G###,        L###,   j###t E#t fi E#t    j##f  *
+ *        :E####, i##WLLLLt    t#E   E########f. i##WLLLLt E#t t##f   E#t       :E####,      .E#j##,  G#fE#t E#t L#jE#t    :E#K: *
+ *       ;W#DG##,  .E#L        t#E   E#j..K#j...  .E#L     E#t  :K#E: E#t      ;W#DG##,     ;WW; ##,:K#i E#t E#t L#LE#t   t##L   *
+ *      j###DW##,    f#E:      t#E   E#t  E#t       f#E:   E#KDDDD###iE#t     j###DW##,    j#E.  ##f#W,  E#t E#tf#E:E#t .D#W;    *
+ *     G##i,,G##,     ,WW;     t#E   E#t  E#t        ,WW;  E#f,t#Wi,,,E#t    G##i,,G##,  .D#L    ###K:   E#t E###f  E#tiW#G.     *
+ *   :K#K:   L##,      .D#;    t#E   f#t  f#t         .D#; E#t  ;#W:  E#t  :K#K:   L##, :K#t     ##D.    E#t E#K,   E#K##i       *
+ *  ;##D.    L##,        tt     fE    ii   ii           tt DWi   ,KK: E#t ;##D.    L##, ...      #G      ..  EL     E##D.        *
+ *  ,,,      .,,                 :                                    ,;. ,,,      .,,           j           :      E#t          *
+ *                                                                                                                  L:           *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                AetheriaMUD additions and changes from the Star Wars Reality code                                              *
+ *                copyright (c) 2025 /dev/null Industries - StygianRenegade                                                     *
+ *                                                                                                                               *
+ *                Star Wars Reality Code Additions and changes from the Smaug Code copyright (c) 1997                            *
+ *                by Sean Cooper                                                                                                 *
+ *                                                                                                                               *
+ *           Starwars and Starwars Names copyright(c) Disney Enterprises, Inc.... All hail the mouse overlord!                   *
+ *                                                                                                                               *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                                             SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper                       *
+ *                                                                                                                               *
+ *                           Based on a concept and ideas from the original SWR immortals:                                       *
+ *                Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn),                                  *
+ *                Ackbar, Satin, Streen and Bib as well as much input from our other builders and players.                       *
+ *                                                                                                                               *
+ *                           Original SMAUG 1.4a written by Thoric (Derek Snider) with:                                          *
+ *                Altrag, Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,                                      *
+ *                Grishnakh, Fireblade, and Nivek.                                                                               *
+ *                                                                                                                               *
+ *                           Original MERC 2.1 code by: Hatchet, Furey, and Kahn.                                                *
+ *                                                                                                                               *
+ *                           Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,                                 *
+ *                Michael Seifert, and Sebastian Hammer.                                                                         *
+ *                                                                                                                               *
+ *********************************************************************************************************************************/
 
 #include <sys/types.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include "mud.h"
+#include "mud.hpp"
 
 /*
  *  Locals
@@ -57,31 +76,31 @@ char *drawlife( int min, int max )
    if( per > 100 )
       per = 100;
    if( per == 100 )
-      mudstrlcpy( buf, "&G&W[&R|||||&Y||||&G||||&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&G&W[&R|||||&Y||||&G||||&W]", MAX_STRING_LENGTH );
    else if( per >= 90 && per < 100 )
-      mudstrlcpy( buf, "&G&W[&R|||||&Y||||&G|||&G-&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&G&W[&R|||||&Y||||&G|||&G-&W]", MAX_STRING_LENGTH );
    else if( per >= 80 && per < 90 )
-      mudstrlcpy( buf, "&G&W[&R|||||&Y||||&G||&G--&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&G&W[&R|||||&Y||||&G||&G--&W]", MAX_STRING_LENGTH );
    else if( per >= 70 && per < 80 )
-      mudstrlcpy( buf, "&G&W[&R|||||&Y||||&G|&G---&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&G&W[&R|||||&Y||||&G|&G---&W]", MAX_STRING_LENGTH );
    else if( per >= 60 && per < 70 )
-      mudstrlcpy( buf, "&G&W[&R|||||&Y|||&G&G-----&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&G&W[&R|||||&Y|||&G&G-----&W]", MAX_STRING_LENGTH );
    else if( per >= 50 && per < 60 )
-      mudstrlcpy( buf, "&G&W[&R|||||&Y||&G&G------&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&G&W[&R|||||&Y||&G&G------&W]", MAX_STRING_LENGTH );
    else if( per >= 40 && per < 50 )
-      mudstrlcpy( buf, "&G&W[&R|||||&Y|&G&G-------&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&G&W[&R|||||&Y|&G&G-------&W]", MAX_STRING_LENGTH );
    else if( per >= 30 && per < 40 )
-      mudstrlcpy( buf, "&G&W[&R|||||&Y&G&G--------&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&G&W[&R|||||&Y&G&G--------&W]", MAX_STRING_LENGTH );
    else if( per >= 30 && per < 40 )
-      mudstrlcpy( buf, "&G&W[&R||||&Y&G&G---------&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&G&W[&R||||&Y&G&G---------&W]", MAX_STRING_LENGTH );
    else if( per >= 20 && per < 40 )
-      mudstrlcpy( buf, "&G&W[&R|||&Y&G&G----------&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&G&W[&R|||&Y&G&G----------&W]", MAX_STRING_LENGTH );
    else if( per >= 10 && per < 40 )
-      mudstrlcpy( buf, "&G&W[&R||&Y&G&G-----------&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&G&W[&R||&Y&G&G-----------&W]", MAX_STRING_LENGTH );
    else if( per >= 0 && per < 10 )
-      mudstrlcpy( buf, "&G&W[&R&Y&G&G-------------&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&G&W[&R&Y&G&G-------------&W]", MAX_STRING_LENGTH );
    else
-      mudstrlcpy( buf, "&G&W[&R&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&G&W[&R&W]", MAX_STRING_LENGTH );
    return buf;
 }
 
@@ -94,29 +113,29 @@ char *drawmove( int min, int max )
 
    per = ( ( min * 100 ) / max );
    if( per == 100 )
-      mudstrlcpy( buf, "&G&W[&R|||&Y||&G||&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&G&W[&R|||&Y||&G||&W]", MAX_STRING_LENGTH );
    else if( per >= 90 && per < 100 )
-      mudstrlcpy( buf, "&G&W[&R|||&Y||&G|&G-&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&G&W[&R|||&Y||&G|&G-&W]", MAX_STRING_LENGTH );
    else if( per >= 80 && per < 90 )
-      mudstrlcpy( buf, "&G&W[&R|||&Y||&G&G--&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&G&W[&R|||&Y||&G&G--&W]", MAX_STRING_LENGTH );
    else if( per >= 70 && per < 80 )
-      mudstrlcpy( buf, "&G&W[&R|||&Y|&G&G---&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&G&W[&R|||&Y|&G&G---&W]", MAX_STRING_LENGTH );
    else if( per >= 60 && per < 70 )
-      mudstrlcpy( buf, "&G&W[&R|||&Y&G&G----&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&G&W[&R|||&Y&G&G----&W]", MAX_STRING_LENGTH );
    else if( per >= 50 && per < 60 )
-      mudstrlcpy( buf, "&G&W[&R||&Y&G&G-----&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&G&W[&R||&Y&G&G-----&W]", MAX_STRING_LENGTH );
    else if( per >= 40 && per < 50 )
-      mudstrlcpy( buf, "&G&W[&R|&Y&G&G------&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&G&W[&R|&Y&G&G------&W]", MAX_STRING_LENGTH );
    else if( per >= 30 && per < 40 )
-      mudstrlcpy( buf, "&G&W[&R|&G&Y&G------&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&G&W[&R|&G&Y&G------&W]", MAX_STRING_LENGTH );
    else if( per >= 20 && per < 40 )
-      mudstrlcpy( buf, "&G&W[&R|&G&Y&G------&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&G&W[&R|&G&Y&G------&W]", MAX_STRING_LENGTH );
    else if( per >= 10 && per < 40 )
-      mudstrlcpy( buf, "&G&W[&R|&G&Y&G------&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&G&W[&R|&G&Y&G------&W]", MAX_STRING_LENGTH );
    else if( per >= 0 && per < 10 )
-      mudstrlcpy( buf, "&G&W[&R&G&Y&G-------&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&G&W[&R&G&Y&G-------&W]", MAX_STRING_LENGTH );
    else
-      mudstrlcpy( buf, "&G&W[&R&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&G&W[&R&W]", MAX_STRING_LENGTH );
    return buf;
 }
 
@@ -127,29 +146,29 @@ char *drawalign( int align )
    buf[0] = '\0';
 
    if( align >= 100 )
-      mudstrlcpy( buf, "&W[&C============&W|&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&W[&C============&W|&W]", MAX_STRING_LENGTH );
    else if( align >= 90 && align < 100 )
-      mudstrlcpy( buf, "&W[&C===========&W|&C=&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&W[&C===========&W|&C=&W]", MAX_STRING_LENGTH );
    else if( align >= 60 && align < 90 )
-      mudstrlcpy( buf, "&W[&C==========&W|&C==&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&W[&C==========&W|&C==&W]", MAX_STRING_LENGTH );
    else if( align >= 40 && align < 60 )
-      mudstrlcpy( buf, "&W[&C=========&W|&C===&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&W[&C=========&W|&C===&W]", MAX_STRING_LENGTH );
    else if( align >= 20 && align < 40 )
-      mudstrlcpy( buf, "&W[&C========&W|&C====&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&W[&C========&W|&C====&W]", MAX_STRING_LENGTH );
    else if( align >= 10 && align < 20 )
-      mudstrlcpy( buf, "&W[&C=======&W|&C=====&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&W[&C=======&W|&C=====&W]", MAX_STRING_LENGTH );
    else if( align >= 0 && align < 10 )
-      mudstrlcpy( buf, "&W[&C======&W|&C======&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&W[&C======&W|&C======&W]", MAX_STRING_LENGTH );
    else if( align <= -1 && align > -20 )
-      mudstrlcpy( buf, "&W[&C=====&W|&C=======&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&W[&C=====&W|&C=======&W]", MAX_STRING_LENGTH );
    else if( align <= -20 && align > -40 )
-      mudstrlcpy( buf, "&W[&C====&W|&C========&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&W[&C====&W|&C========&W]", MAX_STRING_LENGTH );
    else if( align <= -60 && align > -80 )
-      mudstrlcpy( buf, "&W[&C===&W|&C=========&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&W[&C===&W|&C=========&W]", MAX_STRING_LENGTH );
    else if( align <= -80 && align > -100 )
-      mudstrlcpy( buf, "&W[&C==&W|&C==========&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&W[&C==&W|&C==========&W]", MAX_STRING_LENGTH );
    else if( align <= -100 )
-      mudstrlcpy( buf, "&W[&W|&C============&W]", MAX_STRING_LENGTH );
+      strlcpy( buf, "&W[&W|&C============&W]", MAX_STRING_LENGTH );
 
    return buf;
 }
@@ -749,7 +768,7 @@ void do_equipment( CHAR_DATA * ch, const char *argument )
             if( can_see_obj( ch, obj ) )
             {
                send_to_char( format_obj_to_char( obj, ch, TRUE ), ch );
-               mudstrlcpy( buf, "", MAX_STRING_LENGTH );
+               strlcpy( buf, "", MAX_STRING_LENGTH );
                switch ( obj->item_type )
                {
                   default:
@@ -762,34 +781,34 @@ void do_equipment( CHAR_DATA * ch, const char *argument )
                         obj->value[1] = 1;
                      dam = ( short )( ( obj->value[0] * 10 ) / obj->value[1] );
                      if( dam >= 10 )
-                        mudstrlcat( buf, " (superb) ", MAX_STRING_LENGTH );
+                        strlcat( buf, " (superb) ", MAX_STRING_LENGTH );
                      else if( dam >= 7 )
-                        mudstrlcat( buf, " (good) ", MAX_STRING_LENGTH );
+                        strlcat( buf, " (good) ", MAX_STRING_LENGTH );
                      else if( dam >= 5 )
-                        mudstrlcat( buf, " (worn) ", MAX_STRING_LENGTH );
+                        strlcat( buf, " (worn) ", MAX_STRING_LENGTH );
                      else if( dam >= 3 )
-                        mudstrlcat( buf, " (poor) ", MAX_STRING_LENGTH );
+                        strlcat( buf, " (poor) ", MAX_STRING_LENGTH );
                      else if( dam >= 1 )
-                        mudstrlcat( buf, " (awful) ", MAX_STRING_LENGTH );
+                        strlcat( buf, " (awful) ", MAX_STRING_LENGTH );
                      else if( dam == 0 )
-                        mudstrlcat( buf, " (broken) ", MAX_STRING_LENGTH );
+                        strlcat( buf, " (broken) ", MAX_STRING_LENGTH );
                      send_to_char( buf, ch );
                      break;
 
                   case ITEM_WEAPON:
                      dam = INIT_WEAPON_CONDITION - obj->value[0];
                      if( dam < 2 )
-                        mudstrlcat( buf, " (superb) ", MAX_STRING_LENGTH );
+                        strlcat( buf, " (superb) ", MAX_STRING_LENGTH );
                      else if( dam < 4 )
-                        mudstrlcat( buf, " (good) ", MAX_STRING_LENGTH );
+                        strlcat( buf, " (good) ", MAX_STRING_LENGTH );
                      else if( dam < 7 )
-                        mudstrlcat( buf, " (worn) ", MAX_STRING_LENGTH );
+                        strlcat( buf, " (worn) ", MAX_STRING_LENGTH );
                      else if( dam < 10 )
-                        mudstrlcat( buf, " (poor) ", MAX_STRING_LENGTH );
+                        strlcat( buf, " (poor) ", MAX_STRING_LENGTH );
                      else if( dam < 12 )
-                        mudstrlcat( buf, " (awful) ", MAX_STRING_LENGTH );
+                        strlcat( buf, " (awful) ", MAX_STRING_LENGTH );
                      else if( dam == 12 )
-                        mudstrlcat( buf, " (broken) ", MAX_STRING_LENGTH );
+                        strlcat( buf, " (broken) ", MAX_STRING_LENGTH );
                      send_to_char( buf, ch );
                      
                      break;
@@ -821,10 +840,10 @@ void set_title( CHAR_DATA * ch, const char *title )
    if( isalpha( title[0] ) || isdigit( title[0] ) )
    {
       buf[0] = ' ';
-      mudstrlcpy( buf + 1, title, MAX_STRING_LENGTH );
+      strlcpy( buf + 1, title, MAX_STRING_LENGTH - 1 );
    }
    else
-      mudstrlcpy( buf, title, MAX_STRING_LENGTH );
+      strlcpy( buf, title, MAX_STRING_LENGTH );
 
    STRFREE( ch->pcdata->title );
    ch->pcdata->title = STRALLOC( buf );
@@ -870,7 +889,7 @@ void do_email( CHAR_DATA * ch, const char *argument )
    if( argument[0] == '\0' )
    {
       if( !ch->pcdata->email )
-         ch->pcdata->email = str_dup( "" );
+         ch->pcdata->email = strdup( "" );
       ch_printf( ch, "Your email address is: %s\r\n", show_tilde( ch->pcdata->email ) );
       return;
    }
@@ -879,13 +898,13 @@ void do_email( CHAR_DATA * ch, const char *argument )
    {
       if( ch->pcdata->email )
          DISPOSE( ch->pcdata->email );
-      ch->pcdata->email = str_dup( "" );
+      ch->pcdata->email = strdup( "" );
 
       send_to_char( "Email address cleared.\r\n", ch );
       return;
    }
 
-   mudstrlcpy( buf, argument, MAX_STRING_LENGTH );
+   strlcpy( buf, argument, MAX_STRING_LENGTH );
 
    if( strlen( buf ) > 70 )
       buf[70] = '\0';
@@ -893,7 +912,7 @@ void do_email( CHAR_DATA * ch, const char *argument )
    hide_tilde( buf );
    if( ch->pcdata->email )
       DISPOSE( ch->pcdata->email );
-   ch->pcdata->email = str_dup( buf );
+   ch->pcdata->email = strdup( buf );
    send_to_char( "Email address set.\r\n", ch );
 }
 
@@ -907,7 +926,7 @@ void do_screenname( CHAR_DATA * ch, const char *argument )
    if( argument[0] == '\0' )
    {
       if( !ch->pcdata->screenname )
-         ch->pcdata->screenname = str_dup( "" );
+         ch->pcdata->screenname = strdup( "" );
       ch_printf( ch, "Your AIM screenname is: %s\r\n", show_tilde( ch->pcdata->screenname ) );
       return;
    }
@@ -916,13 +935,13 @@ void do_screenname( CHAR_DATA * ch, const char *argument )
    {
       if( ch->pcdata->screenname )
          DISPOSE( ch->pcdata->screenname );
-      ch->pcdata->screenname = str_dup( "" );
+      ch->pcdata->screenname = strdup( "" );
 
       send_to_char( "AIM Screnname cleared.\r\n", ch );
       return;
    }
 
-   mudstrlcpy( buf, argument, MAX_STRING_LENGTH );
+   strlcpy( buf, argument, MAX_STRING_LENGTH );
 
    if( strlen( buf ) > 70 )
       buf[70] = '\0';
@@ -930,7 +949,7 @@ void do_screenname( CHAR_DATA * ch, const char *argument )
    hide_tilde( buf );
    if( ch->pcdata->screenname )
       DISPOSE( ch->pcdata->screenname );
-   ch->pcdata->screenname = str_dup( buf );
+   ch->pcdata->screenname = strdup( buf );
    send_to_char( "AIM Screnname set.\r\n", ch );
 }
 
@@ -944,7 +963,7 @@ void do_homepage( CHAR_DATA * ch, const char *argument )
    if( argument[0] == '\0' )
    {
       if( !ch->pcdata->homepage )
-         ch->pcdata->homepage = str_dup( "" );
+         ch->pcdata->homepage = strdup( "" );
       ch_printf( ch, "Your homepage is: %s\r\n", show_tilde( ch->pcdata->homepage ) );
       return;
    }
@@ -953,13 +972,13 @@ void do_homepage( CHAR_DATA * ch, const char *argument )
    {
       if( ch->pcdata->homepage )
          DISPOSE( ch->pcdata->homepage );
-      ch->pcdata->homepage = str_dup( "" );
+      ch->pcdata->homepage = strdup( "" );
       send_to_char( "Homepage cleared.\r\n", ch );
       return;
    }
 
    if( strstr( argument, "://" ) )
-      mudstrlcpy( buf, argument, MAX_STRING_LENGTH );
+      strlcpy( buf, argument, MAX_STRING_LENGTH );
    else
       snprintf( buf, MAX_STRING_LENGTH, "http://%s", argument );
    if( strlen( buf ) > 70 )
@@ -968,7 +987,7 @@ void do_homepage( CHAR_DATA * ch, const char *argument )
    hide_tilde( buf );
    if( ch->pcdata->homepage )
       DISPOSE( ch->pcdata->homepage );
-   ch->pcdata->homepage = str_dup( buf );
+   ch->pcdata->homepage = strdup( buf );
    send_to_char( "Homepage set.\r\n", ch );
 }
 
@@ -982,7 +1001,7 @@ void do_wwwimage( CHAR_DATA * ch, const char *argument )
    if( argument[0] == '\0' )
    {
       if( !ch->pcdata->image )
-         ch->pcdata->image = str_dup( "" );
+         ch->pcdata->image = strdup( "" );
       ch_printf( ch, "Your www image is: %s\r\n", show_tilde( ch->pcdata->image ) );
       return;
    }
@@ -991,13 +1010,13 @@ void do_wwwimage( CHAR_DATA * ch, const char *argument )
    {
       if( ch->pcdata->image )
          DISPOSE( ch->pcdata->image );
-      ch->pcdata->image = str_dup( "" );
+      ch->pcdata->image = strdup( "" );
       send_to_char( "WWW Image cleared.\r\n", ch );
       return;
    }
 
    if( strstr( argument, "://" ) )
-      mudstrlcpy( buf, argument, MAX_STRING_LENGTH );
+      strlcpy( buf, argument, MAX_STRING_LENGTH );
    else
       snprintf( buf, MAX_STRING_LENGTH, "http://%s", argument );
    if( strlen( buf ) > 70 )
@@ -1006,7 +1025,7 @@ void do_wwwimage( CHAR_DATA * ch, const char *argument )
    hide_tilde( buf );
    if( ch->pcdata->image )
       DISPOSE( ch->pcdata->image );
-   ch->pcdata->image = str_dup( buf );
+   ch->pcdata->image = strdup( buf );
    send_to_char( "WWW Image set.\r\n", ch );
 }
 

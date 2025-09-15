@@ -1,31 +1,50 @@
+/*********************************************************************************************************************************
+ *                                                                                                                   ;           *
+ *                                                                                                                  ED.          *
+ *                        ,;                             ,;                                                  :      E#Wi         *
+ *                      f#i          .    .            f#i j.         t                                      Ef     E###G.       *
+ *             ..     .E#t  GEEEEEEELDi   Dt         .E#t  EW,        Ej             ..           ..       : E#t    E#fD#W;      *
+ *            ;W,    i#W,   ,;;L#K;;.E#i  E#i       i#W,   E##j       E#,           ;W,          ,W,     .Et E#t    E#t t##L     *
+ *           j##,   L#D.       t#E   E#t  E#t      L#D.    E###D.     E#t          j##,         t##,    ,W#t E#t    E#t  .E#K,   *
+ *          G###, :K#Wfff;     t#E   E#t  E#t    :K#Wfff;  E#jG#W;    E#t         G###,        L###,   j###t E#t fi E#t    j##f  *
+ *        :E####, i##WLLLLt    t#E   E########f. i##WLLLLt E#t t##f   E#t       :E####,      .E#j##,  G#fE#t E#t L#jE#t    :E#K: *
+ *       ;W#DG##,  .E#L        t#E   E#j..K#j...  .E#L     E#t  :K#E: E#t      ;W#DG##,     ;WW; ##,:K#i E#t E#t L#LE#t   t##L   *
+ *      j###DW##,    f#E:      t#E   E#t  E#t       f#E:   E#KDDDD###iE#t     j###DW##,    j#E.  ##f#W,  E#t E#tf#E:E#t .D#W;    *
+ *     G##i,,G##,     ,WW;     t#E   E#t  E#t        ,WW;  E#f,t#Wi,,,E#t    G##i,,G##,  .D#L    ###K:   E#t E###f  E#tiW#G.     *
+ *   :K#K:   L##,      .D#;    t#E   f#t  f#t         .D#; E#t  ;#W:  E#t  :K#K:   L##, :K#t     ##D.    E#t E#K,   E#K##i       *
+ *  ;##D.    L##,        tt     fE    ii   ii           tt DWi   ,KK: E#t ;##D.    L##, ...      #G      ..  EL     E##D.        *
+ *  ,,,      .,,                 :                                    ,;. ,,,      .,,           j           :      E#t          *
+ *                                                                                                                  L:           *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                AetheriaMUD additions and changes from the Star Wars Reality code                                              *
+ *                copyright (c) 2025 /dev/null Industries - StygianRenegade                                                     *
+ *                                                                                                                               *
+ *                Star Wars Reality Code Additions and changes from the Smaug Code copyright (c) 1997                            *
+ *                by Sean Cooper                                                                                                 *
+ *                                                                                                                               *
+ *           Starwars and Starwars Names copyright(c) Disney Enterprises, Inc.... All hail the mouse overlord!                   *
+ *                                                                                                                               *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                                             SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper                       *
+ *                                                                                                                               *
+ *                           Based on a concept and ideas from the original SWR immortals:                                       *
+ *                Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn),                                  *
+ *                Ackbar, Satin, Streen and Bib as well as much input from our other builders and players.                       *
+ *                                                                                                                               *
+ *                           Original SMAUG 1.4a written by Thoric (Derek Snider) with:                                          *
+ *                Altrag, Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,                                      *
+ *                Grishnakh, Fireblade, and Nivek.                                                                               *
+ *                                                                                                                               *
+ *                           Original MERC 2.1 code by: Hatchet, Furey, and Kahn.                                                *
+ *                                                                                                                               *
+ *                           Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,                                 *
+ *                Michael Seifert, and Sebastian Hammer.                                                                         *
+ *                                                                                                                               *
+ *********************************************************************************************************************************/
+
 /*****************************************************************************************
- *                       DDDDD        A        RRRRRRR     K    K                        *
- *                       D    D      A A       R      R    K   K                         *
- *                       D     D    A   A      R      R    KK K                          *
- *                       D     D   A     A     RRRRRRR     K K                           *
- *                       D     D  AAAAAAAAA    R    R      K  K                          *
- *                       D    D  A         A   R     R     K   K                         *
- *                       DDDDD  A           A  R      R    K    K                        *
- *                                                                                       *
- *                                                                                       *
- *W      WW      W    A        RRRRRRR   RRRRRRR   IIIIIIII    OOOO   RRRRRRR     SSSSS  *
- * W    W  W    W    A A       R      R  R      R     II      O    O  R      R   S       *
- * W    W  W    W   A   A      R      R  R      R     II     O      O R      R   S       *
- * W    W  W    W  A     A     RRRRRRR   RRRRRRR      II     O      O RRRRRRR     SSSSS  *
- *  W  W    W  W  AAAAAAAAA    R    R    R    R       II     O      O R    R           S *
- *  W W     W W  A         A   R     R   R     R      II      O    O  R     R          S *
- *   W       W  A           A  R      R  R      R  IIIIIIII    OOOO   R      R    SSSSS  *
- *                                                                                       *
- *****************************************************************************************
- *                                                                                       *
- * Dark Warrior Code additions and changes from the Star Wars Reality code copyright (c) *
- * 2003 by Michael Ervin, Mark Gottselig, Gavin Mogan                                    *
- *                                                                                       *
- * Star Wars Reality Code Additions and changes from the Smaug Code copyright (c) 1997   *
- * by Sean Cooper                                                                        *
- *                                                                                       *
- * Starwars and Starwars Names copyright(c) Lucas Film Ltd.                              *
- *****************************************************************************************
  *                           ^     +----- |  / ^     ^ |     | +-\                       *
  *                          / \    |      | /  |\   /| |     | |  \                      *
  *                         /   \   +---   |<   | \ / | |     | |  |                      *
@@ -60,10 +79,10 @@
 #include <string.h>
 #include <stdio.h>
 #include <dlfcn.h>
-#include "mud.h"
-#include "mccp.h"
+#include "mud.hpp"
+#include "mccp.hpp"
 #ifdef CHANGES
-#include "changes.h"
+#include "changes.hpp"
 #endif
 
 #define MAX_NEST	100
@@ -1040,7 +1059,7 @@ void do_hotboot( CHAR_DATA * ch, const char *argument )
    if( ch && ch->desc )
       write_to_descriptor( ch->desc, "\033[0m", 0 );
 
-   mudstrlcpy( buf, "\r\nYou feel a great disturbance in the Force.", 100 );
+   strlcpy( buf, "\r\nYou feel a great disturbance in the Force.", 100 );
    /*
     * For each playing descriptor, save its state 
     */
@@ -1091,7 +1110,7 @@ void do_hotboot( CHAR_DATA * ch, const char *argument )
     */
    snprintf( buf, 100, "%d", port );
    snprintf( buf2, 100, "%d", control );
-   mudstrlcpy( buf3, "-1", 100 );
+   strlcpy( buf3, "-1", 100 );
 
    dlclose( sysdata.dlHandle );
    execl( EXE_FILE, "swreality", buf, "hotboot", buf2, buf3, ( char * )NULL );

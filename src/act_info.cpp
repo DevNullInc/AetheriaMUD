@@ -51,8 +51,8 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
-#include "mud.h"
-#include "sha256.h"
+#include "mud.hpp"
+#include "sha256.hpp"
 
 /*
  * Keep players from defeating examine progs -Druid

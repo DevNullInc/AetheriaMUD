@@ -1,35 +1,54 @@
-/* 
-
-SWFotE copyright (c) 2002 was created by
-Chris 'Tawnos' Dary (cadary@uwm.edu),
-Korey 'Eleven' King (no email),
-Matt 'Trillen' White (mwhite17@ureach.com),
-Daniel 'Danimal' Berrill (danimal924@yahoo.com),
-Richard 'Bambua' Berrill (email unknown),
-Stuart 'Ackbar' Unknown (email unknown)
-
-SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper
-based on a concept and ideas from the original SWR immortals: 
-Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn), 
-Ackbar, Satin, Streen and Bib as well as much input from our other builders 
-and players.
-
-Original SMAUG 1.4a written by Thoric (Derek Snider) with Altrag,
-Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,
-Grishnakh, Fireblade, and Nivek.
-
-Original MERC 2.1 code by Hatchet, Furey, and Kahn.
-
-Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,
-Michael Seifert, and Sebastian Hammer.
-
-*/
+/*********************************************************************************************************************************
+ *                                                                                                                   ;           *
+ *                                                                                                                  ED.          *
+ *                        ,;                             ,;                                                  :      E#Wi         *
+ *                      f#i          .    .            f#i j.         t                                      Ef     E###G.       *
+ *             ..     .E#t  GEEEEEEELDi   Dt         .E#t  EW,        Ej             ..           ..       : E#t    E#fD#W;      *
+ *            ;W,    i#W,   ,;;L#K;;.E#i  E#i       i#W,   E##j       E#,           ;W,          ,W,     .Et E#t    E#t t##L     *
+ *           j##,   L#D.       t#E   E#t  E#t      L#D.    E###D.     E#t          j##,         t##,    ,W#t E#t    E#t  .E#K,   *
+ *          G###, :K#Wfff;     t#E   E#t  E#t    :K#Wfff;  E#jG#W;    E#t         G###,        L###,   j###t E#t fi E#t    j##f  *
+ *        :E####, i##WLLLLt    t#E   E########f. i##WLLLLt E#t t##f   E#t       :E####,      .E#j##,  G#fE#t E#t L#jE#t    :E#K: *
+ *       ;W#DG##,  .E#L        t#E   E#j..K#j...  .E#L     E#t  :K#E: E#t      ;W#DG##,     ;WW; ##,:K#i E#t E#t L#LE#t   t##L   *
+ *      j###DW##,    f#E:      t#E   E#t  E#t       f#E:   E#KDDDD###iE#t     j###DW##,    j#E.  ##f#W,  E#t E#tf#E:E#t .D#W;    *
+ *     G##i,,G##,     ,WW;     t#E   E#t  E#t        ,WW;  E#f,t#Wi,,,E#t    G##i,,G##,  .D#L    ###K:   E#t E###f  E#tiW#G.     *
+ *   :K#K:   L##,      .D#;    t#E   f#t  f#t         .D#; E#t  ;#W:  E#t  :K#K:   L##, :K#t     ##D.    E#t E#K,   E#K##i       *
+ *  ;##D.    L##,        tt     fE    ii   ii           tt DWi   ,KK: E#t ;##D.    L##, ...      #G      ..  EL     E##D.        *
+ *  ,,,      .,,                 :                                    ,;. ,,,      .,,           j           :      E#t          *
+ *                                                                                                                  L:           *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                AetheriaMUD additions and changes from the Star Wars Reality code                                              *
+ *                copyright (c) 2025 /dev/null Industries - StygianRenegade                                                     *
+ *                                                                                                                               *
+ *                Star Wars Reality Code Additions and changes from the Smaug Code copyright (c) 1997                            *
+ *                by Sean Cooper                                                                                                 *
+ *                                                                                                                               *
+ *           Starwars and Starwars Names copyright(c) Disney Enterprises, Inc.... All hail the mouse overlord!                   *
+ *                                                                                                                               *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                                             SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper                       *
+ *                                                                                                                               *
+ *                           Based on a concept and ideas from the original SWR immortals:                                       *
+ *                Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn),                                  *
+ *                Ackbar, Satin, Streen and Bib as well as much input from our other builders and players.                       *
+ *                                                                                                                               *
+ *                           Original SMAUG 1.4a written by Thoric (Derek Snider) with:                                          *
+ *                Altrag, Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,                                      *
+ *                Grishnakh, Fireblade, and Nivek.                                                                               *
+ *                                                                                                                               *
+ *                           Original MERC 2.1 code by: Hatchet, Furey, and Kahn.                                                *
+ *                                                                                                                               *
+ *                           Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,                                 *
+ *                Michael Seifert, and Sebastian Hammer.                                                                         *
+ *                                                                                                                               *
+ *********************************************************************************************************************************/
 
 #include <sys/types.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include "mud.h"
+#include "mud.hpp"
 
 const char *const spell_flag[] = { "water", "earth", "air", "astral", "area", "distant", "reverse",
    "save_half_dam", "save_negates", "accumulative", "recastable", "noscribe",
@@ -437,14 +456,14 @@ void do_slookup( CHAR_DATA * ch, const char *argument )
                     spell_damage[SPELL_DAMAGE( skill )],
                     spell_action[SPELL_ACTION( skill )],
                     spell_class[SPELL_CLASS( skill )], spell_power[SPELL_POWER( skill )] );
-         mudstrlcpy( buf, "Flags:", MAX_STRING_LENGTH );
+         strlcpy( buf, "Flags:", MAX_STRING_LENGTH );
          for( x = 11; x < 32; x++ )
             if( SPELL_FLAG( skill, 1 << x ) )
             {
-               mudstrlcat( buf, " ", MAX_STRING_LENGTH );
-               mudstrlcat( buf, spell_flag[x - 11], MAX_STRING_LENGTH );
+               strlcat( buf, " ", MAX_STRING_LENGTH );
+               strlcat( buf, spell_flag[x - 11], MAX_STRING_LENGTH );
             }
-         mudstrlcat( buf, "\r\n", MAX_STRING_LENGTH );
+         strlcat( buf, "\r\n", MAX_STRING_LENGTH );
          send_to_char( buf, ch );
       }
       ch_printf( ch, "Saves: %s\r\n", spell_saves[( int )skill->saves] );
@@ -477,36 +496,36 @@ void do_slookup( CHAR_DATA * ch, const char *argument )
          snprintf( buf, MAX_STRING_LENGTH, "Affect %d", ++cnt );
          if( aff->location )
          {
-            mudstrlcat( buf, " modifies ", MAX_STRING_LENGTH );
-            mudstrlcat( buf, a_types[aff->location % REVERSE_APPLY], MAX_STRING_LENGTH );
-            mudstrlcat( buf, " by '", MAX_STRING_LENGTH );
-            mudstrlcat( buf, aff->modifier, MAX_STRING_LENGTH );
+            strlcat( buf, " modifies ", MAX_STRING_LENGTH );
+            strlcat( buf, a_types[aff->location % REVERSE_APPLY], MAX_STRING_LENGTH );
+            strlcat( buf, " by '", MAX_STRING_LENGTH );
+            strlcat( buf, aff->modifier, MAX_STRING_LENGTH );
             if( aff->bitvector )
-               mudstrlcat( buf, "' and", MAX_STRING_LENGTH );
+               strlcat( buf, "' and", MAX_STRING_LENGTH );
             else
-               mudstrlcat( buf, "'", MAX_STRING_LENGTH );
+               strlcat( buf, "'", MAX_STRING_LENGTH );
          }
          if( aff->bitvector )
          {
             int x;
 
-            mudstrlcat( buf, " applies", MAX_STRING_LENGTH );
+            strlcat( buf, " applies", MAX_STRING_LENGTH );
             for( x = 0; x < 32; x++ )
                if( IS_SET( aff->bitvector, 1 << x ) )
                {
-                  mudstrlcat( buf, " ", MAX_STRING_LENGTH );
-                  mudstrlcat( buf, a_flags[x], MAX_STRING_LENGTH );
+                  strlcat( buf, " ", MAX_STRING_LENGTH );
+                  strlcat( buf, a_flags[x], MAX_STRING_LENGTH );
                }
          }
          if( aff->duration[0] != '\0' && aff->duration[0] != '0' )
          {
-            mudstrlcat( buf, " for '", MAX_STRING_LENGTH );
-            mudstrlcat( buf, aff->duration, MAX_STRING_LENGTH );
-            mudstrlcat( buf, "' rounds", MAX_STRING_LENGTH );
+            strlcat( buf, " for '", MAX_STRING_LENGTH );
+            strlcat( buf, aff->duration, MAX_STRING_LENGTH );
+            strlcat( buf, "' rounds", MAX_STRING_LENGTH );
          }
          if( aff->location >= REVERSE_APPLY )
-            mudstrlcat( buf, " (affects caster only)", MAX_STRING_LENGTH );
-         mudstrlcat( buf, "\r\n", MAX_STRING_LENGTH );
+            strlcat( buf, " (affects caster only)", MAX_STRING_LENGTH );
+         strlcat( buf, "\r\n", MAX_STRING_LENGTH );
          send_to_char( buf, ch );
          if( !aff->next )
             send_to_char( "\r\n", ch );
@@ -640,9 +659,9 @@ void do_sset( CHAR_DATA * ch, const char *argument )
       }
       else
          skill_table[top_sn++] = skill;
-      skill->name = str_dup( argument );
-      skill->noun_damage = str_dup( "" );
-      skill->msg_off = str_dup( "" );
+      skill->name = strdup( argument );
+      skill->noun_damage = strdup( "" );
+      skill->msg_off = strdup( "" );
       skill->spell_fun = spell_smaug;
       skill->type = type;
       send_to_char( "Done.\r\n", ch );
@@ -785,14 +804,14 @@ void do_sset( CHAR_DATA * ch, const char *argument )
 		skill->skill_fun = dofun;
 		skill->spell_fun = NULL;
 		DISPOSE( skill->skill_fun_name );
-		skill->skill_fun_name = str_dup( argument );
+		skill->skill_fun_name = strdup( argument );
 	   }		
 	   else if( ( spellfun = spell_function( argument ) ) != spell_notfound )
 	   {
 		skill->spell_fun = spellfun;
 		skill->skill_fun = NULL;
 		DISPOSE( skill->skill_fun_name );
-		skill->spell_fun_name = str_dup( argument );
+		skill->spell_fun_name = strdup( argument );
 	   }
 	   else if( validate_spec_fun( argument ) )
 	   {
@@ -937,7 +956,7 @@ void do_sset( CHAR_DATA * ch, const char *argument )
             duration[0] = '\0';
          if( !str_cmp( modifier, "0" ) )
             modifier[0] = '\0';
-         aff->duration = str_dup( duration );
+         aff->duration = strdup( duration );
          aff->location = loc;
          if( loc == APPLY_AFFECT || loc == APPLY_RESISTANT || loc == APPLY_IMMUNE || loc == APPLY_SUSCEPTIBLE )
          {
@@ -948,7 +967,7 @@ void do_sset( CHAR_DATA * ch, const char *argument )
                modval = 0;
             snprintf( modifier, MAX_INPUT_LENGTH, "%d", modval );
          }
-         aff->modifier = str_dup( modifier );
+         aff->modifier = strdup( modifier );
          aff->bitvector = bit;
          LINK( aff, skill->first_affect, skill->last_affect, next, prev );
          send_to_char( "Ok.\r\n", ch );
@@ -967,7 +986,7 @@ void do_sset( CHAR_DATA * ch, const char *argument )
       if( !str_cmp( arg2, "name" ) )
       {
          DISPOSE( skill->name );
-         skill->name = str_dup( argument );
+         skill->name = strdup( argument );
          send_to_char( "Ok.\r\n", ch );
          return;
       }
@@ -975,9 +994,9 @@ void do_sset( CHAR_DATA * ch, const char *argument )
       {
          DISPOSE( skill->noun_damage );
          if( !str_cmp( argument, "clear" ) )
-            skill->noun_damage = str_dup( "" );
+            skill->noun_damage = strdup( "" );
          else
-            skill->noun_damage = str_dup( argument );
+            skill->noun_damage = strdup( argument );
          send_to_char( "Ok.\r\n", ch );
          return;
       }
@@ -985,7 +1004,7 @@ void do_sset( CHAR_DATA * ch, const char *argument )
       {
          DISPOSE( skill->msg_off );
          if( str_cmp( argument, "clear" ) )
-            skill->msg_off = str_dup( argument );
+            skill->msg_off = strdup( argument );
          send_to_char( "Ok.\r\n", ch );
          return;
       }
@@ -994,7 +1013,7 @@ void do_sset( CHAR_DATA * ch, const char *argument )
          if( skill->hit_char )
             DISPOSE( skill->hit_char );
          if( str_cmp( argument, "clear" ) )
-            skill->hit_char = str_dup( argument );
+            skill->hit_char = strdup( argument );
          send_to_char( "Ok.\r\n", ch );
          return;
       }
@@ -1003,7 +1022,7 @@ void do_sset( CHAR_DATA * ch, const char *argument )
          if( skill->hit_vict )
             DISPOSE( skill->hit_vict );
          if( str_cmp( argument, "clear" ) )
-            skill->hit_vict = str_dup( argument );
+            skill->hit_vict = strdup( argument );
          send_to_char( "Ok.\r\n", ch );
          return;
       }
@@ -1012,7 +1031,7 @@ void do_sset( CHAR_DATA * ch, const char *argument )
          if( skill->hit_room )
             DISPOSE( skill->hit_room );
          if( str_cmp( argument, "clear" ) )
-            skill->hit_room = str_dup( argument );
+            skill->hit_room = strdup( argument );
          send_to_char( "Ok.\r\n", ch );
          return;
       }
@@ -1021,7 +1040,7 @@ void do_sset( CHAR_DATA * ch, const char *argument )
          if( skill->miss_char )
             DISPOSE( skill->miss_char );
          if( str_cmp( argument, "clear" ) )
-            skill->miss_char = str_dup( argument );
+            skill->miss_char = strdup( argument );
          send_to_char( "Ok.\r\n", ch );
          return;
       }
@@ -1030,7 +1049,7 @@ void do_sset( CHAR_DATA * ch, const char *argument )
          if( skill->miss_vict )
             DISPOSE( skill->miss_vict );
          if( str_cmp( argument, "clear" ) )
-            skill->miss_vict = str_dup( argument );
+            skill->miss_vict = strdup( argument );
          send_to_char( "Ok.\r\n", ch );
          return;
       }
@@ -1039,7 +1058,7 @@ void do_sset( CHAR_DATA * ch, const char *argument )
          if( skill->miss_room )
             DISPOSE( skill->miss_room );
          if( str_cmp( argument, "clear" ) )
-            skill->miss_room = str_dup( argument );
+            skill->miss_room = strdup( argument );
          send_to_char( "Ok.\r\n", ch );
          return;
       }
@@ -1048,7 +1067,7 @@ void do_sset( CHAR_DATA * ch, const char *argument )
          if( skill->die_char )
             DISPOSE( skill->die_char );
          if( str_cmp( argument, "clear" ) )
-            skill->die_char = str_dup( argument );
+            skill->die_char = strdup( argument );
          send_to_char( "Ok.\r\n", ch );
          return;
       }
@@ -1057,7 +1076,7 @@ void do_sset( CHAR_DATA * ch, const char *argument )
          if( skill->die_vict )
             DISPOSE( skill->die_vict );
          if( str_cmp( argument, "clear" ) )
-            skill->die_vict = str_dup( argument );
+            skill->die_vict = strdup( argument );
          send_to_char( "Ok.\r\n", ch );
          return;
       }
@@ -1066,7 +1085,7 @@ void do_sset( CHAR_DATA * ch, const char *argument )
          if( skill->die_room )
             DISPOSE( skill->die_room );
          if( str_cmp( argument, "clear" ) )
-            skill->die_room = str_dup( argument );
+            skill->die_room = strdup( argument );
          send_to_char( "Ok.\r\n", ch );
          return;
       }
@@ -1075,7 +1094,7 @@ void do_sset( CHAR_DATA * ch, const char *argument )
          if( skill->imm_char )
             DISPOSE( skill->imm_char );
          if( str_cmp( argument, "clear" ) )
-            skill->imm_char = str_dup( argument );
+            skill->imm_char = strdup( argument );
          send_to_char( "Ok.\r\n", ch );
          return;
       }
@@ -1084,7 +1103,7 @@ void do_sset( CHAR_DATA * ch, const char *argument )
          if( skill->imm_vict )
             DISPOSE( skill->imm_vict );
          if( str_cmp( argument, "clear" ) )
-            skill->imm_vict = str_dup( argument );
+            skill->imm_vict = strdup( argument );
          send_to_char( "Ok.\r\n", ch );
          return;
       }
@@ -1093,7 +1112,7 @@ void do_sset( CHAR_DATA * ch, const char *argument )
          if( skill->imm_room )
             DISPOSE( skill->imm_room );
          if( str_cmp( argument, "clear" ) )
-            skill->imm_room = str_dup( argument );
+            skill->imm_room = strdup( argument );
          send_to_char( "Ok.\r\n", ch );
          return;
       }
@@ -1102,7 +1121,7 @@ void do_sset( CHAR_DATA * ch, const char *argument )
          if( skill->dice )
             DISPOSE( skill->dice );
          if( str_cmp( argument, "clear" ) )
-            skill->dice = str_dup( argument );
+            skill->dice = strdup( argument );
          send_to_char( "Ok.\r\n", ch );
          return;
       }
@@ -1111,23 +1130,23 @@ void do_sset( CHAR_DATA * ch, const char *argument )
          if( skill->components )
             DISPOSE( skill->components );
          if( str_cmp( argument, "clear" ) )
-            skill->components = str_dup( argument );
+            skill->components = strdup( argument );
          send_to_char( "Ok.\r\n", ch );
          return;
       }
       if( !str_cmp( arg2, "teachers" ) )
       {
          if( !str_cmp( argument, "clear" ) )
-            skill->teachers = str_dup( "" );
+            skill->teachers = strdup( "" );
          else
          {
             if( skill->teachers )
             {
                snprintf( buf, MAX_STRING_LENGTH, "%s %s", skill->teachers, argument );
-               skill->teachers = str_dup( buf );
+               skill->teachers = strdup( buf );
             }
             else
-               skill->teachers = str_dup( argument );
+               skill->teachers = strdup( argument );
          }
          send_to_char( "Ok.\r\n", ch );
          return;
@@ -1425,7 +1444,7 @@ void do_detrap( CHAR_DATA * ch, const char *argument )
          }
          act( AT_ACTION, "You carefully begin your attempt to remove a trap from $p...", ch, obj, NULL, TO_CHAR );
          act( AT_ACTION, "$n carefully attempts to remove a trap from $p...", ch, obj, NULL, TO_ROOM );
-         ch->dest_buf = str_dup( obj->name );
+         ch->dest_buf = strdup( obj->name );
          add_timer( ch, TIMER_DO_FUN, 3, do_detrap, 1 );
 /*	    WAIT_STATE( ch, skill_table[gsn_detrap]->beats ); */
          return;
@@ -1436,7 +1455,7 @@ void do_detrap( CHAR_DATA * ch, const char *argument )
             bug( "%s: ch->dest_buf NULL!", __func__ );
             return;
          }
-         mudstrlcpy( arg, (const char*)ch->dest_buf, MAX_INPUT_LENGTH );
+         strlcpy( arg, (const char*)ch->dest_buf, MAX_INPUT_LENGTH );
          DISPOSE( ch->dest_buf );
          ch->dest_buf = NULL;
          ch->substate = SUB_NONE;
@@ -1547,7 +1566,7 @@ void do_dig( CHAR_DATA * ch, const char *argument )
             }
          }
          add_timer( ch, TIMER_DO_FUN, UMIN( skill_table[gsn_dig]->beats / 10, 3 ), do_dig, 1 );
-         ch->dest_buf = str_dup( arg );
+         ch->dest_buf = strdup( arg );
          send_to_char( "You begin digging...\r\n", ch );
          act( AT_PLAIN, "$n begins digging...", ch, NULL, NULL, TO_ROOM );
          return;
@@ -1560,7 +1579,7 @@ void do_dig( CHAR_DATA * ch, const char *argument )
             bug( "%s: dest_buf NULL", __func__ );
             return;
          }
-         mudstrlcpy( arg, (const char*)ch->dest_buf, MAX_INPUT_LENGTH );
+         strlcpy( arg, (const char*)ch->dest_buf, MAX_INPUT_LENGTH );
          DISPOSE( ch->dest_buf );
          break;
 
@@ -1690,7 +1709,7 @@ void do_search( CHAR_DATA * ch, const char *argument )
          }
          add_timer( ch, TIMER_DO_FUN, UMIN( skill_table[gsn_search]->beats / 10, 3 ), do_search, 1 );
          send_to_char( "You begin your search...\r\n", ch );
-         ch->dest_buf = str_dup( arg );
+         ch->dest_buf = strdup( arg );
          return;
 
       case 1:
@@ -1700,7 +1719,7 @@ void do_search( CHAR_DATA * ch, const char *argument )
             bug( "%s: dest_buf NULL", __func__ );
             return;
          }
-         mudstrlcpy( arg, (const char*)ch->dest_buf, MAX_INPUT_LENGTH );
+         strlcpy( arg, (const char*)ch->dest_buf, MAX_INPUT_LENGTH );
          DISPOSE( ch->dest_buf );
          break;
       case SUB_TIMER_DO_ABORT:

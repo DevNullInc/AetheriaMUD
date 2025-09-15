@@ -1,36 +1,55 @@
-/* 
-
-SWFotE copyright (c) 2002 was created by
-Chris 'Tawnos' Dary (cadary@uwm.edu),
-Korey 'Eleven' King (no email),
-Matt 'Trillen' White (mwhite17@ureach.com),
-Daniel 'Danimal' Berrill (danimal924@yahoo.com),
-Richard 'Bambua' Berrill (email unknown),
-Stuart 'Ackbar' Unknown (email unknown)
-
-SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper
-based on a concept and ideas from the original SWR immortals: 
-Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn), 
-Ackbar, Satin, Streen and Bib as well as much input from our other builders 
-and players.
-
-Original SMAUG 1.4a written by Thoric (Derek Snider) with Altrag,
-Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,
-Grishnakh, Fireblade, and Nivek.
-
-Original MERC 2.1 code by Hatchet, Furey, and Kahn.
-
-Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,
-Michael Seifert, and Sebastian Hammer.
-
-*/
+/*********************************************************************************************************************************
+ *                                                                                                                   ;           *
+ *                                                                                                                  ED.          *
+ *                        ,;                             ,;                                                  :      E#Wi         *
+ *                      f#i          .    .            f#i j.         t                                      Ef     E###G.       *
+ *             ..     .E#t  GEEEEEEELDi   Dt         .E#t  EW,        Ej             ..           ..       : E#t    E#fD#W;      *
+ *            ;W,    i#W,   ,;;L#K;;.E#i  E#i       i#W,   E##j       E#,           ;W,          ,W,     .Et E#t    E#t t##L     *
+ *           j##,   L#D.       t#E   E#t  E#t      L#D.    E###D.     E#t          j##,         t##,    ,W#t E#t    E#t  .E#K,   *
+ *          G###, :K#Wfff;     t#E   E#t  E#t    :K#Wfff;  E#jG#W;    E#t         G###,        L###,   j###t E#t fi E#t    j##f  *
+ *        :E####, i##WLLLLt    t#E   E########f. i##WLLLLt E#t t##f   E#t       :E####,      .E#j##,  G#fE#t E#t L#jE#t    :E#K: *
+ *       ;W#DG##,  .E#L        t#E   E#j..K#j...  .E#L     E#t  :K#E: E#t      ;W#DG##,     ;WW; ##,:K#i E#t E#t L#LE#t   t##L   *
+ *      j###DW##,    f#E:      t#E   E#t  E#t       f#E:   E#KDDDD###iE#t     j###DW##,    j#E.  ##f#W,  E#t E#tf#E:E#t .D#W;    *
+ *     G##i,,G##,     ,WW;     t#E   E#t  E#t        ,WW;  E#f,t#Wi,,,E#t    G##i,,G##,  .D#L    ###K:   E#t E###f  E#tiW#G.     *
+ *   :K#K:   L##,      .D#;    t#E   f#t  f#t         .D#; E#t  ;#W:  E#t  :K#K:   L##, :K#t     ##D.    E#t E#K,   E#K##i       *
+ *  ;##D.    L##,        tt     fE    ii   ii           tt DWi   ,KK: E#t ;##D.    L##, ...      #G      ..  EL     E##D.        *
+ *  ,,,      .,,                 :                                    ,;. ,,,      .,,           j           :      E#t          *
+ *                                                                                                                  L:           *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                AetheriaMUD additions and changes from the Star Wars Reality code                                              *
+ *                copyright (c) 2025 /dev/null Industries - StygianRenegade                                                     *
+ *                                                                                                                               *
+ *                Star Wars Reality Code Additions and changes from the Smaug Code copyright (c) 1997                            *
+ *                by Sean Cooper                                                                                                 *
+ *                                                                                                                               *
+ *           Starwars and Starwars Names copyright(c) Disney Enterprises, Inc.... All hail the mouse overlord!                   *
+ *                                                                                                                               *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                                             SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper                       *
+ *                                                                                                                               *
+ *                           Based on a concept and ideas from the original SWR immortals:                                       *
+ *                Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn),                                  *
+ *                Ackbar, Satin, Streen and Bib as well as much input from our other builders and players.                       *
+ *                                                                                                                               *
+ *                           Original SMAUG 1.4a written by Thoric (Derek Snider) with:                                          *
+ *                Altrag, Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,                                      *
+ *                Grishnakh, Fireblade, and Nivek.                                                                               *
+ *                                                                                                                               *
+ *                           Original MERC 2.1 code by: Hatchet, Furey, and Kahn.                                                *
+ *                                                                                                                               *
+ *                           Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,                                 *
+ *                Michael Seifert, and Sebastian Hammer.                                                                         *
+ *                                                                                                                               *
+ *********************************************************************************************************************************/
 
 #include <sys/types.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include "mud.h"
+#include "mud.hpp"
 
 /*Global Variables*/
 char title[MAX_INPUT_LENGTH];
@@ -623,7 +642,7 @@ void do_inquire( CHAR_DATA * ch, const char *argument )
          {
 
             send_to_char( "&GYou begin the long process of trying to slice into the banking computer system.\r\n", ch );
-            mudstrlcpy( buf, "$n takes $s datapad and hooks into a data port.", MAX_INPUT_LENGTH );
+            strlcpy( buf, "$n takes $s datapad and hooks into a data port.", MAX_INPUT_LENGTH );
             act( AT_PLAIN, buf, ch, NULL, argument, TO_ROOM );
             add_timer( ch, TIMER_DO_FUN, 10, do_inquire, 1 );
             return;
@@ -779,7 +798,7 @@ void do_makecommsystem( CHAR_DATA * ch, const char *argument )
             send_to_char( "&GYou begin the long process of making a commsystem.\r\n", ch );
             act( AT_PLAIN, "$n takes $s tools and begins to work on something.", ch, NULL, argument, TO_ROOM );
             add_timer( ch, TIMER_DO_FUN, 5, do_makecommsystem, 1 );
-            ch->dest_buf = str_dup( arg );
+            ch->dest_buf = strdup( arg );
             return;
          }
          send_to_char( "&RYou can't figure out how to fit the parts together.\r\n", ch );
@@ -873,14 +892,14 @@ void do_makecommsystem( CHAR_DATA * ch, const char *argument )
    obj->level = level;
    obj->weight = 2 + level / 10;
    STRFREE( obj->name );
-   mudstrlcpy( buf, arg, MAX_STRING_LENGTH );
-   mudstrlcat( buf, " CommSystem", MAX_STRING_LENGTH );
+   strlcpy( buf, arg, MAX_STRING_LENGTH );
+   strlcat( buf, " CommSystem", MAX_STRING_LENGTH );
    obj->name = STRALLOC( buf );
-   mudstrlcpy( buf, arg, MAX_STRING_LENGTH );
+   strlcpy( buf, arg, MAX_STRING_LENGTH );
    STRFREE( obj->short_descr );
    obj->short_descr = STRALLOC( buf );
    STRFREE( obj->description );
-   mudstrlcat( buf, " was dropped on the floor.", MAX_STRING_LENGTH );
+   strlcat( buf, " was dropped on the floor.", MAX_STRING_LENGTH );
    obj->description = STRALLOC( buf );;
    obj->cost = 45000;
    obj = obj_to_char( obj, ch );
@@ -994,7 +1013,7 @@ void do_makedatapad( CHAR_DATA * ch, const char *argument )
             send_to_char( "&GYou begin the long process of making a datapad.\r\n", ch );
             act( AT_PLAIN, "$n takes $s tools and begins to work on something.", ch, NULL, argument, TO_ROOM );
             add_timer( ch, TIMER_DO_FUN, 5, do_makedatapad, 1 );
-            ch->dest_buf = str_dup( arg );
+            ch->dest_buf = strdup( arg );
             return;
          }
          send_to_char( "&RYou can't figure out how to fit the parts together.\r\n", ch );
@@ -1095,14 +1114,14 @@ void do_makedatapad( CHAR_DATA * ch, const char *argument )
    obj->level = level;
    obj->weight = 2 + level / 10;
    STRFREE( obj->name );
-   mudstrlcpy( buf, arg, MAX_STRING_LENGTH );
-   mudstrlcat( buf, " CommSystem", MAX_STRING_LENGTH );
+   strlcpy( buf, arg, MAX_STRING_LENGTH );
+   strlcat( buf, " CommSystem", MAX_STRING_LENGTH );
    obj->name = STRALLOC( buf );
-   mudstrlcpy( buf, arg, MAX_STRING_LENGTH );
+   strlcpy( buf, arg, MAX_STRING_LENGTH );
    STRFREE( obj->short_descr );
    obj->short_descr = STRALLOC( buf );
    STRFREE( obj->description );
-   mudstrlcat( buf, " was dropped on the floor.", MAX_STRING_LENGTH );
+   strlcat( buf, " was dropped on the floor.", MAX_STRING_LENGTH );
    obj->description = STRALLOC( buf );;
    obj->cost = 45000;
    obj = obj_to_char( obj, ch );
@@ -1173,7 +1192,7 @@ void do_codecrack( CHAR_DATA * ch, const char *argument )
             if( ( ship = ship_in_room( ch->in_room, arg ) ) != NULL )
             {
                ship = get_ship( arg );
-               ch->dest_buf = str_dup( arg );
+               ch->dest_buf = strdup( arg );
                send_to_char( "&GYou begin the long process of trying to slice into a ships computer.\r\n", ch );
                snprintf( buf, MAX_INPUT_LENGTH, "$n takes $s datapad and hooks into the %s's data port.\r\n", ship->name );
                act( AT_PLAIN, buf, ch, NULL, argument, TO_ROOM );
@@ -1382,7 +1401,7 @@ void do_disableship( CHAR_DATA * ch, const char *argument )
                send_to_char( "You take out your datapad and commsystem and begin working on disabling the ship.\r\n", ch );
                act( AT_PLAIN, "$n takes out $s datapad and begins working on disabling a ships launcher.\r\n", ch, NULL,
                     NULL, TO_ROOM );
-               ch->dest_buf = str_dup( arg1 );
+               ch->dest_buf = strdup( arg1 );
                add_timer( ch, TIMER_DO_FUN, 5, do_disableship, 1 );
                return;
             }
@@ -1393,7 +1412,7 @@ void do_disableship( CHAR_DATA * ch, const char *argument )
                send_to_char( "You take out your datapad and commsystem and begin working on disabling the ship.\r\n", ch );
                act( AT_PLAIN, "$n takes out $s datapad and begins working on disabling a ships shields.\r\n", ch, NULL, NULL,
                     TO_ROOM );
-               ch->dest_buf = str_dup( arg1 );
+               ch->dest_buf = strdup( arg1 );
                add_timer( ch, TIMER_DO_FUN, 15, do_disableship, 1 );
                return;
             }
@@ -1408,7 +1427,7 @@ void do_disableship( CHAR_DATA * ch, const char *argument )
                send_to_char( "You take out your datapad and commsystem and begin working on disabling the ship.\r\n", ch );
                act( AT_PLAIN, "$n takes out $s datapad and begins working on disabling a ships hyperdrive.\r\n", ch, NULL,
                     NULL, TO_ROOM );
-               ch->dest_buf = str_dup( arg1 );
+               ch->dest_buf = strdup( arg1 );
                add_timer( ch, TIMER_DO_FUN, 10, do_disableship, 1 );
                return;
             }
@@ -1419,7 +1438,7 @@ void do_disableship( CHAR_DATA * ch, const char *argument )
                send_to_char( "You take out your datapad and commsystem and begin working on disabling the ship.\r\n", ch );
                act( AT_PLAIN, "$n takes out $s datapad and begins working on disabling a ships primary weapons system.\r\n",
                     ch, NULL, NULL, TO_ROOM );
-               ch->dest_buf = str_dup( arg1 );
+               ch->dest_buf = strdup( arg1 );
                add_timer( ch, TIMER_DO_FUN, 30, do_disableship, 1 );
                return;
             }
@@ -1583,7 +1602,7 @@ void do_assignpilot( CHAR_DATA * ch, const char *argument )
             strcpy( disable, arg2 );
             send_to_char( "You take out your datapad working on changing this ships pilot.\r\n", ch );
             act( AT_PLAIN, "$n takes out $s datapad and begins working on something.\r\n", ch, NULL, argument, TO_ROOM );
-            ch->dest_buf = str_dup( arg1 );
+            ch->dest_buf = strdup( arg1 );
             add_timer( ch, TIMER_DO_FUN, 5, do_assignpilot, 1 );
             return;
          }
@@ -1732,10 +1751,10 @@ void do_slicebank( CHAR_DATA * ch, const char *argument )
             return;
          }
 
-         ch->dest_buf = str_dup( arg );
-         ch->dest_buf_2 = str_dup( arg2 );
+         ch->dest_buf = strdup( arg );
+         ch->dest_buf_2 = strdup( arg2 );
          send_to_char( "&GYou begin the long process of trying to slice into the banking computer system.\r\n", ch );
-         mudstrlcpy( buf, "$n takes $s datapad and hooks it into a data port.", MAX_INPUT_LENGTH );
+         strlcpy( buf, "$n takes $s datapad and hooks it into a data port.", MAX_INPUT_LENGTH );
          act( AT_PLAIN, buf, ch, NULL, argument, TO_ROOM );
          add_timer( ch, TIMER_DO_FUN, 10, do_slicebank, 1 );
          return;
@@ -1964,9 +1983,9 @@ void do_checkprints( CHAR_DATA * ch, const char *argument )
          schance = IS_NPC( ch ) ? ch->top_level : ( int )( ch->pcdata->learned[gsn_checkprints] );
          if( number_percent(  ) < schance )
          {
-            ch->dest_buf = str_dup( arg );
+            ch->dest_buf = strdup( arg );
             send_to_char( "&GYou begin the long process of cross checking fingerprints.\r\n", ch );
-            mudstrlcpy( buf, "$n takes $s datapad and hooks into a commsystem.\r\n", MAX_INPUT_LENGTH );
+            strlcpy( buf, "$n takes $s datapad and hooks into a commsystem.\r\n", MAX_INPUT_LENGTH );
             act( AT_PLAIN, buf, ch, NULL, argument, TO_ROOM );
             add_timer( ch, TIMER_DO_FUN, 5, do_checkprints, 1 );
             return;

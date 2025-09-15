@@ -34,7 +34,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "sha256.h"
+#include "sha256.hpp"
 
 #define UNPACK32(x, str)                      \
 {                                             \

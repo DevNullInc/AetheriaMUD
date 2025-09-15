@@ -1,31 +1,26 @@
-/*****************************************************************************************
- *                      .___________. __    __   _______                                 *
- *                      |           ||  |  |  | |   ____|                                *
- *                      `---|  |----`|  |__|  | |  |__                                   *
- *                          |  |     |   __   | |   __|                                  *
- *                          |  |     |  |  |  | |  |____                                 *
- *                          |__|     |__|  |__| |_______|                                *
- *                                                                                       *
- *                _______  __  .__   __.      ___       __                               *
- *               |   ____||  | |  \ |  |     /   \     |  |                              *
- *               |  |__   |  | |   \|  |    /  ^  \    |  |                              *
- *               |   __|  |  | |  . `  |   /  /_\  \   |  |                              *
- *               |  |     |  | |  |\   |  /  _____  \  |  `----.                         *
- *               |__|     |__| |__| \__| /__/     \__\ |_______|                         *
- *                                                                                       *
- *      _______ .______    __       _______.  ______    _______   _______                *
- *     |   ____||   _  \  |  |     /       | /  __  \  |       \ |   ____|               *
- *     |  |__   |  |_)  | |  |    |   (----`|  |  |  | |  .--.  ||  |__                  *
- *     |   __|  |   ___/  |  |     \   \    |  |  |  | |  |  |  ||   __|                 *
- *     |  |____ |  |      |  | .----)   |   |  `--'  | |  '--'  ||  |____                *
- *     |_______|| _|      |__| |_______/     \______/  |_______/ |_______|               *
- *****************************************************************************************
- *                                                                                       *
- * Modern password hashing using Argon2 for improved security - /dev/null Industries     *
- * Argon2 - https://argon2-cffi.readthedocs.io/en/stable/                                *
- *  Commented fully for better understanding on how this works.                          *
- *                                                                                       *
- *****************************************************************************************/
+/*********************************************************************************************************************************
+ *                                                                                                                   ;           *
+ *                                                                                                                  ED.          *
+ *                        ,;                             ,;                                                  :      E#Wi         *
+ *                      f#i          .    .            f#i j.         t                                      Ef     E###G.       *
+ *             ..     .E#t  GEEEEEEELDi   Dt         .E#t  EW,        Ej             ..           ..       : E#t    E#fD#W;      *
+ *            ;W,    i#W,   ,;;L#K;;.E#i  E#i       i#W,   E##j       E#,           ;W,          ,W,     .Et E#t    E#t t##L     *
+ *           j##,   L#D.       t#E   E#t  E#t      L#D.    E###D.     E#t          j##,         t##,    ,W#t E#t    E#t  .E#K,   *
+ *          G###, :K#Wfff;     t#E   E#t  E#t    :K#Wfff;  E#jG#W;    E#t         G###,        L###,   j###t E#t fi E#t    j##f  *
+ *        :E####, i##WLLLLt    t#E   E########f. i##WLLLLt E#t t##f   E#t       :E####,      .E#j##,  G#fE#t E#t L#jE#t    :E#K: *
+ *       ;W#DG##,  .E#L        t#E   E#j..K#j...  .E#L     E#t  :K#E: E#t      ;W#DG##,     ;WW; ##,:K#i E#t E#t L#LE#t   t##L   *
+ *      j###DW##,    f#E:      t#E   E#t  E#t       f#E:   E#KDDDD###iE#t     j###DW##,    j#E.  ##f#W,  E#t E#tf#E:E#t .D#W;    *
+ *     G##i,,G##,     ,WW;     t#E   E#t  E#t        ,WW;  E#f,t#Wi,,,E#t    G##i,,G##,  .D#L    ###K:   E#t E###f  E#tiW#G.     *
+ *   :K#K:   L##,      .D#;    t#E   f#t  f#t         .D#; E#t  ;#W:  E#t  :K#K:   L##, :K#t     ##D.    E#t E#K,   E#K##i       *
+ *  ;##D.    L##,        tt     fE    ii   ii           tt DWi   ,KK: E#t ;##D.    L##, ...      #G      ..  EL     E##D.        *
+ *  ,,,      .,,                 :                                    ,;. ,,,      .,,           j           :      E#t          *
+ *                                                                                                                  L:           *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                 Modern password hashing using Argon2 for improved security - /dev/null Industries                             * 
+ *                                 Argon2 - https://argon2-cffi.readthedocs.io/en/stable/                                        *
+ *                               Commented fully for better understanding on how this works.                                     *
+ *********************************************************************************************************************************/
 
 #include <string>
 #include <vector>
@@ -127,7 +122,7 @@ std::string hash_password(std::string_view password, std::string_view salt_in) {
     encoded.resize(strlen(encoded.c_str()));
     return encoded;
 }
-
+// Verify a password against a stored hash (supports Argon2 and legacy crypt)
 bool verify_password(std::string_view password, std::string_view stored_hash) {
     if (password.empty() || stored_hash.empty()) {
         return false;
@@ -143,14 +138,14 @@ bool verify_password(std::string_view password, std::string_view stored_hash) {
         return encrypted && (strcmp(encrypted, stored_hash.data()) == 0);
     }
 }
-
+// Generate a new random salt (for legacy crypt, if needed)
 std::string generate_salt() {
     std::string salt;
     salt.resize(SaltLength);
     generate_secure_random(reinterpret_cast<uint8_t*>(&salt[0]), SaltLength);
     return salt;
 }
-
+// Migrate a password from legacy crypt to Argon2 (if it matches)
 std::string migrate_password(std::string_view password, std::string_view old_hash) {
     if (password.empty() || old_hash.empty()) {
         return old_hash.empty() ? std::string() : std::string(old_hash);

@@ -1,29 +1,48 @@
-/* 
-
-SWFotE copyright (c) 2002 was created by
-Chris 'Tawnos' Dary (cadary@uwm.edu),
-Korey 'Eleven' King (no email),
-Matt 'Trillen' White (mwhite17@ureach.com),
-Daniel 'Danimal' Berrill (danimal924@yahoo.com),
-Richard 'Bambua' Berrill (email unknown),
-Stuart 'Ackbar' Unknown (email unknown)
-
-SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper
-based on a concept and ideas from the original SWR immortals: 
-Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn), 
-Ackbar, Satin, Streen and Bib as well as much input from our other builders 
-and players.
-
-Original SMAUG 1.4a written by Thoric (Derek Snider) with Altrag,
-Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,
-Grishnakh, Fireblade, and Nivek.
-
-Original MERC 2.1 code by Hatchet, Furey, and Kahn.
-
-Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,
-Michael Seifert, and Sebastian Hammer.
-
-*/
+/*********************************************************************************************************************************
+ *                                                                                                                   ;           *
+ *                                                                                                                  ED.          *
+ *                        ,;                             ,;                                                  :      E#Wi         *
+ *                      f#i          .    .            f#i j.         t                                      Ef     E###G.       *
+ *             ..     .E#t  GEEEEEEELDi   Dt         .E#t  EW,        Ej             ..           ..       : E#t    E#fD#W;      *
+ *            ;W,    i#W,   ,;;L#K;;.E#i  E#i       i#W,   E##j       E#,           ;W,          ,W,     .Et E#t    E#t t##L     *
+ *           j##,   L#D.       t#E   E#t  E#t      L#D.    E###D.     E#t          j##,         t##,    ,W#t E#t    E#t  .E#K,   *
+ *          G###, :K#Wfff;     t#E   E#t  E#t    :K#Wfff;  E#jG#W;    E#t         G###,        L###,   j###t E#t fi E#t    j##f  *
+ *        :E####, i##WLLLLt    t#E   E########f. i##WLLLLt E#t t##f   E#t       :E####,      .E#j##,  G#fE#t E#t L#jE#t    :E#K: *
+ *       ;W#DG##,  .E#L        t#E   E#j..K#j...  .E#L     E#t  :K#E: E#t      ;W#DG##,     ;WW; ##,:K#i E#t E#t L#LE#t   t##L   *
+ *      j###DW##,    f#E:      t#E   E#t  E#t       f#E:   E#KDDDD###iE#t     j###DW##,    j#E.  ##f#W,  E#t E#tf#E:E#t .D#W;    *
+ *     G##i,,G##,     ,WW;     t#E   E#t  E#t        ,WW;  E#f,t#Wi,,,E#t    G##i,,G##,  .D#L    ###K:   E#t E###f  E#tiW#G.     *
+ *   :K#K:   L##,      .D#;    t#E   f#t  f#t         .D#; E#t  ;#W:  E#t  :K#K:   L##, :K#t     ##D.    E#t E#K,   E#K##i       *
+ *  ;##D.    L##,        tt     fE    ii   ii           tt DWi   ,KK: E#t ;##D.    L##, ...      #G      ..  EL     E##D.        *
+ *  ,,,      .,,                 :                                    ,;. ,,,      .,,           j           :      E#t          *
+ *                                                                                                                  L:           *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                AetheriaMUD additions and changes from the Star Wars Reality code                                              *
+ *                copyright (c) 2025 /dev/null Industries - StygianRenegade                                                     *
+ *                                                                                                                               *
+ *                Star Wars Reality Code Additions and changes from the Smaug Code copyright (c) 1997                            *
+ *                by Sean Cooper                                                                                                 *
+ *                                                                                                                               *
+ *           Starwars and Starwars Names copyright(c) Disney Enterprises, Inc.... All hail the mouse overlord!                   *
+ *                                                                                                                               *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                                             SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper                       *
+ *                                                                                                                               *
+ *                           Based on a concept and ideas from the original SWR immortals:                                       *
+ *                Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn),                                  *
+ *                Ackbar, Satin, Streen and Bib as well as much input from our other builders and players.                       *
+ *                                                                                                                               *
+ *                           Original SMAUG 1.4a written by Thoric (Derek Snider) with:                                          *
+ *                Altrag, Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,                                      *
+ *                Grishnakh, Fireblade, and Nivek.                                                                               *
+ *                                                                                                                               *
+ *                           Original MERC 2.1 code by: Hatchet, Furey, and Kahn.                                                *
+ *                                                                                                                               *
+ *                           Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,                                 *
+ *                Michael Seifert, and Sebastian Hammer.                                                                         *
+ *                                                                                                                               *
+ *********************************************************************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,7 +53,7 @@ Michael Seifert, and Sebastian Hammer.
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <errno.h>
-#include "mud.h"
+#include "mud.hpp"
 
 BMARKET_DATA *first_market_ship;
 BMARKET_DATA *last_market_ship;
@@ -249,39 +268,39 @@ void do_buymobship( CHAR_DATA * ch, const char *argument )
    switch ( ship_type )
    {
       default:
-         mudstrlcpy( ship_buf, "Mobile Ship MS", MAX_INPUT_LENGTH );
+         strlcpy( ship_buf, "Mobile Ship MS", MAX_INPUT_LENGTH );
          break;
          // NR
       case 0:
-         mudstrlcpy( ship_buf, "X-Wing Snubfighter MXW", MAX_INPUT_LENGTH );
+         strlcpy( ship_buf, "X-Wing Snubfighter MXW", MAX_INPUT_LENGTH );
          break;
       case 1:
-         mudstrlcpy( ship_buf, "A-Wing Scout MAW", MAX_INPUT_LENGTH );
+         strlcpy( ship_buf, "A-Wing Scout MAW", MAX_INPUT_LENGTH );
          break;
       case 2:
-         mudstrlcpy( ship_buf, "B-Wing Heavy Fighter MBW", MAX_INPUT_LENGTH );
+         strlcpy( ship_buf, "B-Wing Heavy Fighter MBW", MAX_INPUT_LENGTH );
          break;
       case 3:
-         mudstrlcpy( ship_buf, "Y-Wing Bomber MYB", MAX_INPUT_LENGTH );
+         strlcpy( ship_buf, "Y-Wing Bomber MYB", MAX_INPUT_LENGTH );
          break;
       case 4:
-         mudstrlcpy( ship_buf, "K-Wing Heavy Bomber MKW", MAX_INPUT_LENGTH );
+         strlcpy( ship_buf, "K-Wing Heavy Bomber MKW", MAX_INPUT_LENGTH );
          break;
          // Imp
       case 6:
-         mudstrlcpy( ship_buf, "TIE Fighter MTF", MAX_INPUT_LENGTH );
+         strlcpy( ship_buf, "TIE Fighter MTF", MAX_INPUT_LENGTH );
          break;
       case 7:
-         mudstrlcpy( ship_buf, "TIE Bomber MTB", MAX_INPUT_LENGTH );
+         strlcpy( ship_buf, "TIE Bomber MTB", MAX_INPUT_LENGTH );
          break;
       case 8:
-         mudstrlcpy( ship_buf, "TIE Defender MTD", MAX_INPUT_LENGTH );
+         strlcpy( ship_buf, "TIE Defender MTD", MAX_INPUT_LENGTH );
          break;
       case 9:
-         mudstrlcpy( ship_buf, "XM-1 Missileboat MXM", MAX_INPUT_LENGTH );
+         strlcpy( ship_buf, "XM-1 Missileboat MXM", MAX_INPUT_LENGTH );
          break;
       case 10:
-         mudstrlcpy( ship_buf, "XG-1 Assault Gunboat MXG", MAX_INPUT_LENGTH );
+         strlcpy( ship_buf, "XG-1 Assault Gunboat MXG", MAX_INPUT_LENGTH );
          break;
    }
 
@@ -913,7 +932,7 @@ SHIP_DATA *make_prototype_ship( int ship_type, int vnum, CHAR_DATA * ch, char *s
    ship->password = number_range( 1111, 9999 );;
    ship->maxmods = ship_prototypes[ship_type].mods;
    snprintf( sp_filename, 256, "ship_%d.sss", vnum );
-   ship->filename = str_dup( sp_filename );
+   ship->filename = strdup( sp_filename );
    ship->pilotseat = vnum;
    ship->coseat = vnum;
    ship->navseat = vnum;
@@ -1087,7 +1106,7 @@ int make_prototype_rooms( int ship_type, int vnum, AREA_DATA * tarea, char *Snam
             newroom->description = STRALLOC( "" ); 
             continue;
          }
-         mudstrlcpy( newdesc, strlinwrp( proom->desc, 60 ), MAX_STRING_LENGTH );
+         strlcpy( newdesc, strlinwrp( proom->desc, 60 ), MAX_STRING_LENGTH );
          if( newroom->name )
             STRFREE( newroom->name );
          newroom->name = STRALLOC( strrep( proom->name, "$SN$", Sname ) );
@@ -1226,7 +1245,7 @@ void make_rprogs( int ship_type, int vnum )
          size = 10;
          for( x = 0; x < size; x++ )
          {
-            argument = str_dup( proom->rprog[x] );
+            argument = strdup( proom->rprog[x] );
             if( argument[0] == '\0' )
                continue;
             argument = one_argument( argument, arg1 );
@@ -1265,7 +1284,7 @@ char *parse_prog_string( char *inp, int ship_type, int vnum )
    char newinp[MAX_STRING_LENGTH];
    int x, size;
 
-   mudstrlcpy( newinp, inp, MAX_STRING_LENGTH );
+   strlcpy( newinp, inp, MAX_STRING_LENGTH );
    size = ship_prototypes[ship_type].num_rooms;
    for( x = 0; x < size; x++ )
    {
@@ -1273,7 +1292,7 @@ char *parse_prog_string( char *inp, int ship_type, int vnum )
       snprintf( rep, MAX_STRING_LENGTH, "%d", x + vnum );
       snprintf( newinp, MAX_STRING_LENGTH, "%s", strrep( newinp, sch, rep ) );
    }
-   return str_dup( newinp );
+   return strdup( newinp );
 }
 
 void save_prototype( int prototype )
@@ -1678,7 +1697,7 @@ void do_makeprototypeship( CHAR_DATA * ch, const char *argument )
    argument = one_argument( argument, ship_name );
    argument = one_argument( argument, scost );
    argument = one_argument( argument, sname );
-   mudstrlcpy( name, argument, MAX_INPUT_LENGTH );
+   strlcpy( name, argument, MAX_INPUT_LENGTH );
    if( ship_name[0] == '\0' )
    {
       send_to_char( "You must specify a valid ship name.\r\n", ch );
@@ -2016,43 +2035,43 @@ void do_shipstat( CHAR_DATA * ch, const char *argument )
    if( ship_prototypes[shiptype].primaryType > 0 )
       snprintf( buf1, MAX_STRING_LENGTH, "%d", ship_prototypes[shiptype].primaryType );
    else
-      mudstrlcpy( buf1, "&RNone.", MAX_STRING_LENGTH );
+      strlcpy( buf1, "&RNone.", MAX_STRING_LENGTH );
    if( ship_prototypes[shiptype].secondaryType > 0 )
       snprintf( buf2, MAX_STRING_LENGTH, "%d", ship_prototypes[shiptype].secondaryType );
    else
-      mudstrlcpy( buf2, "&RNone.", MAX_STRING_LENGTH );
+      strlcpy( buf2, "&RNone.", MAX_STRING_LENGTH );
    if( ship_prototypes[shiptype].range_weapons[0] > 0 )
       snprintf( buf3, MAX_STRING_LENGTH, "%d", ship_prototypes[shiptype].range_weapons[0] );
    else
-      mudstrlcpy( buf3, "&RNone.", MAX_STRING_LENGTH );
+      strlcpy( buf3, "&RNone.", MAX_STRING_LENGTH );
    if( ship_prototypes[shiptype].shields > 0 )
       snprintf( buf4, MAX_STRING_LENGTH, "%d", ship_prototypes[shiptype].shields );
    else
-      mudstrlcpy( buf4, "&RNone.", MAX_STRING_LENGTH );
+      strlcpy( buf4, "&RNone.", MAX_STRING_LENGTH );
    if( ship_prototypes[shiptype].range_weapons[1] > 0 )
       snprintf( buf5, MAX_STRING_LENGTH, "%d", ship_prototypes[shiptype].range_weapons[1] );
    else
-      mudstrlcpy( buf5, "&RNone.", MAX_STRING_LENGTH );
+      strlcpy( buf5, "&RNone.", MAX_STRING_LENGTH );
    if( ship_prototypes[shiptype].hyperspeed > 0 )
       snprintf( buf6, MAX_STRING_LENGTH, "Class %d", ship_prototypes[shiptype].hyperspeed );
    else
-      mudstrlcpy( buf6, "&RNone.", MAX_STRING_LENGTH );
+      strlcpy( buf6, "&RNone.", MAX_STRING_LENGTH );
    if( ship_prototypes[shiptype].range_weapons[2] > 0 )
       snprintf( buf7, MAX_STRING_LENGTH, "%d", ship_prototypes[shiptype].range_weapons[2] );
    else
-      mudstrlcpy( buf7, "&RNone.", MAX_STRING_LENGTH );
+      strlcpy( buf7, "&RNone.", MAX_STRING_LENGTH );
    if( ship_prototypes[shiptype].maxbombs > 0 )
       snprintf( buf8, MAX_STRING_LENGTH, "%d", ship_prototypes[shiptype].maxbombs );
    else
-      mudstrlcpy( buf8, "&RNone.", MAX_STRING_LENGTH );
+      strlcpy( buf8, "&RNone.", MAX_STRING_LENGTH );
    if( ship_prototypes[shiptype].turrets > 0 )
       snprintf( buf9, MAX_STRING_LENGTH, "%d", ship_prototypes[shiptype].turrets );
    else
-      mudstrlcpy( buf9, "&RNone.", MAX_STRING_LENGTH );
+      strlcpy( buf9, "&RNone.", MAX_STRING_LENGTH );
    if( ship_prototypes[shiptype].chaff > 0 )
       snprintf( buf10, MAX_STRING_LENGTH, "%d", ship_prototypes[shiptype].chaff );
    else
-      mudstrlcpy( buf10, "&RNone.", MAX_STRING_LENGTH );
+      strlcpy( buf10, "&RNone.", MAX_STRING_LENGTH );
 
    ch_printf( ch, "&R&z+&W---------------------------------------------------------------&z+\r\n" );
    ch_printf( ch, "&W| Name: &w%-35.35s      &WCost: &w%8d &W|\r\n",
@@ -2403,7 +2422,7 @@ void do_installmodule( CHAR_DATA * ch, const char *argument )
    int salarm = 0;
    int chaff = 0;
 
-   mudstrlcpy( arg, argument, MAX_INPUT_LENGTH );
+   strlcpy( arg, argument, MAX_INPUT_LENGTH );
    checktool = FALSE;
    checkmod = FALSE;
    switch ( ch->substate )
@@ -2412,7 +2431,7 @@ void do_installmodule( CHAR_DATA * ch, const char *argument )
          if( ( ship = ship_from_engine( ch->in_room->vnum ) ) != NULL )
          {
             ship = ship_from_engine( ch->in_room->vnum );
-            mudstrlcpy( arg, ship->name, MAX_INPUT_LENGTH );
+            strlcpy( arg, ship->name, MAX_INPUT_LENGTH );
          }
 
          if( !ship )
@@ -2527,7 +2546,7 @@ void do_installmodule( CHAR_DATA * ch, const char *argument )
          schance = IS_NPC( ch ) ? ch->top_level : ( int )( ch->pcdata->learned[gsn_installmodule] );
          if( number_percent(  ) < schance )
          {
-            ch->dest_buf = str_dup( arg );
+            ch->dest_buf = strdup( arg );
             send_to_char( "&GYou begin the long process of installing a new module.\r\n", ch );
             snprintf( buf, MAX_INPUT_LENGTH, "$n takes out $s toolkit and a module and begins to work.\r\n" );
             act( AT_PLAIN, buf, ch, NULL, argument, TO_ROOM );
@@ -2542,7 +2561,7 @@ void do_installmodule( CHAR_DATA * ch, const char *argument )
       case 1:
          if( !ch->dest_buf )
             return;
-         mudstrlcpy( arg, (const char*)ch->dest_buf, MAX_INPUT_LENGTH );
+         strlcpy( arg, (const char*)ch->dest_buf, MAX_INPUT_LENGTH );
          DISPOSE( ch->dest_buf );
          break;
 

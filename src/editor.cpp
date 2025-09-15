@@ -44,7 +44,6 @@
  *                                                                                                                               *
  *********************************************************************************************************************************/
 
-
 /*
  *  New editor code
  *  Author: Cronel (cronel_kal@hotmail.com)
@@ -65,7 +64,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <dirent.h>
-#include "mud.h"
+#include "mud.hpp"
 
 /****************************************************************************
  * Data types and other definitions 

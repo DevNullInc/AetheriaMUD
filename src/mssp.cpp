@@ -1,19 +1,48 @@
-/****************************************************************************
- * [S]imulated [M]edieval [A]dventure multi[U]ser [G]ame      |   \\._.//   *
- * -----------------------------------------------------------|   (0...0)   *
- * SMAUG 1.4 (C) 1994, 1995, 1996, 1998  by Derek Snider      |    ).:.(    *
- * -----------------------------------------------------------|    {o o}    *
- * SMAUG code team: Thoric, Altrag, Blodkai, Narn, Haus,      |   / ' ' \   *
- * Scryn, Rennard, Swordbearer, Gorog, Grishnakh, Nivek,      |~'~.VxvxV.~'~*
- * Tricops and Fireblade                                      |             *
- * ------------------------------------------------------------------------ *
- * Merc 2.1 Diku Mud improvments copyright (C) 1992, 1993 by Michael        *
- * Chastain, Michael Quan, and Mitchell Tse.                                *
- * Original Diku Mud copyright (C) 1990, 1991 by Sebastian Hammer,          *
- * Michael Seifert, Hans Henrik St{rfeldt, Tom Madsen, and Katja Nyboe.     *
- * ------------------------------------------------------------------------ *
- *                          MSSP Plaintext Module                           *
- ****************************************************************************/
+/*********************************************************************************************************************************
+ *                                                                                                                   ;           *
+ *                                                                                                                  ED.          *
+ *                        ,;                             ,;                                                  :      E#Wi         *
+ *                      f#i          .    .            f#i j.         t                                      Ef     E###G.       *
+ *             ..     .E#t  GEEEEEEELDi   Dt         .E#t  EW,        Ej             ..           ..       : E#t    E#fD#W;      *
+ *            ;W,    i#W,   ,;;L#K;;.E#i  E#i       i#W,   E##j       E#,           ;W,          ,W,     .Et E#t    E#t t##L     *
+ *           j##,   L#D.       t#E   E#t  E#t      L#D.    E###D.     E#t          j##,         t##,    ,W#t E#t    E#t  .E#K,   *
+ *          G###, :K#Wfff;     t#E   E#t  E#t    :K#Wfff;  E#jG#W;    E#t         G###,        L###,   j###t E#t fi E#t    j##f  *
+ *        :E####, i##WLLLLt    t#E   E########f. i##WLLLLt E#t t##f   E#t       :E####,      .E#j##,  G#fE#t E#t L#jE#t    :E#K: *
+ *       ;W#DG##,  .E#L        t#E   E#j..K#j...  .E#L     E#t  :K#E: E#t      ;W#DG##,     ;WW; ##,:K#i E#t E#t L#LE#t   t##L   *
+ *      j###DW##,    f#E:      t#E   E#t  E#t       f#E:   E#KDDDD###iE#t     j###DW##,    j#E.  ##f#W,  E#t E#tf#E:E#t .D#W;    *
+ *     G##i,,G##,     ,WW;     t#E   E#t  E#t        ,WW;  E#f,t#Wi,,,E#t    G##i,,G##,  .D#L    ###K:   E#t E###f  E#tiW#G.     *
+ *   :K#K:   L##,      .D#;    t#E   f#t  f#t         .D#; E#t  ;#W:  E#t  :K#K:   L##, :K#t     ##D.    E#t E#K,   E#K##i       *
+ *  ;##D.    L##,        tt     fE    ii   ii           tt DWi   ,KK: E#t ;##D.    L##, ...      #G      ..  EL     E##D.        *
+ *  ,,,      .,,                 :                                    ,;. ,,,      .,,           j           :      E#t          *
+ *                                                                                                                  L:           *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                AetheriaMUD additions and changes from the Star Wars Reality code                                              *
+ *                copyright (c) 2025 /dev/null Industries - StygianRenegade                                                     *
+ *                                                                                                                               *
+ *                Star Wars Reality Code Additions and changes from the Smaug Code copyright (c) 1997                            *
+ *                by Sean Cooper                                                                                                 *
+ *                                                                                                                               *
+ *           Starwars and Starwars Names copyright(c) Disney Enterprises, Inc.... All hail the mouse overlord!                   *
+ *                                                                                                                               *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                                             SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper                       *
+ *                                                                                                                               *
+ *                           Based on a concept and ideas from the original SWR immortals:                                       *
+ *                Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn),                                  *
+ *                Ackbar, Satin, Streen and Bib as well as much input from our other builders and players.                       *
+ *                                                                                                                               *
+ *                           Original SMAUG 1.4a written by Thoric (Derek Snider) with:                                          *
+ *                Altrag, Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,                                      *
+ *                Grishnakh, Fireblade, and Nivek.                                                                               *
+ *                                                                                                                               *
+ *                           Original MERC 2.1 code by: Hatchet, Furey, and Kahn.                                                *
+ *                                                                                                                               *
+ *                           Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,                                 *
+ *                Michael Seifert, and Sebastian Hammer.                                                                         *
+ *                                                                                                                               *
+ *********************************************************************************************************************************/
 
 /******************************************************************
 * Program writen by:                                              *
@@ -51,8 +80,8 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
-#include "mud.h"
-#include "mssp.h"
+#include "mud.hpp"
+#include "mssp.hpp"
 
 struct mssp_info *mssp_info;
 void fread_mssp_info( FILE * fp );
@@ -444,7 +473,7 @@ void do_setmssp( CHAR_DATA *ch, const char* argument )
    if( strptr != NULL )
    {
       DISPOSE( *strptr );
-      *strptr = str_dup( argument );
+      *strptr = strdup( argument );
       ch_printf( ch, "MSSP value, %s has been changed to: %s\r\n", arg1, argument );
       save_mssp_info(  );
       return;
@@ -549,12 +578,12 @@ void do_setmssp( CHAR_DATA *ch, const char* argument )
       if( !str_cmp( arg1, "multiplaying" ) )
       {
          DISPOSE( mssp_info->multiplaying );
-         mssp_info->multiplaying = str_dup( argument );
+         mssp_info->multiplaying = strdup( argument );
       }
       else
       {
          DISPOSE( mssp_info->playerKilling );
-         mssp_info->playerKilling = str_dup( argument );
+         mssp_info->playerKilling = strdup( argument );
       }
       ch_printf( ch, "MSSP value, %s has been changed to: %s\r\n", arg1, argument );
       save_mssp_info(  );
@@ -570,12 +599,12 @@ void do_setmssp( CHAR_DATA *ch, const char* argument )
       if( !str_cmp( arg1, "training_system" ) )
       {
          DISPOSE( mssp_info->trainingSystem );
-         mssp_info->trainingSystem = str_dup( argument );
+         mssp_info->trainingSystem = strdup( argument );
       }
       else
       {
          DISPOSE( mssp_info->equipmentSystem );
-         mssp_info->equipmentSystem = str_dup( argument );
+         mssp_info->equipmentSystem = strdup( argument );
       }
       ch_printf( ch, "MSSP value, %s has been changed to: %s\r\n", arg1, argument );
       save_mssp_info(  );
@@ -589,7 +618,7 @@ void do_setmssp( CHAR_DATA *ch, const char* argument )
          return;
       }
       DISPOSE( mssp_info->questSystem );
-      mssp_info->questSystem = str_dup( argument );
+      mssp_info->questSystem = strdup( argument );
       ch_printf( ch, "MSSP value, %s has been changed to: %s\r\n", arg1, argument );
       save_mssp_info(  );
       return;
@@ -602,7 +631,7 @@ void do_setmssp( CHAR_DATA *ch, const char* argument )
          return;
       }
       DISPOSE( mssp_info->roleplaying );
-      mssp_info->roleplaying = str_dup( argument );
+      mssp_info->roleplaying = strdup( argument );
       ch_printf( ch, "MSSP value, %s has been changed to: %s\r\n", arg1, argument );
       save_mssp_info(  );
       return;
@@ -615,7 +644,7 @@ void do_setmssp( CHAR_DATA *ch, const char* argument )
          return;
       }
       DISPOSE( mssp_info->worldOriginality );
-      mssp_info->worldOriginality = str_dup( argument );
+      mssp_info->worldOriginality = strdup( argument );
       ch_printf( ch, "MSSP value, %s has been changed to: %s\r\n", arg1, argument );
       save_mssp_info(  );
       return;

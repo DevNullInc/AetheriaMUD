@@ -1,35 +1,54 @@
-/* 
-
-SWFotE copyright (c) 2002 was created by
-Chris 'Tawnos' Dary (cadary@uwm.edu),
-Korey 'Eleven' King (no email),
-Matt 'Trillen' White (mwhite17@ureach.com),
-Daniel 'Danimal' Berrill (danimal924@yahoo.com),
-Richard 'Bambua' Berrill (email unknown),
-Stuart 'Ackbar' Unknown (email unknown)
-
-SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper
-based on a concept and ideas from the original SWR immortals: 
-Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn), 
-Ackbar, Satin, Streen and Bib as well as much input from our other builders 
-and players.
-
-Original SMAUG 1.4a written by Thoric (Derek Snider) with Altrag,
-Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,
-Grishnakh, Fireblade, and Nivek.
-
-Original MERC 2.1 code by Hatchet, Furey, and Kahn.
-
-Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,
-Michael Seifert, and Sebastian Hammer.
-
-*/
+/*********************************************************************************************************************************
+ *                                                                                                                   ;           *
+ *                                                                                                                  ED.          *
+ *                        ,;                             ,;                                                  :      E#Wi         *
+ *                      f#i          .    .            f#i j.         t                                      Ef     E###G.       *
+ *             ..     .E#t  GEEEEEEELDi   Dt         .E#t  EW,        Ej             ..           ..       : E#t    E#fD#W;      *
+ *            ;W,    i#W,   ,;;L#K;;.E#i  E#i       i#W,   E##j       E#,           ;W,          ,W,     .Et E#t    E#t t##L     *
+ *           j##,   L#D.       t#E   E#t  E#t      L#D.    E###D.     E#t          j##,         t##,    ,W#t E#t    E#t  .E#K,   *
+ *          G###, :K#Wfff;     t#E   E#t  E#t    :K#Wfff;  E#jG#W;    E#t         G###,        L###,   j###t E#t fi E#t    j##f  *
+ *        :E####, i##WLLLLt    t#E   E########f. i##WLLLLt E#t t##f   E#t       :E####,      .E#j##,  G#fE#t E#t L#jE#t    :E#K: *
+ *       ;W#DG##,  .E#L        t#E   E#j..K#j...  .E#L     E#t  :K#E: E#t      ;W#DG##,     ;WW; ##,:K#i E#t E#t L#LE#t   t##L   *
+ *      j###DW##,    f#E:      t#E   E#t  E#t       f#E:   E#KDDDD###iE#t     j###DW##,    j#E.  ##f#W,  E#t E#tf#E:E#t .D#W;    *
+ *     G##i,,G##,     ,WW;     t#E   E#t  E#t        ,WW;  E#f,t#Wi,,,E#t    G##i,,G##,  .D#L    ###K:   E#t E###f  E#tiW#G.     *
+ *   :K#K:   L##,      .D#;    t#E   f#t  f#t         .D#; E#t  ;#W:  E#t  :K#K:   L##, :K#t     ##D.    E#t E#K,   E#K##i       *
+ *  ;##D.    L##,        tt     fE    ii   ii           tt DWi   ,KK: E#t ;##D.    L##, ...      #G      ..  EL     E##D.        *
+ *  ,,,      .,,                 :                                    ,;. ,,,      .,,           j           :      E#t          *
+ *                                                                                                                  L:           *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                AetheriaMUD additions and changes from the Star Wars Reality code                                              *
+ *                copyright (c) 2025 /dev/null Industries - StygianRenegade                                                     *
+ *                                                                                                                               *
+ *                Star Wars Reality Code Additions and changes from the Smaug Code copyright (c) 1997                            *
+ *                by Sean Cooper                                                                                                 *
+ *                                                                                                                               *
+ *           Starwars and Starwars Names copyright(c) Disney Enterprises, Inc.... All hail the mouse overlord!                   *
+ *                                                                                                                               *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                                             SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper                       *
+ *                                                                                                                               *
+ *                           Based on a concept and ideas from the original SWR immortals:                                       *
+ *                Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn),                                  *
+ *                Ackbar, Satin, Streen and Bib as well as much input from our other builders and players.                       *
+ *                                                                                                                               *
+ *                           Original SMAUG 1.4a written by Thoric (Derek Snider) with:                                          *
+ *                Altrag, Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,                                      *
+ *                Grishnakh, Fireblade, and Nivek.                                                                               *
+ *                                                                                                                               *
+ *                           Original MERC 2.1 code by: Hatchet, Furey, and Kahn.                                                *
+ *                                                                                                                               *
+ *                           Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,                                 *
+ *                Michael Seifert, and Sebastian Hammer.                                                                         *
+ *                                                                                                                               *
+ *********************************************************************************************************************************/
 
 #include <sys/types.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include "mud.h"
+#include "mud.hpp"
 
 /* This is for the new technician class. The technicians are going to be totally in control of ship related
    abilities. These include, creation of, and use of ship modules. Ship Maintanance, Custom Ship Design, and
@@ -125,7 +144,7 @@ void do_makemodule( CHAR_DATA * ch, const char *argument )
             send_to_char( "&GYou begin the long process of creating a module.\r\n", ch );
             act( AT_PLAIN, "$n takes $s tools and begins to work.", ch, NULL, argument, TO_ROOM );
             add_timer( ch, TIMER_DO_FUN, 10, do_makemodule, 1 );
-            ch->dest_buf = str_dup( arg );
+            ch->dest_buf = strdup( arg );
             return;
          }
          send_to_char( "&RYou can't figure out what to do.\r\n", ch );
@@ -135,7 +154,7 @@ void do_makemodule( CHAR_DATA * ch, const char *argument )
       case 1:
          if( !ch->dest_buf )
             return;
-         mudstrlcpy( arg, (const char*)ch->dest_buf, MAX_INPUT_LENGTH );
+         strlcpy( arg, (const char*)ch->dest_buf, MAX_INPUT_LENGTH );
          DISPOSE( ch->dest_buf );
          break;
 
@@ -210,85 +229,85 @@ void do_makemodule( CHAR_DATA * ch, const char *argument )
    {
       affecttype = AFFECT_PRIMARY;
       affectammount = 1;
-      mudstrlcpy( name, "A Primary Weapons Module", MAX_STRING_LENGTH );
+      strlcpy( name, "A Primary Weapons Module", MAX_STRING_LENGTH );
    }
 
    if( !str_cmp( arg, "secondary" ) )
    {
       affecttype = AFFECT_SECONDARY;
       affectammount = 1;
-      mudstrlcpy( name, "A Secondary Weapons Module", MAX_STRING_LENGTH );
+      strlcpy( name, "A Secondary Weapons Module", MAX_STRING_LENGTH );
    }
 
    if( !str_cmp( arg, "missile" ) )
    {
       affecttype = AFFECT_MISSILE;
       affectammount = ( level / 20 );
-      mudstrlcpy( name, "A Missile Module", MAX_STRING_LENGTH );
+      strlcpy( name, "A Missile Module", MAX_STRING_LENGTH );
    }
 
    if( !str_cmp( arg, "rocket" ) )
    {
       affecttype = AFFECT_ROCKET;
       affectammount = ( level / 20 );
-      mudstrlcpy( name, "A Rocket Module", MAX_STRING_LENGTH );
+      strlcpy( name, "A Rocket Module", MAX_STRING_LENGTH );
    }
 
    if( !str_cmp( arg, "torpedo" ) )
    {
       affecttype = AFFECT_TORPEDO;
       affectammount = ( level / 20 );
-      mudstrlcpy( name, "A Torpedo Module", MAX_STRING_LENGTH );
+      strlcpy( name, "A Torpedo Module", MAX_STRING_LENGTH );
    }
 
    if( !str_cmp( arg, "hull" ) )
    {
       affecttype = AFFECT_HULL;
       affectammount = ( level / 2 );
-      mudstrlcpy( name, "A Hull Module", MAX_STRING_LENGTH );
+      strlcpy( name, "A Hull Module", MAX_STRING_LENGTH );
    }
 
    if( !str_cmp( arg, "shield" ) )
    {
       affecttype = AFFECT_SHIELD;
       affectammount = ( level / 5 );
-      mudstrlcpy( name, "A Shield Module", MAX_STRING_LENGTH );
+      strlcpy( name, "A Shield Module", MAX_STRING_LENGTH );
    }
    if( !str_cmp( arg, "speed" ) )
    {
       affecttype = AFFECT_SPEED;
       affectammount = ( level / 10 );
-      mudstrlcpy( name, "A Speed Module", MAX_STRING_LENGTH );
+      strlcpy( name, "A Speed Module", MAX_STRING_LENGTH );
    }
    if( !str_cmp( arg, "hyperspeed" ) )
    {
       affecttype = AFFECT_HYPER;
       affectammount = 1;
-      mudstrlcpy( name, "A Hyperspeed Module", MAX_STRING_LENGTH );
+      strlcpy( name, "A Hyperspeed Module", MAX_STRING_LENGTH );
    }
    if( !str_cmp( arg, "energy" ) )
    {
       affecttype = AFFECT_ENERGY;
       affectammount = ( level * 5 );
-      mudstrlcpy( name, "An Energy Module", MAX_STRING_LENGTH );
+      strlcpy( name, "An Energy Module", MAX_STRING_LENGTH );
    }
    if( !str_cmp( arg, "manuever" ) )
    {
       affecttype = AFFECT_MANUEVER;
       affectammount = ( level / 10 );
-      mudstrlcpy( name, "A Manuever Module", MAX_STRING_LENGTH );
+      strlcpy( name, "A Manuever Module", MAX_STRING_LENGTH );
    }
    if( !str_cmp( arg, "alarm" ) )
    {
       affecttype = AFFECT_ALARM;
       affectammount = 1;
-      mudstrlcpy( name, "An Alarm Module", MAX_STRING_LENGTH );
+      strlcpy( name, "An Alarm Module", MAX_STRING_LENGTH );
    }
    if( !str_cmp( arg, "chaff" ) )
    {
       affecttype = AFFECT_CHAFF;
       affectammount = URANGE( 1, ( level / 33 ), 3 );
-      mudstrlcpy( name, "A Chaff Module", MAX_STRING_LENGTH );
+      strlcpy( name, "A Chaff Module", MAX_STRING_LENGTH );
    }
 
    obj = create_object( pObjIndex, level );
@@ -300,7 +319,7 @@ void do_makemodule( CHAR_DATA * ch, const char *argument )
    STRFREE( obj->short_descr );
    obj->short_descr = STRALLOC( name );
    STRFREE( obj->description );
-   mudstrlcat( name, " was dropped here.", MAX_STRING_LENGTH );
+   strlcat( name, " was dropped here.", MAX_STRING_LENGTH );
    obj->description = STRALLOC( name );
 
    obj->value[0] = affecttype;
@@ -354,31 +373,31 @@ void do_showmodules( CHAR_DATA * ch, const char *argument )
    {
       i++;
       if( mod->affect == AFFECT_PRIMARY )
-         mudstrlcpy( str, "Primary Weapon", MAX_STRING_LENGTH );
+         strlcpy( str, "Primary Weapon", MAX_STRING_LENGTH );
       if( mod->affect == AFFECT_SECONDARY )
-         mudstrlcpy( str, "Secondary Weapon", MAX_STRING_LENGTH );
+         strlcpy( str, "Secondary Weapon", MAX_STRING_LENGTH );
       if( mod->affect == AFFECT_MISSILE )
-         mudstrlcpy( str, "Missile", MAX_STRING_LENGTH );
+         strlcpy( str, "Missile", MAX_STRING_LENGTH );
       if( mod->affect == AFFECT_ROCKET )
-         mudstrlcpy( str, "Rocket", MAX_STRING_LENGTH );
+         strlcpy( str, "Rocket", MAX_STRING_LENGTH );
       if( mod->affect == AFFECT_TORPEDO )
-         mudstrlcpy( str, "Torpedo", MAX_STRING_LENGTH );
+         strlcpy( str, "Torpedo", MAX_STRING_LENGTH );
       if( mod->affect == AFFECT_HULL )
-         mudstrlcpy( str, "Hull", MAX_STRING_LENGTH );
+         strlcpy( str, "Hull", MAX_STRING_LENGTH );
       if( mod->affect == AFFECT_SHIELD )
-         mudstrlcpy( str, "Shields", MAX_STRING_LENGTH );
+         strlcpy( str, "Shields", MAX_STRING_LENGTH );
       if( mod->affect == AFFECT_SPEED )
-         mudstrlcpy( str, "Speed", MAX_STRING_LENGTH );
+         strlcpy( str, "Speed", MAX_STRING_LENGTH );
       if( mod->affect == AFFECT_HYPER )
-         mudstrlcpy( str, "Hyperspeed", MAX_STRING_LENGTH );
+         strlcpy( str, "Hyperspeed", MAX_STRING_LENGTH );
       if( mod->affect == AFFECT_ENERGY )
-         mudstrlcpy( str, "Energy", MAX_STRING_LENGTH );
+         strlcpy( str, "Energy", MAX_STRING_LENGTH );
       if( mod->affect == AFFECT_MANUEVER )
-         mudstrlcpy( str, "Manuever", MAX_STRING_LENGTH );
+         strlcpy( str, "Manuever", MAX_STRING_LENGTH );
       if( mod->affect == AFFECT_ALARM )
-         mudstrlcpy( str, "Alarm", MAX_STRING_LENGTH );
+         strlcpy( str, "Alarm", MAX_STRING_LENGTH );
       if( mod->affect == AFFECT_CHAFF )
-         mudstrlcpy( str, "Chaff", MAX_STRING_LENGTH );
+         strlcpy( str, "Chaff", MAX_STRING_LENGTH );
 
       ch_printf( ch, "&z| &P%2d&p)  &G&W%-22.22s %-8.8d &z|\r\n", i, str, mod->ammount );
    }
@@ -400,7 +419,7 @@ void do_removemodule( CHAR_DATA * ch, const char *argument )
    int schance;
    int num, i;
 
-   mudstrlcpy( arg, argument, MAX_INPUT_LENGTH );
+   strlcpy( arg, argument, MAX_INPUT_LENGTH );
    checktool = FALSE;
    switch ( ch->substate )
    {
@@ -447,10 +466,10 @@ void do_removemodule( CHAR_DATA * ch, const char *argument )
          schance = IS_NPC( ch ) ? ch->top_level : ( int )( ch->pcdata->learned[gsn_removemodule] );
          if( number_percent(  ) < schance )
          {
-            mudstrlcpy( arg, argument, MAX_INPUT_LENGTH );
-            ch->dest_buf = str_dup( arg );
+            strlcpy( arg, argument, MAX_INPUT_LENGTH );
+            ch->dest_buf = strdup( arg );
             send_to_char( "&GYou begin the long process of removing a module.\r\n", ch );
-            mudstrlcpy( buf, "$n takes out $s toolkit and begins to work.\r\n", MAX_INPUT_LENGTH );
+            strlcpy( buf, "$n takes out $s toolkit and begins to work.\r\n", MAX_INPUT_LENGTH );
             act( AT_PLAIN, buf, ch, NULL, argument, TO_ROOM );
 
             add_timer( ch, TIMER_DO_FUN, 5, do_removemodule, 1 );
@@ -464,7 +483,7 @@ void do_removemodule( CHAR_DATA * ch, const char *argument )
       case 1:
          if( !ch->dest_buf )
             return;
-         mudstrlcpy( arg, (const char*)ch->dest_buf, MAX_INPUT_LENGTH );
+         strlcpy( arg, (const char*)ch->dest_buf, MAX_INPUT_LENGTH );
          DISPOSE( ch->dest_buf );
          break;
 
@@ -568,7 +587,7 @@ void do_shipmaintenance( CHAR_DATA * ch, const char *argument )
    OBJ_DATA *obj;
    int oldbombs;
 
-   mudstrlcpy( arg, argument, MAX_INPUT_LENGTH );
+   strlcpy( arg, argument, MAX_INPUT_LENGTH );
 
    if( ( ch->pcdata->learned[gsn_shipmaintenance] ) <= 0 )
    {
@@ -591,7 +610,7 @@ void do_shipmaintenance( CHAR_DATA * ch, const char *argument )
             send_to_char( "&GYou start performing basic maintenance on your ship...\r\n", ch );
             act( AT_PLAIN, "$n begins some basic ship maintenance.", ch, NULL, argument, TO_ROOM );
             add_timer( ch, TIMER_DO_FUN, 15, do_shipmaintenance, 1 );
-            ch->dest_buf = str_dup( arg );
+            ch->dest_buf = strdup( arg );
             return;
          }
          send_to_char( "&RYou fail to perform even the most basic of ship maintenance skills.\r\n", ch );
@@ -601,7 +620,7 @@ void do_shipmaintenance( CHAR_DATA * ch, const char *argument )
       case 1:
          if( !ch->dest_buf )
             return;
-         mudstrlcpy( arg, (const char*)ch->dest_buf, MAX_INPUT_LENGTH );
+         strlcpy( arg, (const char*)ch->dest_buf, MAX_INPUT_LENGTH );
          DISPOSE( ch->dest_buf );
          break;
 
@@ -726,7 +745,7 @@ void do_scanbugs( CHAR_DATA * ch, const char *argument )
             act( AT_PLAIN, "$n takes a scanner and begins to scan $N.", ch, NULL, victim, TO_NOTVICT );
             act( AT_PLAIN, "$n takes a scanner and begins to scan you for bugs.", ch, NULL, victim, TO_VICT );
             add_timer( ch, TIMER_DO_FUN, 10, do_scanbugs, 1 );
-            ch->dest_buf = str_dup( arg );
+            ch->dest_buf = strdup( arg );
             return;
          }
          send_to_char( "You punch random buttons on the scanner, unsure of what you are doing.\r\n", ch );
@@ -736,7 +755,7 @@ void do_scanbugs( CHAR_DATA * ch, const char *argument )
       case 1:
          if( !ch->dest_buf )
             return;
-         mudstrlcpy( arg, (const char*)ch->dest_buf, MAX_INPUT_LENGTH );
+         strlcpy( arg, (const char*)ch->dest_buf, MAX_INPUT_LENGTH );
          DISPOSE( ch->dest_buf );
          ch->dest_buf = NULL;
          break;
@@ -832,7 +851,7 @@ void do_removebug( CHAR_DATA * ch, const char *argument )
             act( AT_PLAIN, "$n takes $s toolkit and begins removing a bug from $N.", ch, NULL, victim, TO_NOTVICT );
             act( AT_PLAIN, "$n takes $s toolkit and begins removing a bug from you.", ch, NULL, victim, TO_VICT );
             add_timer( ch, TIMER_DO_FUN, 1, do_removebug, 1 );
-            ch->dest_buf = str_dup( arg );
+            ch->dest_buf = strdup( arg );
             return;
          }
          send_to_char( "You look curiously at the bug, unsure of how to remove it.\r\n", ch );
@@ -842,7 +861,7 @@ void do_removebug( CHAR_DATA * ch, const char *argument )
       case 1:
          if( !ch->dest_buf )
             return;
-         mudstrlcpy( arg, (const char*)ch->dest_buf, MAX_INPUT_LENGTH );
+         strlcpy( arg, (const char*)ch->dest_buf, MAX_INPUT_LENGTH );
          DISPOSE( ch->dest_buf );
          ch->dest_buf = NULL;
          break;

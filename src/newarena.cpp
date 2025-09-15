@@ -1,29 +1,48 @@
-/* 
-
-SWFotE copyright (c) 2002 was created by
-Chris 'Tawnos' Dary (cadary@uwm.edu),
-Korey 'Eleven' King (no email),
-Matt 'Trillen' White (mwhite17@ureach.com),
-Daniel 'Danimal' Berrill (danimal924@yahoo.com),
-Richard 'Bambua' Berrill (email unknown),
-Stuart 'Ackbar' Unknown (email unknown)
-
-SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper
-based on a concept and ideas from the original SWR immortals: 
-Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn), 
-Ackbar, Satin, Streen and Bib as well as much input from our other builders 
-and players.
-
-Original SMAUG 1.4a written by Thoric (Derek Snider) with Altrag,
-Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,
-Grishnakh, Fireblade, and Nivek.
-
-Original MERC 2.1 code by Hatchet, Furey, and Kahn.
-
-Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,
-Michael Seifert, and Sebastian Hammer.
-
-*/
+/*********************************************************************************************************************************
+ *                                                                                                                   ;           *
+ *                                                                                                                  ED.          *
+ *                        ,;                             ,;                                                  :      E#Wi         *
+ *                      f#i          .    .            f#i j.         t                                      Ef     E###G.       *
+ *             ..     .E#t  GEEEEEEELDi   Dt         .E#t  EW,        Ej             ..           ..       : E#t    E#fD#W;      *
+ *            ;W,    i#W,   ,;;L#K;;.E#i  E#i       i#W,   E##j       E#,           ;W,          ,W,     .Et E#t    E#t t##L     *
+ *           j##,   L#D.       t#E   E#t  E#t      L#D.    E###D.     E#t          j##,         t##,    ,W#t E#t    E#t  .E#K,   *
+ *          G###, :K#Wfff;     t#E   E#t  E#t    :K#Wfff;  E#jG#W;    E#t         G###,        L###,   j###t E#t fi E#t    j##f  *
+ *        :E####, i##WLLLLt    t#E   E########f. i##WLLLLt E#t t##f   E#t       :E####,      .E#j##,  G#fE#t E#t L#jE#t    :E#K: *
+ *       ;W#DG##,  .E#L        t#E   E#j..K#j...  .E#L     E#t  :K#E: E#t      ;W#DG##,     ;WW; ##,:K#i E#t E#t L#LE#t   t##L   *
+ *      j###DW##,    f#E:      t#E   E#t  E#t       f#E:   E#KDDDD###iE#t     j###DW##,    j#E.  ##f#W,  E#t E#tf#E:E#t .D#W;    *
+ *     G##i,,G##,     ,WW;     t#E   E#t  E#t        ,WW;  E#f,t#Wi,,,E#t    G##i,,G##,  .D#L    ###K:   E#t E###f  E#tiW#G.     *
+ *   :K#K:   L##,      .D#;    t#E   f#t  f#t         .D#; E#t  ;#W:  E#t  :K#K:   L##, :K#t     ##D.    E#t E#K,   E#K##i       *
+ *  ;##D.    L##,        tt     fE    ii   ii           tt DWi   ,KK: E#t ;##D.    L##, ...      #G      ..  EL     E##D.        *
+ *  ,,,      .,,                 :                                    ,;. ,,,      .,,           j           :      E#t          *
+ *                                                                                                                  L:           *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                AetheriaMUD additions and changes from the Star Wars Reality code                                              *
+ *                copyright (c) 2025 /dev/null Industries - StygianRenegade                                                     *
+ *                                                                                                                               *
+ *                Star Wars Reality Code Additions and changes from the Smaug Code copyright (c) 1997                            *
+ *                by Sean Cooper                                                                                                 *
+ *                                                                                                                               *
+ *           Starwars and Starwars Names copyright(c) Disney Enterprises, Inc.... All hail the mouse overlord!                   *
+ *                                                                                                                               *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                                             SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper                       *
+ *                                                                                                                               *
+ *                           Based on a concept and ideas from the original SWR immortals:                                       *
+ *                Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn),                                  *
+ *                Ackbar, Satin, Streen and Bib as well as much input from our other builders and players.                       *
+ *                                                                                                                               *
+ *                           Original SMAUG 1.4a written by Thoric (Derek Snider) with:                                          *
+ *                Altrag, Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,                                      *
+ *                Grishnakh, Fireblade, and Nivek.                                                                               *
+ *                                                                                                                               *
+ *                           Original MERC 2.1 code by: Hatchet, Furey, and Kahn.                                                *
+ *                                                                                                                               *
+ *                           Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,                                 *
+ *                Michael Seifert, and Sebastian Hammer.                                                                         *
+ *                                                                                                                               *
+ *********************************************************************************************************************************/
 
 /*
  * This is a new automated arena for Smaug 1.4.
@@ -54,7 +73,7 @@ Michael Seifert, and Sebastian Hammer.
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "mud.h"
+#include "mud.hpp"
 
 #define PREP_START  42  /* vnum of first prep room */
 #define PREP_END    43  /* vnum of last prep room */
@@ -500,7 +519,7 @@ void silent_end(  )
    time_left_in_game = 0;
    arena_pot = 0;
    bet_pot = 0;
-   mudstrlcpy( buf, "It looks like no one was brave enough to enter the Arena.\r\n", MAX_INPUT_LENGTH );
+   strlcpy( buf, "It looks like no one was brave enough to enter the Arena.\r\n", MAX_INPUT_LENGTH );
    sportschan( buf );
 }
 
@@ -591,7 +610,7 @@ void do_awho( CHAR_DATA * ch, const char *argument )
       return;
    }
 
-   mudstrlcpy( buf, "&W  Players in the &BChaos&W Arena\r\n", MAX_INPUT_LENGTH );
+   strlcpy( buf, "&W  Players in the &BChaos&W Arena\r\n", MAX_INPUT_LENGTH );
    snprintf( buf + strlen( buf ), ( MAX_INPUT_LENGTH - strlen( buf ) ), "%s-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-", buf );
    snprintf( buf + strlen( buf ), ( MAX_INPUT_LENGTH - strlen( buf ) ), "%s&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-\r\n", buf );
    snprintf( buf + strlen( buf ), ( MAX_INPUT_LENGTH - strlen( buf ) ), "%sGame Length = &R%-3d   &WTime To Start &R%-3d\r\n", buf, game_length, time_to_start );
@@ -629,29 +648,29 @@ void do_ahall( CHAR_DATA * ch, const char *argument )
       return;
    }
 
-   mudstrlcpy( buf2, "&B|---------------------------------------|\r\n", MAX_INPUT_LENGTH );
-   mudstrlcat( buf2, "|    &WPast Winners of The FotE Arena&B     |\r\n", MAX_INPUT_LENGTH );
-   mudstrlcat( buf2, "|---------------------------------------|\r\r\n\n", MAX_INPUT_LENGTH );
+   strlcpy( buf2, "&B|---------------------------------------|\r\n", MAX_INPUT_LENGTH );
+   strlcat( buf2, "|    &WPast Winners of The FotE Arena&B     |\r\n", MAX_INPUT_LENGTH );
+   strlcat( buf2, "|---------------------------------------|\r\r\n\n", MAX_INPUT_LENGTH );
    send_to_char( buf2, ch );
 
-   mudstrlcpy( format, "%-25.25s  %-10.10s  %-16.16s\r\n", MAX_INPUT_LENGTH );
+   strlcpy( format, "%-25.25s  %-10.10s  %-16.16s\r\n", MAX_INPUT_LENGTH );
    ch_printf( ch, format, "&RName", "&RDate", "&RAward Amt" );
 
    ch_printf( ch, format,
             "&B---------------------------------",
             "&B---------------------------------", "&B---------------------------------" );
 
-   mudstrlcpy( format2, "&W%-25.25s  &R%-10.10s  &Y%-16d\r\n", MAX_INPUT_LENGTH );
+   strlcpy( format2, "&W%-25.25s  &R%-10.10s  &Y%-16d\r\n", MAX_INPUT_LENGTH );
    for( fame_node = fame_list; fame_node; fame_node = fame_node->next )
    {
       if( fame_node->date )
       {
          timestr = asctime( localtime( &( fame_node->date ) ) );
          *( timestr + 10 ) = 0;
-         mudstrlcpy( site, timestr, MAX_INPUT_LENGTH );
+         strlcpy( site, timestr, MAX_INPUT_LENGTH );
       }
       else
-         mudstrlcpy( site, "Unknown", MAX_INPUT_LENGTH );
+         strlcpy( site, "Unknown", MAX_INPUT_LENGTH );
       ch_printf( ch, format2, fame_node->name, site, fame_node->award );
    }
    return;
