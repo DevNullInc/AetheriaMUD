@@ -1,0 +1,3 @@
+#pragma once
+// All macros from mud.hpp that do not collide with type definitions
+// ...add all other macros from mud.hpp here...

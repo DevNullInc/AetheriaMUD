@@ -21,43 +21,23 @@ Original MERC 2.1 code by Hatchet, Furey, and Kahn.
 
 Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,
 Michael Seifert, and Sebastian Hammer.
-
 */
 
-#include <stdlib.h>
-#include <limits.h>
-#include <sys/cdefs.h>
-#include <sys/time.h>
-#include <math.h>
+#include <cstdlib>
+#include <climits>
+#include <ctime>
+#include <cmath>
 #ifdef __cplusplus
 #include <typeinfo>
 #endif
 
-#define CODENAME "SWFotEFUSS"
-#define CODEVERSION "1.5.2"
+#define CODENAME "Aetheria"
+#define CODEVERSION "1.24b"
 
 typedef int ch_ret;
 typedef int obj_ret;
 
-#ifdef __cplusplus
-#define DECLARE_DO_FUN( fun )    extern "C" { DO_FUN    fun; } DO_FUN fun##_mangled
-#define DECLARE_SPEC_FUN( fun )  extern "C" { SPEC_FUN  fun; } SPEC_FUN fun##_mangled
-#define DECLARE_SPELL_FUN( fun ) extern "C" { SPELL_FUN fun; } SPELL_FUN fun##_mangled
-#else
-#define DECLARE_DO_FUN( fun )     DO_FUN    fun; DO_FUN fun##_mangled
-#define DECLARE_SPEC_FUN( fun )   SPEC_FUN  fun; SPEC_FUN fun##_mangled
-#define DECLARE_SPELL_FUN( fun )  SPELL_FUN fun; SPELL_FUN fun##_mangled
-#endif
-
-/* Stuff from newarena.c */
-void show_jack_pot( void );
-void do_game( void );
-int num_in_arena( void );
-void find_game_winner( void );
-void do_end_game( void );
-void start_game( void );
-void silent_end( void );
-void write_fame_list( void );
+// Function prototypes and DECLARE_DO_FUN/DECLARE_SPELL_FUN macros have been moved to mud_functions.hpp
 void load_hall_of_fame( void );
 
 /*
@@ -1304,6 +1284,7 @@ struct ship_data
    int firstroom;
    int lastroom;
    int navseat;
+   int navseat;
    int pilotseat;
    int coseat;
    int gunseat;
@@ -2119,6 +2100,7 @@ typedef enum
 #define ROOM_VNUM_ALTAR		  32144
 #define ROOM_VNUM_SCHOOL	    115
 #define ROOM_AUTH_START		  10300
+
 #define ROOM_START_HUMAN            211
 #define ROOM_START_WOOKIEE        28600
 #define ROOM_START_TWILEK         32148

@@ -27,12 +27,11 @@ Michael Seifert, and Sebastian Hammer.
 
 // 11.c. Tired of downloading huge files.
 
-#include <math.h>
-#include <sys/types.h>
-#include <ctype.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
+#include <cmath>
+#include <cctype>
+#include <cstdio>
+#include <cstring>
+#include <ctime>
 #include "mud.hpp"
 
 extern SHIP_DATA *first_ship;
@@ -143,151 +142,151 @@ void explode_emissile( CHAR_DATA * ch, ROOM_INDEX_DATA * proom, int mindam, int 
       if( incendiary )
          ch_printf( rch, "&RThe missile EXPLODES into a rain of fire!\r\n" );
       else
-         ch_printf( rch, "&RThe massive shockwave from the EXPLOSION rips through your body!&w\r\n" );
+         ch_printf( rch, "&RThe massive shockwave from the EXPLOSION rips through/* 
 
-      dam = number_range( mindam, maxdam );
-      damage( ch, rch, dam, TYPE_MISSILE );
-   }
-   if( incendiary )
+SWFotE copyright (c) 2002 was created by
+Chris 'Tawnos' Dary (cadary@uwm.edu),
+Korey 'Eleven' King (no email),
+Matt 'Trillen' White (mwhite17@ureach.com),
+Daniel 'Danimal' Berrill (danimal924@yahoo.com),
+Richard 'Bambua' Berrill (email unknown),
+Stuart 'Ackbar' Unknown (email unknown)
+
+SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper
+based on a concept and ideas from the original SWR immortals: 
+Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn), 
+Ackbar, Satin, Streen and Bib as well as much input from our other builders 
+and players.
+
+Original SMAUG 1.4a written by Thoric (Derek Snider) with Altrag,
+Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,
+Grishnakh, Fireblade, and Nivek.
+
+Original MERC 2.1 code by Hatchet, Furey, and Kahn.
+
+Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,
+Michael Seifert, and Sebastian Hammer.
+
+*/
+
+// 11.c. Tired of downloading huge files.
+
+#include <cmath>
+#include <cctype>
+#include <cstdio>
+#include <cstring>
+#include <ctime>
+#include "mud.hpp"
+
+extern SHIP_DATA *first_ship;
+extern SHIP_DATA *last_ship;
+
+extern MISSILE_DATA *first_missile;
+extern MISSILE_DATA *last_missile;
+
+extern SPACE_DATA *first_starsystem;
+extern SPACE_DATA *last_starsystem;
+
+void explode_emissile( CHAR_DATA * ch, ROOM_INDEX_DATA * proom, int mindam, int maxdam, bool incendiary );
+extern int top_affect;
+SHIP_DATA *ship_from_gunseat( int vnum );
+
+const char *primary_beam_name( SHIP_DATA * ship )
+{
+   if( ship->primaryCount != 0 )
    {
-//Incendiary round creates fire. Bwaha.
-      fObjIndex = get_obj_index( 82 );
-      fobj = create_object( fObjIndex, ch->top_level );
-      fobj->timer = number_range( 3, 5 );
-      fobj = obj_to_room( fobj, proom );
+      snprintf( bname, MAX_STRING_LENGTH, "%d %s", ship->primaryCount,
+               ( ship->primaryType == SINGLE_LASER && ship->primaryCount == 1 ) ? "Single-laser cannon" :
+               ( ship->primaryType == SINGLE_LASER && ship->primaryCount != 1 ) ? "Single-laser cannons" :
+               ( ship->primaryType == DUAL_LASER && ship->primaryCount == 1 ) ? "Dual-laser cannon" :
+               ( ship->primaryType == DUAL_LASER && ship->primaryCount != 1 ) ? "Dual-laser cannons" :
+               ( ship->primaryType == TRI_LASER && ship->primaryCount == 1 ) ? "Triple-laser cannon" :
+               ( ship->primaryType == TRI_LASER && ship->primaryCount != 1 ) ? "Triple-laser cannons" :
+               ( ship->primaryType == QUAD_LASER && ship->primaryCount == 1 ) ? "Quad-laser cannon" :
+               ( ship->primaryType == QUAD_LASER && ship->primaryCount != 1 ) ? "Quad-laser cannons" :
+               ( ship->primaryType == AUTOBLASTER && ship->primaryCount == 1 ) ? "Autoblaster turret" :
+               ( ship->primaryType == AUTOBLASTER && ship->primaryCount != 1 ) ? "Autoblaster turrets" :
+               ( ship->primaryType == HEAVY_LASER && ship->primaryCount == 1 ) ? "Heavy laser cannon" :
+               ( ship->primaryType == HEAVY_LASER && ship->primaryCount != 1 ) ? "Heavy laser cannons" :
+               ( ship->primaryType == LIGHT_ION && ship->primaryCount == 1 ) ? "Light ion cannon" :
+               ( ship->primaryType == LIGHT_ION && ship->primaryCount != 1 ) ? "Light ion cannons" :
+               ( ship->primaryType == REPEATING_ION && ship->primaryCount == 1 ) ? "Repeating ion cannon" :
+               ( ship->primaryType == REPEATING_ION && ship->primaryCount != 1 ) ? "Repeating ion cannons" :
+               ( ship->primaryType == HEAVY_ION && ship->primaryCount == 1 ) ? "Heavy ion cannon" :
+               ( ship->primaryType == HEAVY_ION && ship->primaryCount != 1 ) ? "Heavy ion cannons" : "unknown" );
+
+      return bname;
+   }
+   else
+   {
+      snprintf( bname, MAX_STRING_LENGTH, "%s", "None." );
+      return bname;
    }
 }
 
-void do_makegoggles( CHAR_DATA * ch, const char *argument )
+const char *secondary_beam_name( SHIP_DATA * ship )
 {
-   char arg[MAX_INPUT_LENGTH];
-   char arg2[MAX_INPUT_LENGTH];
-   char buf[MAX_STRING_LENGTH];
-   int level, schance;
-   bool checktool, checkduraplast, checkcirc, checkbatt, checklens;
-   OBJ_DATA *obj;
-   AFFECT_DATA *aff;
 
-   argument = one_argument( argument, arg );
-   mudstrlcpy( arg2, argument, MAX_INPUT_LENGTH );
-
-   switch ( ch->substate )
+   if( ship->secondaryCount != 0 )
    {
-      default:
+      snprintf( bname, MAX_STRING_LENGTH, "%d %s", ship->secondaryCount,
+               ( ship->secondaryType == SINGLE_LASER && ship->secondaryCount == 1 ) ? "Single-laser cannon" :
+               ( ship->secondaryType == SINGLE_LASER && ship->secondaryCount != 1 ) ? "Single-laser cannons" :
+               ( ship->secondaryType == DUAL_LASER && ship->secondaryCount == 1 ) ? "Dual-laser cannon" :
+               ( ship->secondaryType == DUAL_LASER && ship->secondaryCount != 1 ) ? "Dual-laser cannons" :
+               ( ship->secondaryType == TRI_LASER && ship->secondaryCount == 1 ) ? "Triple-laser cannon" :
+               ( ship->secondaryType == TRI_LASER && ship->secondaryCount != 1 ) ? "Triple-laser cannons" :
+               ( ship->secondaryType == QUAD_LASER && ship->secondaryCount == 1 ) ? "Quad-laser cannon" :
+               ( ship->secondaryType == QUAD_LASER && ship->secondaryCount != 1 ) ? "Quad-laser cannons" :
+               ( ship->secondaryType == AUTOBLASTER && ship->secondaryCount == 1 ) ? "Autoblaster turret" :
+               ( ship->secondaryType == AUTOBLASTER && ship->secondaryCount != 1 ) ? "Autoblaster turrets" :
+               ( ship->secondaryType == HEAVY_LASER && ship->secondaryCount == 1 ) ? "Heavy laser cannon" :
+               ( ship->secondaryType == HEAVY_LASER && ship->secondaryCount != 1 ) ? "Heavy laser cannons" :
+               ( ship->secondaryType == LIGHT_ION && ship->secondaryCount == 1 ) ? "Light ion cannon" :
+               ( ship->secondaryType == LIGHT_ION && ship->secondaryCount != 1 ) ? "Light ion cannons" :
+               ( ship->secondaryType == REPEATING_ION && ship->secondaryCount == 1 ) ? "Repeating ion cannon" :
+               ( ship->secondaryType == REPEATING_ION && ship->secondaryCount != 1 ) ? "Repeating ion cannons" :
+               ( ship->secondaryType == HEAVY_ION && ship->secondaryCount == 1 ) ? "Heavy ion cannon" :
+               ( ship->secondaryType == HEAVY_ION && ship->secondaryCount != 1 ) ? "Heavy ion cannons" : "unknown" );
 
-         if( arg2[0] == '\0' || ( str_cmp( arg, "infrared" ) && str_cmp( arg, "magnifying" ) ) )
-         {
-            send_to_char( "&RUsage: Makegoggles <infrared/magnifying> <name>\r\n&w", ch );
-            return;
-         }
-
-         checktool = FALSE;
-         checkcirc = FALSE;
-         checkduraplast = FALSE;
-         checkbatt = FALSE;
-         checklens = FALSE;
-
-         if( !IS_SET( ch->in_room->room_flags, ROOM_FACTORY ) )
-         {
-            send_to_char( "&RYou need to be in a factory or workshop to do that.\r\n", ch );
-            return;
-         }
-
-         for( obj = ch->last_carrying; obj; obj = obj->prev_content )
-         {
-            if( obj->item_type == ITEM_DURAPLAST )
-               checkduraplast = TRUE;
-            if( obj->item_type == ITEM_BATTERY )
-               checkbatt = TRUE;
-            if( obj->item_type == ITEM_LENS )
-               checklens = TRUE;
-            if( obj->item_type == ITEM_CIRCUIT )
-               checkcirc = TRUE;
-            if( obj->item_type == ITEM_TOOLKIT )
-               checktool = TRUE;
-         }
-
-         if( !checkduraplast )
-         {
-            send_to_char( "&RYou need a piece of duraplast.\r\n", ch );
-            return;
-         }
-         if( !checkcirc )
-         {
-            send_to_char( "&RYou'll need some circuitry.\r\n", ch );
-            return;
-         }
-         if( !checkbatt )
-         {
-            send_to_char( "&RYou need a small battery.\r\n", ch );
-            return;
-         }
-         if( !checklens )
-         {
-            send_to_char( "&RYou'll need a lens.\r\n", ch );
-            return;
-         }
-         if( !checktool )
-         {
-            send_to_char( "&RYou'll need a toolkit.\r\n", ch );
-            return;
-         }
-
-         schance = IS_NPC( ch ) ? ch->top_level : ( int )( ch->pcdata->learned[gsn_makegoggles] );
-         if( number_percent(  ) < schance )
-         {
-            if( !str_cmp( arg, "infrared" ) )
-               send_to_char( "&GYou begin the long process of creating a pair of infrared goggles.\r\n", ch );
-            else
-               send_to_char( "&GYou begin the long process of creating a pair of magnifying goggles.\r\n", ch );
-            act( AT_PLAIN, "$n takes $s toolkit and begins putting something together.", ch, NULL, argument, TO_ROOM );
-            add_timer( ch, TIMER_DO_FUN, 12, do_makegoggles, 1 );
-            ch->dest_buf = str_dup( arg );
-            ch->dest_buf_2 = str_dup( arg2 );
-            return;
-         }
-         send_to_char( "&RYou can't figure out what to do.\r\n", ch );
-         learn_from_failure( ch, gsn_makegoggles );
-         return;
-
-      case 1:
-         if( !ch->dest_buf )
-            return;
-         if( !ch->dest_buf_2 )
-            return;
-         mudstrlcpy( arg, ( const char * )ch->dest_buf, MAX_INPUT_LENGTH );
-         DISPOSE( ch->dest_buf );
-         mudstrlcpy( arg2, ( const char * )ch->dest_buf_2, MAX_INPUT_LENGTH );
-         DISPOSE( ch->dest_buf_2 );
-         break;
-
-      case SUB_TIMER_DO_ABORT:
-         DISPOSE( ch->dest_buf );
-         DISPOSE( ch->dest_buf_2 );
-         ch->substate = SUB_NONE;
-         send_to_char( "&RYou are interrupted and fail to finish your work.\r\n", ch );
-         return;
+      return bname;
    }
-
-   ch->substate = SUB_NONE;
-
-   level = IS_NPC( ch ) ? ch->top_level : ( int )( ch->pcdata->learned[gsn_makegoggles] );
-
-   checktool = FALSE;
-   checklens = FALSE;
-   checkcirc = FALSE;
-   checkbatt = FALSE;
-   checkduraplast = FALSE;
-
-   for( obj = ch->last_carrying; obj; obj = obj->prev_content )
+   else
    {
-      if( obj->item_type == ITEM_TOOLKIT )
-         checktool = TRUE;
-      if( obj->item_type == ITEM_CIRCUIT && checkcirc == FALSE )
-      {
-         checkcirc = TRUE;
-         separate_obj( obj );
-         obj_from_char( obj );
+      snprintf( bname, MAX_STRING_LENGTH, "%s", "None." );
+      return bname;
+   }
+}
+
+void explode_emissile( CHAR_DATA * ch, ROOM_INDEX_DATA * proom, int mindam, int maxdam, bool incendiary )
+{
+   CHAR_DATA *rch;
+   OBJ_INDEX_DATA *objindex;
+   OBJ_INDEX_DATA *fObjIndex;
+   OBJ_DATA *obj;
+   OBJ_DATA *fobj;
+   int dam;
+
+// Make scraps of missile
+   objindex = get_obj_index( 80 );
+   obj = create_object( objindex, ch->top_level );
+   obj->item_type = ITEM_TRASH;
+   STRFREE( obj->name );
+   STRFREE( obj->short_descr );
+   STRFREE( obj->description );
+   obj->name = STRALLOC( "scraps missile" );
+   obj->short_descr = STRALLOC( "some scraps of a missile" );
+   obj->description = STRALLOC( "The scraps of a missile are littering the area." );
+   obj->timer = number_range( 5, 15 );
+   SET_BIT( obj->wear_flags, ITEM_TAKE );
+   obj_to_room( obj, proom );
+// Damage
+   for( rch = proom->first_person; rch; rch = rch->next_in_room )
+   {
+      if( incendiary )
+         ch_printf( rch, "&RThe missile EXPLODES into a rain of fire!\r\n" );
+      else
+         ch_printf( rch, "&RThe massive shockwave from the EXPLOSION rips through
       }
       if( obj->item_type == ITEM_LENS && checklens == FALSE )
       {
@@ -793,6 +792,7 @@ void do_launch2( CHAR_DATA * ch, const char *argument )
                   {
                      if( rch == ch )
                         continue;
+                     ch_printf( rch, "%s launches a missile %s, and it EXPLODES upon impact
                      ch_printf( rch, "%s launches a missile %s, and it EXPLODES upon impact of the doorway!\r\n", PERS( ch, rch ), dtxt );
                   }
                   send_to_char( "&RThe missile flies directly into the doorway, and EXPLODES!\r\n", ch );
