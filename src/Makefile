@@ -64,7 +64,7 @@ CPP_FILES := 11.cpp act_comm.cpp act_info.cpp act_move.cpp act_obj.cpp act_wiz.c
 	  build.cpp clans.cpp color.cpp comm.cpp comments.cpp const.cpp db.cpp dns.cpp editor.cpp fight.cpp finfo.cpp \
 	  force.cpp fskills.cpp functions.cpp handler.cpp hashstr.cpp hotboot.cpp hunter.cpp interp.cpp \
 	  magic.cpp makeobjs.cpp marriage.cpp mccp.cpp misc.cpp mssp.cpp mud_comm.cpp mud_prog.cpp newarena.cpp \
-	  pfiles.cpp planets.cpp player.cpp reset.cpp save.cpp sha256.cpp ships.cpp shops.cpp skills.cpp slicers.cpp \
+	  pfiles.cpp planets.cpp player.cpp reset.cpp save.cpp password.cpp ships.cpp shops.cpp skills.cpp slicers.cpp \
 	  space.cpp special.cpp swskills.cpp tables.cpp track.cpp tech.cpp update.cpp \
 	  
 ifdef IMC # IMC2 support
