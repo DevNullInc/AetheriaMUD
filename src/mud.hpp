@@ -25,7 +25,8 @@ Michael Seifert, and Sebastian Hammer.
 
 #include <cstdlib>
 #include <climits>
-#include <ctime>
+#include <sys/cdefs.h>
+#include <sys/time.h>
 #include <cmath>
 #ifdef __cplusplus
 #include <typeinfo>
@@ -1283,7 +1284,6 @@ struct ship_data
    int engineroom;
    int firstroom;
    int lastroom;
-   int navseat;
    int navseat;
    int pilotseat;
    int coseat;

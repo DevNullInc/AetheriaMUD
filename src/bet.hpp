@@ -1,32 +1,51 @@
-/* 
+/*********************************************************************************************************************************
+ *                                                                                                                   ;           *
+ *                                                                                                                  ED.          *
+ *                        ,;                             ,;                                                  :      E#Wi         *
+ *                      f#i          .    .            f#i j.         t                                      Ef     E###G.       *
+ *             ..     .E#t  GEEEEEEELDi   Dt         .E#t  EW,        Ej             ..           ..       : E#t    E#fD#W;      *
+ *            ;W,    i#W,   ,;;L#K;;.E#i  E#i       i#W,   E##j       E#,           ;W,          ,W,     .Et E#t    E#t t##L     *
+ *           j##,   L#D.       t#E   E#t  E#t      L#D.    E###D.     E#t          j##,         t##,    ,W#t E#t    E#t  .E#K,   *
+ *          G###, :K#Wfff;     t#E   E#t  E#t    :K#Wfff;  E#jG#W;    E#t         G###,        L###,   j###t E#t fi E#t    j##f  *
+ *        :E####, i##WLLLLt    t#E   E########f. i##WLLLLt E#t t##f   E#t       :E####,      .E#j##,  G#fE#t E#t L#jE#t    :E#K: *
+ *       ;W#DG##,  .E#L        t#E   E#j..K#j...  .E#L     E#t  :K#E: E#t      ;W#DG##,     ;WW; ##,:K#i E#t E#t L#LE#t   t##L   *
+ *      j###DW##,    f#E:      t#E   E#t  E#t       f#E:   E#KDDDD###iE#t     j###DW##,    j#E.  ##f#W,  E#t E#tf#E:E#t .D#W;    *
+ *     G##i,,G##,     ,WW;     t#E   E#t  E#t        ,WW;  E#f,t#Wi,,,E#t    G##i,,G##,  .D#L    ###K:   E#t E###f  E#tiW#G.     *
+ *   :K#K:   L##,      .D#;    t#E   f#t  f#t         .D#; E#t  ;#W:  E#t  :K#K:   L##, :K#t     ##D.    E#t E#K,   E#K##i       *
+ *  ;##D.    L##,        tt     fE    ii   ii           tt DWi   ,KK: E#t ;##D.    L##, ...      #G      ..  EL     E##D.        *
+ *  ,,,      .,,                 :                                    ,;. ,,,      .,,           j           :      E#t          *
+ *                                                                                                                  L:           *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                AetheriaMUD additions and changes from the Star Wars Reality code                                              *
+ *                copyright (c) 2025 /dev/null Industries - StygianRenegade                                                     *
+ *                                                                                                                               *
+ *                Star Wars Reality Code Additions and changes from the Smaug Code copyright (c) 1997                            *
+ *                by Sean Cooper                                                                                                 *
+ *                                                                                                                               *
+ *           Starwars and Starwars Names copyright(c) Disney Enterprises, Inc.... All hail the mouse overlord!                   *
+ *                                                                                                                               *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                                             SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper                       *
+ *                                                                                                                               *
+ *                           Based on a concept and ideas from the original SWR immortals:                                       *
+ *                Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn),                                  *
+ *                Ackbar, Satin, Streen and Bib as well as much input from our other builders and players.                       *
+ *                                                                                                                               *
+ *                           Original SMAUG 1.4a written by Thoric (Derek Snider) with:                                          *
+ *                Altrag, Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,                                      *
+ *                Grishnakh, Fireblade, and Nivek.                                                                               *
+ *                                                                                                                               *
+ *                           Original MERC 2.1 code by: Hatchet, Furey, and Kahn.                                                *
+ *                                                                                                                               *
+ *                           Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,                                 *
+ *                Michael Seifert, and Sebastian Hammer.                                                                         *
+ *                                                                                                                               *
+ *********************************************************************************************************************************/
 
-SWFotE copyright (c) 2002 was created by
-Chris 'Tawnos' Dary (cadary@uwm.edu),
-Korey 'Eleven' King (no email),
-Matt 'Trillen' White (mwhite17@ureach.com),
-Daniel 'Danimal' Berrill (danimal924@yahoo.com),
-Richard 'Bambua' Berrill (email unknown),
-Stuart 'Ackbar' Unknown (email unknown)
-
-SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper
-based on a concept and ideas from the original SWR immortals: 
-Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn), 
-Ackbar, Satin, Streen and Bib as well as much input from our other builders 
-and players.
-
-Original SMAUG 1.4a written by Thoric (Derek Snider) with Altrag,
-Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,
-Grishnakh, Fireblade, and Nivek.
-
-Original MERC 2.1 code by Hatchet, Furey, and Kahn.
-
-Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,
-Michael Seifert, and Sebastian Hammer.
-
-*/
 
 #include <ctype.h>
-
 
 /*
   util function, converts an 'advanced' ASCII-number-string into a number.
@@ -59,58 +78,57 @@ Michael Seifert, and Sebastian Hammer.
   once.
 */
 
-int advatoi( const char *s )
+int advatoi(const char *s)
 {
-   int number = 0;   /* number to be returned */
-   int multiplier = 0;  /* multiplier used to get the extra digits right */
+   int number = 0;     /* number to be returned */
+   int multiplier = 0; /* multiplier used to get the extra digits right */
 
    /*
     * as long as the current character is a digit add to current number
     */
-   while( isdigit( s[0] ) )
-      number = ( number * 10 ) + ( *s++ - '0' );
+   while (isdigit(s[0]))
+      number = (number * 10) + (*s++ - '0');
 
-   switch ( UPPER( s[0] ) )
+   switch (UPPER(s[0]))
    {
-      case 'K':
-         number *= ( multiplier = 1000 );
-         ++s;
-         break;
-      case 'M':
-         number *= ( multiplier = 1000000 );
-         ++s;
-         break;
-      case '\0':
-         break;
-      default:
-         return 0;   /* not k nor m nor NULL - return 0! */
+   case 'K':
+      number *= (multiplier = 1000);
+      ++s;
+      break;
+   case 'M':
+      number *= (multiplier = 1000000);
+      ++s;
+      break;
+   case '\0':
+      break;
+   default:
+      return 0; /* not k nor m nor NULL - return 0! */
    }
 
    /*
-    * if any digits follow k/m, add those too 
+    * if any digits follow k/m, add those too
     */
-   while( isdigit( s[0] ) && ( multiplier > 1 ) )
+   while (isdigit(s[0]) && (multiplier > 1))
    {
       /*
-       * the further we get to right, the less the digit 'worth' 
+       * the further we get to right, the less the digit 'worth'
        */
       multiplier /= 10;
-      number = number + ( ( *s++ - '0' ) * multiplier );
+      number = number + ((*s++ - '0') * multiplier);
    }
 
    /*
-    * return 0 if non-digit character was found, other than NULL 
+    * return 0 if non-digit character was found, other than NULL
     */
-   if( s[0] != '\0' && !isdigit( s[0] ) )
+   if (s[0] != '\0' && !isdigit(s[0]))
       return 0;
 
    /*
-    * anything left is likely extra digits (ie: 14k4443  -> 3 is extra) 
+    * anything left is likely extra digits (ie: 14k4443  -> 3 is extra)
     */
 
    return number;
 }
-
 
 /*
   This function allows the following kinds of bets to be made:
@@ -134,29 +152,29 @@ int advatoi( const char *s )
   gives 10,000 etc.
 
 */
-int parsebet( const int currentbet, const char *s )
+int parsebet(const int currentbet, const char *s)
 {
    /*
-    * check to make sure it's not blank 
+    * check to make sure it's not blank
     */
-   if( s[0] != '\0' )
+   if (s[0] != '\0')
    {
       /*
-       * if first char is a digit, use advatoi 
+       * if first char is a digit, use advatoi
        */
-      if( isdigit( s[0] ) )
-         return ( advatoi( s ) );
-      if( s[0] == '+' ) /* add percent (default 25%) */
+      if (isdigit(s[0]))
+         return (advatoi(s));
+      if (s[0] == '+') /* add percent (default 25%) */
       {
-         if( s[1] == '\0' )
-            return ( currentbet * 125 ) / 100;
-         return ( currentbet * ( 100 + atoi( s + 1 ) ) ) / 100;
+         if (s[1] == '\0')
+            return (currentbet * 125) / 100;
+         return (currentbet * (100 + atoi(s + 1))) / 100;
       }
-      if( s[0] == '*' || s[0] == 'x' ) /* multiply (default is by 2) */
+      if (s[0] == '*' || s[0] == 'x') /* multiply (default is by 2) */
       {
-         if( s[1] == '\0' )
-            return ( currentbet * 2 );
-         return ( currentbet * atoi( s + 1 ) );
+         if (s[1] == '\0')
+            return (currentbet * 2);
+         return (currentbet * atoi(s + 1));
       }
    }
    return 0;

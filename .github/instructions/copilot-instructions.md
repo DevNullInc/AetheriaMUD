@@ -79,7 +79,8 @@ The codebase currently uses C-style `SNAKE_CASE` naming conventions inherited fr
 
 **Limiting the Range of Edits**
 
-To further optimize the editing process and minimize potential context issues, you can limit the range of the `insert_edit_into_file` tool by using the `read_file` tool in conjunction with the `limit` and `offset` parameters. This allows you to read only the relevant section of the file, providing a smaller context window for the `insert_edit_into_file` tool to work with. For example:
+To further optimize the editing process and minimize potential context issues, you are disallowed from using `insert_edit_into_file` tool.
+Using the `read_file` tool in conjunction with the `limit` and `offset` parameters. This allows you to read only the relevant section of the file, providing a smaller context window for the `insert_edit_into_file` tool to work with. For example:
 
 1.  Use `read_file` with `limit` and `offset` to retrieve a specific section of the file.
 2.  Identify the code you want to change within that section.
