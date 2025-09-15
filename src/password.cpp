@@ -30,7 +30,7 @@
 #include <cstdio>
 #include <unistd.h>
 #include <fcntl.h>
-#include <argon2.h>
+#include <argon2.h> // Argon2 library header
 #include "password.hpp"
 #include "mud.hpp"
 
@@ -113,7 +113,7 @@ std::string hash_password(std::string_view password, std::string_view salt_in) {
                                    salt_bytes.data(), salt_bytes.size(),
                                    HashLength,
                                    &encoded[0], encoded_len);
-    if (rc != Argon2Ok) {
+    if (rc != ARGON2_OK) {
         bug("argon2id_hash_encoded failed: %s", argon2_error_message(rc));
         return std::string();
     }
@@ -131,7 +131,7 @@ bool verify_password(std::string_view password, std::string_view stored_hash) {
     // Check if this is an Argon2 hash
     if (stored_hash.substr(0, strlen(Argon2Prefix)) == Argon2Prefix) {
         int rc = argon2id_verify(stored_hash.data(), password.data(), password.size());
-        return rc == Argon2Ok;
+        return rc == ARGON2_OK;
     } else {
         // Legacy verification using crypt
         const char* encrypted = crypt(password.data(), stored_hash.data());

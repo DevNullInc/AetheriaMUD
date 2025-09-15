@@ -52,7 +52,7 @@
 #include <time.h>
 #include <unistd.h>
 #include "mud.hpp"
-#include "sha256.hpp"
+#include "password.hpp"
 
 /*
  * Keep players from defeating examine progs -Druid
@@ -3500,7 +3500,7 @@ void do_password(CHAR_DATA *ch, const char *argument)
       return;
    }
 
-   if (strcmp(sha256_crypt(arg1), ch->pcdata->pwd))
+(!verify_password(arg1, ch->pcdata->pwd))
    {
       WAIT_STATE(ch, 40);
       send_to_char("Wrong password.  Wait 10 seconds.\r\n", ch);
@@ -3519,7 +3519,7 @@ void do_password(CHAR_DATA *ch, const char *argument)
       return;
    }
 
-   pwdnew = sha256_crypt(arg2);
+   pwdnew = hash_password(arg2);
 
    DISPOSE(ch->pcdata->pwd);
    ch->pcdata->pwd = str_dup(pwdnew);
