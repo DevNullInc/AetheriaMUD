@@ -42,376 +42,19 @@
  *                           Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,                                 *
  *                Michael Seifert, and Sebastian Hammer.                                                                         *
  *                                                                                                                               *
+ *********************************************************************************************************************************
+ *                                                                                                                               *
+ *                                             SmaugFUSS 1.9 copyright (c) 2009 by Roger Libiez                                  *
+ *                                                                                                                               *
+ *                                             (Samson) Als far as I know, the only original code is the stuff I wrote.        *
+ *                                                                                                                               *
+ *                                             But if I'm wrong and anything here is original Smaug code, then Thoric and     *
+ *                                                                                                                               *
+ *                                             the other Smaug coders naturally reserve their rights to it.                  *
+ *                                                                                                                               *
  *********************************************************************************************************************************/
-
-#pragma once
-#include "mud_macros.hpp" // For BVxx bitvector macros
-
-/*
- * Command logging types.
- */
-typedef enum
-{
-   LOG_NORMAL,
-   LOG_ALWAYS,
-   LOG_NEVER,
-   LOG_BUILD,
-   LOG_HIGH,
-   LOG_COMM,
-   LOG_ALL
-} log_types;
-
-/*
- * Return types for move_char, damage, greet_trigger, etc, etc
- */
-typedef enum
-{
-   rNONE,
-   rCHAR_DIED,
-   rVICT_DIED,
-   rBOTH_DIED,
-   rCHAR_QUIT,
-   rVICT_QUIT,
-   rBOTH_QUIT,
-   rSPELL_FAILED,
-   rOBJ_SCRAPPED,
-   rOBJ_EATEN,
-   rOBJ_EXPIRED,
-   rOBJ_TIMER,
-   rOBJ_SACCED,
-   rOBJ_QUAFFED,
-   rOBJ_USED,
-   rOBJ_EXTRACTED,
-   rOBJ_DRUNK,
-   rCHAR_IMMUNE,
-   rVICT_IMMUNE,
-   rCHAR_AND_OBJ_EXTRACTED = 128,
-   rERROR = 255
-} ret_types;
-
-/* Force Defines */
-typedef enum
-{
-   FORCE_INROOM,
-   FORCE_ANYWHERE
-} force_locations;
-
-typedef enum
-{
-   FORCE_SKILL_REFRESH,
-   FORCE_SKILL_FINFO,
-   FORCE_SKILL_STUDENT,
-   FORCE_SKILL_MASTER,
-   FORCE_SKILL_IDENTIFY,
-   FORCE_SKILL_PROMOTE,
-   FORCE_SKILL_INSTRUCT,
-   FORCE_SKILL_HEAL,
-   FORCE_SKILL_PROTECT,
-   FORCE_SKILL_SHIELD,
-   FORCE_SKILL_WHIRLWIND,
-   FORCE_SKILL_STRIKE,
-   FORCE_SKILL_SQUEEZE,
-   FORCE_SKILL_FORCE_LIGHTNING,
-   FORCE_SKILL_DISGUISE,
-   FORCE_SKILL_MAKELIGHTSABER,
-   FORCE_SKILL_PARRY,
-   FORCE_SKILL_FINISH,
-   FORCE_SKILL_FHELP,
-   FORCE_SKILL_DUALLIGHTSABER,
-   FORCE_SKILL_REFLECT,
-   FORCE_SKILL_CONVERT,
-   FORCE_SKILL_MAKEDUALSABER,
-   FORCE_SKILL_AWARENESS
-} force_skills_type;
-
-typedef enum
-{
-   FORCE_NONCOMBAT,
-   FORCE_COMBAT,
-   FORCE_NORESTRICT
-} force_skill_types;
-
-typedef enum
-{
-   FORCE_NONE,
-   FORCE_APPRENTICE,
-   FORCE_KNIGHT,
-   FORCE_MASTER
-} force_level_type;
-
-typedef enum
-{
-   FORCE_GENERAL,
-   FORCE_JEDI,
-   FORCE_SITH
-} force_skills_class;
-
-/* Echo types for echo_to_all */
-#define ECHOTAR_ALL 0
-#define ECHOTAR_PC 1
-#define ECHOTAR_IMM 2
-
-/* short cut crash bug fix provided by gfinello@mail.karmanet.it*/
-typedef enum
-{
-   relMSET_ON,
-   relOSET_ON
-} relation_type;
-
-/* defines for new do_who */
-#define WT_MORTAL 0
-#define WT_IMM 2
-#define WT_AVATAR 1
-#define WT_NEWBIE 3
-
-/*
- * Site ban structure.
- */
-struct ban_data; // Forward declaration
-
-/*
- * Time and weather stuff.
- */
-typedef enum
-{
-   SUN_DARK,
-   SUN_RISE,
-   SUN_LIGHT,
-   SUN_SET
-} sun_positions;
-
-typedef enum
-{
-   SKY_CLOUDLESS,
-   SKY_CLOUDY,
-   SKY_RAINING,
-   SKY_LIGHTNING
-} sky_conditions;
-
-/*
- * Connected state for a channel.
- */
-typedef enum
-{
-   CON_GET_NAME = -99,
-   CON_GET_OLD_PASSWORD,
-   CON_CONFIRM_NEW_NAME,
-   CON_GET_NEW_PASSWORD,
-   CON_CONFIRM_NEW_PASSWORD,
-   CON_GET_NEW_SEX,
-   CON_READ_MOTD,
-   CON_GET_NEW_RACE,
-   CON_GET_EMULATION,
-   CON_GET_WANT_RIPANSI,
-   CON_TITLE,
-   CON_PRESS_ENTER,
-   CON_WAIT_1,
-   CON_WAIT_2,
-   CON_WAIT_3,
-   CON_ACCEPTED,
-   CON_GET_PKILL,
-   CON_READ_IMOTD,
-   CON_GET_NEW_EMAIL,
-   CON_GET_MSP,
-   CON_GET_NEW_CLASS,
-   CON_GET_NEW_SECOND,
-   CON_ROLL_STATS,
-   CON_STATS_OK,
-   CON_GET_PUEBLO,
-   CON_GET_HEIGHT,
-   CON_GET_BUILD,
-   CON_GET_DROID,
-   CON_COPYOVER_RECOVER,
-   CON_PLAYING = 0,
-   CON_EDITING
-} connection_types;
-
-/*
- * Character substates
- */
-typedef enum
-{
-   SUB_NONE,
-   SUB_PAUSE,
-   SUB_PERSONAL_DESC,
-   SUB_OBJ_SHORT,
-   SUB_OBJ_LONG,
-   SUB_OBJ_EXTRA,
-   SUB_MOB_LONG,
-   SUB_MOB_DESC,
-   SUB_ROOM_DESC,
-   SUB_ROOM_EXTRA,
-   SUB_ROOM_EXIT_DESC,
-   SUB_WRITING_NOTE,
-   SUB_MPROG_EDIT,
-   SUB_HELP_EDIT,
-   SUB_WRITING_MAP,
-   SUB_PERSONAL_BIO,
-   SUB_REPEATCMD,
-   SUB_RESTRICTED,
-   SUB_DEITYDESC,
-   SUB_SHIPDESC,
-   SUB_FORCE_CH0,
-   SUB_FORCE_CH1,
-   SUB_FORCE_CH2,
-   SUB_FORCE_CH3,
-   SUB_FORCE_CH4,
-   SUB_FORCE_ROOM0,
-   SUB_FORCE_ROOM1,
-   SUB_FORCE_ROOM2,
-   SUB_FORCE_ROOM3,
-   SUB_FORCE_ROOM4,
-   SUB_FORCE_VICTIM0,
-   SUB_FORCE_VICTIM1,
-   SUB_FORCE_VICTIM2,
-   SUB_FORCE_VICTIM3,
-   SUB_FORCE_VICTIM4,
-   SUB_FORCE_HELP,
-
-   /* timer types ONLY below this point */
-   SUB_TIMER_DO_ABORT = 128,
-   SUB_TIMER_CANT_ABORT
-} char_substates;
-
-/* ability classes */
-#define ABILITY_NONE -1
-#define COMBAT_ABILITY 0
-#define PILOTING_ABILITY 1
-#define ENGINEERING_ABILITY 2
-#define HUNTING_ABILITY 3
-#define SMUGGLING_ABILITY 4
-#define POLITICIAN_ABILITY 5
-#define FORCE_ABILITY 6
-#define SLICER_ABILITY 7
-#define ASSASSIN_ABILITY 8
-#define TECHNICIAN_ABILITY 9
-
-/* Languages */
-#define LANG_BASIC BV00
-#define LANG_WOOKIEE BV01
-#define LANG_TWI_LEK BV02
-#define LANG_RODIAN BV03
-#define LANG_HUTT BV04
-#define LANG_MON_CALAMARI BV05
-#define LANG_NOGHRI BV06
-#define LANG_EWOK BV07
-#define LANG_ITHORIAN BV08
-#define LANG_GOTAL BV09
-#define LANG_DEVARONIAN BV10
-#define LANG_BINARY BV11
-#define LANG_FIRRERREO BV12
-#define LANG_CLAN BV13
-#define LANG_GAMORREAN BV14
-#define LANG_TOGORIAN BV15
-#define LANG_SHISTAVANEN BV16
-#define LANG_JAWA BV17
-#define LANG_KUBAZ BV18
-#define LANG_ADARIAN BV19
-#define LANG_VERPINE BV20
-#define LANG_DEFEL BV21
-#define LANG_TRANDOSHAN BV22
-#define LANG_HAPAN BV23
-#define LANG_QUARREN BV24
-#define LANG_SULLUSTAN BV25
-#define LANG_FALLEEN BV26
-#define LANG_BARABEL BV27
-#define LANG_YEVETHAN BV28
-#define LANG_GAND BV29
-#define LANG_DUROS BV30
-#define LANG_COYNITE BV31
-#define LANG_UNKNOWN 0
-#define VALID_LANGS (LANG_BASIC | LANG_WOOKIEE | LANG_TWI_LEK | LANG_RODIAN | LANG_HUTT | LANG_MON_CALAMARI | LANG_NOGHRI | LANG_GAMORREAN | LANG_JAWA | LANG_ADARIAN | LANG_EWOK | LANG_VERPINE | LANG_DEFEL | LANG_TRANDOSHAN | LANG_HAPAN | LANG_QUARREN | LANG_SULLUSTAN | LANG_BINARY | LANG_FIRRERREO | LANG_CLAN | LANG_TOGORIAN | LANG_SHISTAVANEN | LANG_KUBAZ | LANG_YEVETHAN | LANG_GAND | LANG_DUROS | LANG_COYNITE | LANG_GOTAL | LANG_DEVARONIAN | LANG_FALLEEN | LANG_ITHORIAN | LANG_BARABEL)
-
-/* Used to store sleeping mud progs. -rkb */
-typedef enum
-{
-   MP_MOB,
-   MP_ROOM,
-   MP_OBJ
-} mp_types;
-
-typedef enum
-{
-   CLAN_PLAIN,
-   CLAN_CRIME,
-   CLAN_GUILD,
-   CLAN_SUBCLAN,
-   CLAN_CORPORATION
-} clan_types;
-
-typedef enum
-{
-   PLAYER_SHIP,
-   MOB_SHIP,
-   SHIP_IMPERIAL,
-   SHIP_REPUBLIC
-} ship_types;
-
-typedef enum
-{
-   SHIP_DOCKED,
-   SHIP_READY,
-   SHIP_BUSY,
-   SHIP_BUSY_2,
-   SHIP_BUSY_3,
-   SHIP_REFUEL,
-   SHIP_LAUNCH,
-   SHIP_LAUNCH_2,
-   SHIP_LAND,
-   SHIP_LAND_2,
-   SHIP_HYPERSPACE,
-   SHIP_DISABLED,
-   SHIP_FLYING
-} ship_states;
-
-typedef enum
-{
-   MISSILE_READY,
-   MISSILE_FIRED,
-   MISSILE_RELOAD,
-   MISSILE_RELOAD_2,
-   MISSILE_DAMAGED
-} missile_states;
-
-typedef enum
-{
-   LAND_VEHICLE,
-   SHIP_FIGHTER,
-   SHIP_BOMBER,
-   SHIP_SHUTTLE,
-   SHIP_FREIGHTER,
-   SHIP_FRIGATE,
-   SHIP_TT,
-   SHIP_CORVETTE,
-   SHIP_CRUISER,
-   SHIP_DREADNAUGHT,
-   SHIP_DESTROYER,
-   SHIP_SPACE_STATION
-} ship_classes;
-
-typedef enum
-{
-   B_NONE,
-   SINGLE_LASER,
-   DUAL_LASER,
-   TRI_LASER,
-   QUAD_LASER,
-   AUTOBLASTER,
-   HEAVY_LASER,
-   LIGHT_ION,
-   REPEATING_ION,
-   HEAVY_ION
-} beam_types;
-
-typedef enum
-{
-   CONCUSSION_MISSILE,
-   PROTON_TORPEDO,
-   HEAVY_ROCKET,
-   HEAVY_BOMB
-} missile_types;
-
-#define PLANET_NOCAPTURE BV00
+#ifndef MUD_FLAGS_HPP
+#define MUD_FLAGS_HPP
 
 /* Ship Flags */
 #define SHIP_NOHIJACK BV00
@@ -462,44 +105,48 @@ typedef enum
 #define SHIP_DAMAGE_LIFESUPPORT BV16
 #define SHIP_DAMAGE_MISSILE BV17
 
-/* ACT bits for mobs */
-#define ACT_IS_NPC BV00
-#define ACT_SENTINEL BV01
-#define ACT_SCAVENGER BV02
-#define ACT_NOFLEE BV03
-#define ACT_AGGRESSIVE BV05
-#define ACT_STAY_AREA BV06
-#define ACT_WIMPY BV07
-#define ACT_PET BV08
-#define ACT_TRAIN BV09
-#define ACT_PRACTICE BV10
-#define ACT_IMMORTAL BV11
-#define ACT_DEADLY BV12
+/*
+ * ACT bits for mobs.
+ * Used in #MOBILES.
+ */
+#define ACT_IS_NPC BV00     /* Auto set for mobs */
+#define ACT_SENTINEL BV01   /* Stays in one room */
+#define ACT_SCAVENGER BV02  /* Picks up objects  */
+#define ACT_NOFLEE BV03     /* Mobs don't flee. -T  */
+#define ACT_AGGRESSIVE BV05 /* Attacks PC's      */
+#define ACT_STAY_AREA BV06  /* Won't leave area  */
+#define ACT_WIMPY BV07      /* Flees when hurt   */
+#define ACT_PET BV08        /* Auto set for pets */
+#define ACT_TRAIN BV09      /* Can train PC's */
+#define ACT_PRACTICE BV10   /* Can practice PC's */
+#define ACT_IMMORTAL BV11   /* Cannot be killed  */
+#define ACT_DEADLY BV12     /* Has a deadly poison  */
 #define ACT_POLYSELF BV13
-#define ACT_META_AGGR BV14
-#define ACT_GUARDIAN BV15
-#define ACT_RUNNING BV16
-#define ACT_NOWANDER BV17
-#define ACT_MOUNTABLE BV18
-#define ACT_MOUNTED BV19
-#define ACT_SCHOLAR BV20
-#define ACT_SECRETIVE BV21
-#define ACT_POLYMORPHED BV22
-#define ACT_MOBINVIS BV23
-#define ACT_NOASSIST BV24
-#define ACT_NOKILL BV25
-#define ACT_DROID BV26
+#define ACT_META_AGGR BV14   /* Extremely aggressive */
+#define ACT_GUARDIAN BV15    /* Protects master   */
+#define ACT_RUNNING BV16     /* Hunts quickly  */
+#define ACT_NOWANDER BV17    /* Doesn't wander */
+#define ACT_MOUNTABLE BV18   /* Can be mounted */
+#define ACT_MOUNTED BV19     /* Is mounted     */
+#define ACT_SCHOLAR BV20     /* Can teach languages  */
+#define ACT_SECRETIVE BV21   /* actions aren't seen  */
+#define ACT_POLYMORPHED BV22 /* Mob is a ch    */
+#define ACT_MOBINVIS BV23    /* Like wizinvis  */
+#define ACT_NOASSIST BV24    /* Doesn't assist mobs  */
+#define ACT_NOKILL BV25      /* Mob can't die */
+#define ACT_DROID BV26       /* mob is a droid */
 #define ACT_NOCORPSE BV27
-#define ACT_PUEBLO BV28
-#define ACT_PROTOTYPE BV30
+#define ACT_PUEBLO BV28    /* This is the pueblo flag */
+#define ACT_PROTOTYPE BV30 /* A prototype mob   */
 
 /* Act2 Flags */
-#define ACT_BOUND BV00
-#define ACT_JEDI BV01
-#define ACT_SITH BV02
-#define ACT_GAGGED BV03
+#define ACT_BOUND BV00  /* This is the bind flag */
+#define ACT_JEDI BV01   /* This is a light jedi */
+#define ACT_SITH BV02   /* This is a dark jedi */
+#define ACT_GAGGED BV03 /* This is a gagged flag */
 
-/* vip flags */
+/* bits for vip flags */
+
 #define VIP_CORUSCANT BV00
 #define VIP_YAVIN_IV BV01
 #define VIP_TATOOINE BV02
@@ -512,6 +159,7 @@ typedef enum
 #define VIP_BAKURA BV09
 
 /* player wanted bits */
+
 #define WANTED_CORUSCANT VIP_CORUSCANT
 #define WANTED_YAVIN_IV VIP_YAVIN_IV
 #define WANTED_TATOOINE VIP_TATOOINE
@@ -523,8 +171,12 @@ typedef enum
 #define WANTED_CORELLIA VIP_CORELLIA
 #define WANTED_BAKURA VIP_BAKURA
 
-/* 'affected_by' bits */
+/*
+ * Bits for 'affected_by'.
+ * Used in #MOBILES.
+ */
 #define AFF_NONE 0
+
 #define AFF_BLIND BV00
 #define AFF_INVISIBLE BV01
 #define AFF_DETECT_EVIL BV02
@@ -581,8 +233,26 @@ typedef enum
 #define RIS_PLUS6 BV19
 #define RIS_MAGIC BV20
 #define RIS_PARALYSIS BV21
+#define RIS_MENTAL BV22
+#define RIS_HOLY BV23
+#define RIS_ORDER BV24
+#define RIS_CHAOS BV25
+#define RIS_NEGATIVE BV26
+#define RIS_DROWNING BV27
+/* RIS_s */
 
-/* Attack types */
+#define RIS_000 BV00
+#define RIS_R00 BV01
+#define RIS_0I0 BV02
+#define RIS_RI0 BV03
+#define RIS_00S BV04
+#define RIS_R0S BV05
+#define RIS_0IS BV06
+#define RIS_RIS BV07
+
+/*
+ * Attack types
+ */
 #define ATCK_BITE BV00
 #define ATCK_CLAWS BV01
 #define ATCK_TAIL BV02
@@ -590,15 +260,26 @@ typedef enum
 #define ATCK_PUNCH BV04
 #define ATCK_KICK BV05
 #define ATCK_TRIP BV06
+#define ATCK_BASH BV07
+#define ATCK_STUN BV08
+#define ATCK_GOUGE BV09
 #define ATCK_BACKSTAB BV10
+#define ATCK_FORCE BV11
+#define ATCK_SHOOT BV12
+#define ATCK_HIT BV13
 
-/* Defense types */
+/*
+ * Defense types
+ */
 #define DFND_PARRY BV00
 #define DFND_DODGE BV01
-#define DFND_DISARM BV19
-#define DFND_GRIP BV21
+#define DFND_GRIP BV02
+#define DFND_SHIELD BV03
+#define DFND_DISARM BV04
 
-/* Body parts */
+/*
+ * Body parts
+ */
 #define PART_HEAD BV00
 #define PART_ARMS BV01
 #define PART_LEGS BV02
@@ -617,6 +298,7 @@ typedef enum
 #define PART_WINGS BV15
 #define PART_TAIL BV16
 #define PART_SCALES BV17
+/* for combat */
 #define PART_CLAWS BV18
 #define PART_FANGS BV19
 #define PART_HORNS BV20
@@ -624,28 +306,31 @@ typedef enum
 #define PART_TAILATTACK BV22
 #define PART_SHARPSCALES BV23
 #define PART_BEAK BV24
+
 #define PART_HAUNCH BV25
 #define PART_HOOVES BV26
 #define PART_PAWS BV27
 #define PART_FORELEGS BV28
 #define PART_FEATHERS BV29
+#define PART_HUSK_SHELL BV30
 
-/* Autosave flags */
-#define SV_DEATH BV00
-#define SV_KILL BV01
-#define SV_PASSCHG BV02
-#define SV_DROP BV03
-#define SV_PUT BV04
-#define SV_GIVE BV05
-#define SV_AUTO BV06
-#define SV_ZAPDROP BV07
-#define SV_AUCTION BV08
-#define SV_GET BV09
-#define SV_RECEIVE BV10
-#define SV_IDLE BV11
-#define SV_BACKUP BV12
+/*
+ * Autosave flags
+ */
+#define SV_DEATH BV00  /* auto after death */
+#define SV_KILL BV01   /* auto after pk death */
+#define SV_TIME BV02   /* auto on the hour */
+#define SV_AUTO BV03   /* auto flag toggle */
+#define SV_DROP BV04   /* auto after drop */
+#define SV_PUT BV05    /* auto after put */
+#define SV_AUCTION BV06  /* auto after auction */
+#define SV_AUTO BV07   /* auto flag toggle */
+#define SV_IDLE BV08   /* auto on idle */
+#define SV_BACKUP BV09 /* backup on death */
 
-/* Pipe flags */
+/*
+ * Pipe flags
+ */
 #define PIPE_TAMPED BV01
 #define PIPE_LIT BV02
 #define PIPE_HOT BV03
@@ -655,238 +340,418 @@ typedef enum
 #define PIPE_BURNT BV07
 #define PIPE_FULLOFASH BV08
 
-/* Skill/Spell flags */
-#define SF_WATER BV11
-#define SF_EARTH BV12
-#define SF_AIR BV13
-#define SF_ASTRAL BV14
-#define SF_AREA BV15
-#define SF_DISTANT BV16
-#define SF_REVERSE BV17
-#define SF_SAVE_HALF_DAMAGE BV18
-#define SF_SAVE_NEGATES BV19
-#define SF_ACCUMULATIVE BV20
-#define SF_RECASTABLE BV21
-#define SF_NOSCRIBE BV22
-#define SF_NOBREW BV23
-#define SF_GROUPSPELL BV24
-#define SF_OBJECT BV25
-#define SF_CHARACTER BV26
-#define SF_SECRETSKILL BV27
-#define SF_PKSENSITIVE BV28
-#define SF_STOPONFAIL BV29
+/*
+ * Flags for MUD rooms -- Shaddai
+ */
+#define ROOM_R1 BV00
+#define ROOM_DARK BV00
+#define ROOM_DEATH BV01
+#define ROOM_NO_MOB BV02
+#define ROOM_INDOORS BV03
+#define ROOM_LAWFUL BV04
+#define ROOM_NEUTRAL BV05
+#define ROOM_CHAOTIC BV06
+#define ROOM_NO_MAGIC BV07
+#define ROOM_TUNNEL BV08
+#define ROOM_PRIVATE BV09
+#define ROOM_SAFE BV10
+#define ROOM_SOLITARY BV11
+#define ROOM_PET_SHOP BV12
+#define ROOM_NO_RECALL BV13
+#define ROOM_DONATION BV14
+#define ROOM_NODROP BV15
+#define ROOM_SILENCE BV16
+#define ROOM_LOGSPEECH BV17
+#define ROOM_NODROPALL BV18
+#define ROOM_TELEPORT BV19
+#define ROOM_CLANSTOREROOM BV20
+#define ROOM_NO_DRIVING BV21
+#define ROOM_NO_ASTRAL BV22
+#define ROOM_AUCTION BV23
+#define ROOM_NO_SUPPLICATE BV24
+#define ROOM_ARENA BV25
+#define ROOM_R6 BV26
+#define ROOM_R7 BV27
+#define ROOM_R8 BV28
+#define ROOM_R9 BV29
+#define ROOM_R10 BV30
+#define ROOM_R11 BV31
 
-typedef enum
-{
-   SS_NONE,
-   SS_POISON_DEATH,
-   SS_ROD_WANDS,
-   SS_PARA_PETRI,
-   SS_BREATH,
-   SS_SPELL_STAFF
-} save_types;
+/*
+ * Flags for mud areas -- Shaddai
+ */
+#define AFLAG_NOPKILL BV00
+#define AFLAG_FREEKILL BV01
+#define AFLAG_NOTELEPORT BV02
+#define AFLAG_SPELLLIMIT BV03
+#define AFLAG_HIDDEN BV04
+#define AFLAG_NOMAP BV05
 
-typedef enum
-{
-   SD_NONE,
-   SD_FIRE,
-   SD_COLD,
-   SD_ELECTRICITY,
-   SD_ENERGY,
-   SD_ACID,
-   SD_POISON,
-   SD_DRAIN
-} spell_dam_types;
+/*
+ * Sector types
+ */
+#define SECT_INSIDE 0
+#define SECT_CITY 1
+#define SECT_FIELD 2
+#define SECT_FOREST 3
+#define SECT_HILLS 4
+#define SECT_MOUNTAIN 5
+#define SECT_WATER_SWIM 6
+#define SECT_WATER_NOSWIM 7
+#define SECT_UNDERWATER 8
+#define SECT_AIR 9
+#define SECT_DESERT 10
+#define SECT_DUNNO 11
+#define SECT_OCEANFLOOR 12
+#define SECT_UNDERGROUND 13
+#define SECT_SCRUB 14
+#define SECT_ROCKY 15
+#define SECT_SAVANNA 16
+#define SECT_TUNDRA 17
+#define SECT_GLACIER 18
+#define SECT_OCEAN 19
+#define SECT_LAVA 20
+#define SECT_SWAMP 21
+#define SECT_MAX 22
 
-typedef enum
-{
-   SA_NONE,
-   SA_CREATE,
-   SA_DESTROY,
-   SA_RESIST,
-   SA_SUSCEPT,
-   SA_DIVINATE,
-   SA_OBSCURE,
-   SA_CHANGE
-} spell_act_types;
+/*
+ * Equipment wear locations.
+ * Used in #RESETS.
+ */
+#define WEAR_NONE -1
+#define WEAR_LIGHT 0
+#define WEAR_FINGER_L 1
+#define WEAR_FINGER_R 2
+#define WEAR_NECK_1 3
+#define WEAR_NECK_2 4
+#define WEAR_BODY 5
+#define WEAR_HEAD 6
+#define WEAR_LEGS 7
+#define WEAR_FEET 8
+#define WEAR_HANDS 9
+#define WEAR_ARMS 10
+#define WEAR_SHIELD 11
+#define WEAR_ABOUT 12
+#define WEAR_WAIST 13
+#define WEAR_WRIST_L 14
+#define WEAR_WRIST_R 15
+#define WEAR_WIELD 16
+#define WEAR_DUAL_WIELD 17
+#define WEAR_HOLD 18
+#define WEAR_MISSILE_WIELD 19
+#define WEAR_EARS 20
+#define WEAR_EYES 21
+#define WEAR_BADGE 22
+#define WEAR_NOSE 23
+#define WEAR_FLOAT 24
+#define WEAR_BACKPACK 25
+#define WEAR_BELT1 26
+#define WEAR_BELT2 27
+#define WEAR_BELT3 28
+#define WEAR_BELT4 29
+#define WEAR_BELT5 30
+#define WEAR_BELT6 31
+#define WEAR_MAX 31
 
-typedef enum
-{
-   SP_NONE,
-   SP_MINOR,
-   SP_GREATER,
-   SP_MAJOR
-} spell_power_types;
+/*
+ * Locations for damage.
+ */
+#define LOC_HEAD 0
+#define LOC_LEGS 1
+#define LOC_FEET 2
+#define LOC_HANDS 3
+#define LOC_ARMS 4
+#define LOC_BODY 5
+#define LOC_NONE 6
 
-typedef enum
-{
-   SC_NONE,
-   SC_LUNAR,
-   SC_SOLAR,
-   SC_TRAVEL,
-   SC_SUMMON,
-   SC_LIFE,
-   SC_DEATH,
-   SC_ILLUSION
-} spell_class_types;
+/* ***********************************************************************
+ *  Values for the sector_type field (for rooms).
+ *  Zero is for indoors, non-zero for outdoors.
+ *************************************************************************
+ */
+#define SECT_INSIDE 0
+#define SECT_CITY 1
+#define SECT_FIELD 2
+#define SECT_FOREST 3
+#define SECT_HILLS 4
+#define SECT_MOUNTAIN 5
+#define SECT_WATER_SWIM 6
+#define SECT_WATER_NOSWIM 7
+#define SECT_UNDERWATER 8
+#define SECT_AIR 9
+#define SECT_DESERT 10
+#define SECT_DUNNO 11
+#define SECT_OCEANFLOOR 12
+#define SECT_UNDERGROUND 13
+#define SECT_SCRUB 14
+#define SECT_ROCKY 15
+#define SECT_SAVANNA 16
+#define SECT_TUNDRA 17
+#define SECT_GLACIER 18
+#define SECT_OCEAN 19
+#define SECT_LAVA 20
+#define SECT_SWAMP 21
+#define SECT_MAX 22
 
-/* Sex */
-typedef enum
-{
-   SEX_NEUTRAL,
-   SEX_MALE,
-   SEX_FEMALE
-} sex_types;
+/*
+ * Positions.
+ */
+#define POS_DEAD 0
+#define POS_MORTAL 1
+#define POS_INCAP 2
+#define POS_STUNNED 3
+#define POS_SLEEPING 4
+#define POS_RESTING 5
+#define POS_SITTING 6
+#define POS_FIGHTING 7
+#define POS_STANDING 8
+#define POS_MOUNTED 9
+#define POS_SHOVE 10
+#define POS_DRAG 11
 
-typedef enum
-{
-   TRAP_TYPE_POISON_GAS = 1,
-   TRAP_TYPE_POISON_DART,
-   TRAP_TYPE_POISON_NEEDLE,
-   TRAP_TYPE_POISON_DAGGER,
-   TRAP_TYPE_POISON_ARROW,
-   TRAP_TYPE_BLINDNESS_GAS,
-   TRAP_TYPE_SLEEPING_GAS,
-   TRAP_TYPE_FLAME,
-   TRAP_TYPE_EXPLOSION,
-   TRAP_TYPE_ACID_SPRAY,
-   TRAP_TYPE_ELECTRIC_SHOCK,
-   TRAP_TYPE_BLADE,
-   TRAP_TYPE_SEX_CHANGE
-} trap_types;
+/*
+ * Styles.
+ */
+#define STYLE_BERSERK 1
+#define STYLE_AGGRESSIVE 2
+#define STYLE_DEFENSIVE 3
+#define STYLE_EVASIVE 4
 
-#define TRAP_ROOM BV00
-#define TRAP_OBJ BV01
-#define TRAP_ENTER_ROOM BV02
-#define TRAP_LEAVE_ROOM BV03
-#define TRAP_OPEN BV04
-#define TRAP_CLOSE BV05
-#define TRAP_GET BV06
-#define TRAP_PUT BV07
-#define TRAP_PICK BV08
-#define TRAP_UNLOCK BV09
-#define TRAP_N BV10
-#define TRAP_S BV11
-#define TRAP_E BV12
-#define TRAP_W BV13
-#define TRAP_U BV14
-#define TRAP_D BV15
-#define TRAP_EXAMINE BV16
-#define TRAP_NE BV17
-#define TRAP_NW BV18
-#define TRAP_SE BV19
-#define TRAP_SW BV20
+/*
+ * Channel bits.
+ */
+#define CHANNEL_AUCTION BV00
+#define CHANNEL_CHAT BV01
+#define CHANNEL_QUEST BV02
+#define CHANNEL_IMMTALK BV03
+#define CHANNEL_PRAY BV04
+#define CHANNEL_MUSIC BV05
+#define CHANNEL_ASK BV06
+#define CHANNEL_SHOUT BV07
+#define CHANNEL_YELL BV08
+#define CHANNEL_MONITOR BV09
+#define CHANNEL_NEWBIE BV10
+#define CHANNEL_OOC BV11
+#define CHANNEL_INFO BV12
+#define CHANNEL_GOSSIP BV13
+#define CHANNEL_CLAN BV14
+#define CHANNEL_FLAME BV15
+#define CHANNEL_TELL BV16
+#define CHANNEL_GRATS BV17
+#define CHANNEL_GUILD BV18
+#define CHANNEL_PNET BV19
+#define CHANNEL_WARTALK BV20
+#define CHANNEL_TRAFFIC BV21
+#define CHANNEL_RPLOG BV22
+#define CHANNEL_ADVERTISE BV23
+#define CHANNEL_ROLEPLAY BV24
+#define CHANNEL_COMLOG BV25
+#define CHANNEL_LOG BV26
+#define CHANNEL_BUILD BV27
+#define CHANNEL_COMM BV28
+#define CHANNEL_WARN BV29
 
-/* Item types. */
-typedef enum
-{
-   ITEM_NONE,
-   ITEM_LIGHT,
-   ITEM_SCROLL,
-   ITEM_WAND,
-   ITEM_STAFF,
-   ITEM_WEAPON,
-   ITEM_FIREWEAPON,
-   ITEM_MISSILE,
-   ITEM_TREASURE,
-   ITEM_ARMOR,
-   ITEM_POTION,
-   ITEM_WORN,
-   ITEM_FURNITURE,
-   ITEM_TRASH,
-   ITEM_OLDTRAP,
-   ITEM_CONTAINER,
-   ITEM_NOTE,
-   ITEM_DRINK_CON,
-   ITEM_KEY,
-   ITEM_FOOD,
-   ITEM_MONEY,
-   ITEM_PEN,
-   ITEM_BOAT,
-   ITEM_CORPSE_NPC,
-   ITEM_CORPSE_PC,
-   ITEM_FOUNTAIN,
-   ITEM_PILL,
-   ITEM_BLOOD,
-   ITEM_BLOODSTAIN,
-   ITEM_SCRAPS,
-   ITEM_PIPE,
-   ITEM_HERB_CON,
-   ITEM_HERB,
-   ITEM_INCENSE,
-   ITEM_FIRE,
-   ITEM_BOOK,
-   ITEM_SWITCH,
-   ITEM_LEVER,
-   ITEM_PULLCHAIN,
-   ITEM_BUTTON,
-   ITEM_DIAL,
-   ITEM_RUNE,
-   ITEM_RUNEPOUCH,
-   ITEM_MATCH,
-   ITEM_TRAP,
-   ITEM_MAP,
-   ITEM_PORTAL,
-   ITEM_PAPER,
-   ITEM_TINDER,
-   ITEM_LOCKPICK,
-   ITEM_SPIKE,
-   ITEM_DISEASE,
-   ITEM_OIL,
-   ITEM_FUEL,
-   ITEM_SHORT_BOW,
-   ITEM_LONG_BOW,
-   ITEM_CROSSBOW,
-   ITEM_AMMO,
-   ITEM_QUIVER,
-   ITEM_SHOVEL,
-   ITEM_SALVE,
-   ITEM_RAWSPICE,
-   ITEM_LENS,
-   ITEM_CRYSTAL,
-   ITEM_DURAPLAST,
-   ITEM_BATTERY,
-   ITEM_TOOLKIT,
-   ITEM_DURASTEEL,
-   ITEM_OVEN,
-   ITEM_MIRROR,
-   ITEM_CIRCUIT,
-   ITEM_SUPERCONDUCTOR,
-   ITEM_COMLINK,
-   ITEM_MEDPAC,
-   ITEM_FABRIC,
-   ITEM_RARE_METAL,
-   ITEM_MAGNET,
-   ITEM_THREAD,
-   ITEM_SPICE,
-   ITEM_SMUT,
-   ITEM_DEVICE,
-   ITEM_SPACECRAFT,
-   ITEM_GRENADE,
-   ITEM_LANDMINE,
-   ITEM_GOVERNMENT,
-   ITEM_DROID_CORPSE,
-   ITEM_BOLT,
-   ITEM_CHEMICAL,
-   ITEM_COMMSYSTEM,
-   ITEM_DATAPAD,
-   ITEM_MODULE,
-   ITEM_BUG,
-   ITEM_BEACON,
-   ITEM_GLAUNCHER,
-   ITEM_RLAUNCHER,
-   ITEM_BINDERS,
-   ITEM_GOGGLES,
-   ITEM_SHIPBOMB,
-   ITEM_EMP_GRENADE
-} item_types;
+/* Area flags - Narn Mar/96 */
+#define AFLAG_NOPKILL BV00
+#define AFLAG_FREEKILL BV01
+#define AFLAG_NOTELEPORT BV02
+#define AFLAG_SPELLLIMIT BV03
+#define AFLAG_HIDDEN BV04
+#define AFLAG_NOMAP BV05
 
-/* Extra flags for objects */
+/*
+ * Prototype for a mob.
+ * This is the in-memory version of #MOBILES.
+ */
+
+#define AREA_DELETED BV00
+#define AREA_LOADED BV01
+
+/*
+ * Skills include spells as a particular case.
+ */
+
+/* deity structure */
+
+#define DEITY_DEVOTION BV00
+#define DEITY_RACE BV01
+#define DEITY_ELEMENT BV02
+#define DEITY_CLASS BV03
+#define DEITY_SEX BV04
+#define DEITY_SCORP BV05
+#define DEITY_NPCHOSTILE BV06
+#define DEITY_NPCFOE BV07
+#define DEITY_NPCRACE BV08
+
+/*
+ * Auction states for use in update.c
+ */
+#define AUCTION_MEM 0   /* Must have this -- for valids */
+#define AUCTION_NONE 1  /* Nothing being auctioned */
+#define AUCTION_START 2 /* Just started an auction */
+#define AUCTION_ONCE 3  /* Once */
+#define AUCTION_TWICE 4 /* Twice */
+#define AUCTION_SOLD 5  /* Sold */
+
+/* for changes */
+#define CHANGE_CHANGED 1
+#define CHANGE_ADDED 2
+#define CHANGE_REMOVED 3
+
+/* for clans */
+#define CLAN_PLAIN 0
+#define CLAN_CRIME 1
+#define CLAN_GUILD 2
+#define CLAN_SUBCLAN 3
+#define CLAN_CORPORATION 4
+
+/* for planets */
+#define PLANET_NOCAPTURE BV00
+
+/* for ships */
+#define PLAYER_SHIP 0
+#define MOB_SHIP 1
+#define SHIP_IMPERIAL 2
+#define SHIP_REPUBLIC 3
+
+#define SHIP_DOCKED 1
+#define SHIP_READY 2
+#define SHIP_BUSY 3
+#define SHIP_BUSY_2 4
+#define SHIP_BUSY_3 5
+#define SHIP_REFUEL 6
+#define SHIP_LAUNCH 7
+#define SHIP_LAUNCH_2 8
+#define SHIP_LAND 9
+#define SHIP_LAND_2 10
+#define SHIP_HYPERSPACE 11
+#define SHIP_DISABLED 12
+#define SHIP_FLYING 13
+
+#define MISSILE_READY 0
+#define MISSILE_FIRED 1
+#define MISSILE_RELOAD 2
+#define MISSILE_RELOAD_2 3
+#define MISSILE_DAMAGED -1
+
+#define LAND_VEHICLE 0
+#define SHIP_FIGHTER 1
+#define SHIP_BOMBER 2
+#define SHIP_SHUTTLE 3
+#define SHIP_FREIGHTER 4
+#define SHIP_FRIGATE 5
+#define SHIP_TT 6
+#define SHIP_CORVETTE 7
+#define SHIP_CRUISER 8
+#define SHIP_DREADNAUGHT 9
+#define SHIP_DESTROYER 10
+#define SHIP_SPACE_STATION 11
+
+/* For weapons */
+#define B_NONE 0
+#define SINGLE_LASER 1
+#define DUAL_LASER 2
+#define TRI_LASER 3
+#define QUAD_LASER 4
+#define AUTOBLASTER 5
+#define HEAVY_LASER 6
+#define LIGHT_ION 7
+#define REPEATING_ION 8
+#define HEAVY_ION 9
+#define CONCUSSION_MISSILE 0
+#define PROTON_TORPEDO 1
+#define HEAVY_ROCKET 2
+#define HEAVY_BOMB 3
+#define LASER_DAMAGED -1
+#define LASER_READY 0
+
+/* for cargo */
+#define CARGO_SPICE 0
+#define CARGO_GEM 1
+#define CARGO_NORMAL 2
+#define CARGO_WEAPON 3
+#define CARGO_ARMOR 4
+#define CARGO_COMLINK 5
+#define CARGO_DURASTEEL 6
+#define CARGO_DURAPLAST 7
+#define CARGO_CLOTHING 8
+#define CARGO_REPAIR 9
+
+/* for bounties */
+#define BOUNTY_PLAYER 0
+#define BOUNTY_CLAN 1
+
+/* for blackmarket */
+#define BLACKMARKET_LOCAL 0
+#define BLACKMARKET_GLOBAL 1
+
+/* for rooms */
+#define ROOM_DARK BV00
+#define ROOM_DEATH BV01
+#define ROOM_NO_MOB BV02
+#define ROOM_INDOORS BV03
+#define ROOM_LAWFUL BV04
+#define ROOM_NEUTRAL BV05
+#define ROOM_CHAOTIC BV06
+#define ROOM_NO_MAGIC BV07
+#define ROOM_TUNNEL BV08
+#define ROOM_PRIVATE BV09
+#define ROOM_SAFE BV10
+#define ROOM_SOLITARY BV11
+#define ROOM_PET_SHOP BV12
+#define ROOM_NO_RECALL BV13
+#define ROOM_DONATION BV14
+#define ROOM_NODROP BV15
+#define ROOM_SILENCE BV16
+#define ROOM_LOGSPEECH BV17
+#define ROOM_NODROPALL BV18
+#define ROOM_TELEPORT BV19
+#define ROOM_CLANSTOREROOM BV20
+#define ROOM_NO_DRIVING BV21
+#define ROOM_NO_ASTRAL BV22
+#define ROOM_AUCTION BV23
+#define ROOM_NO_SUPPLICATE BV24
+#define ROOM_ARENA BV25
+#define ROOM_R6 BV26
+#define ROOM_R7 BV27
+#define ROOM_R8 BV28
+#define ROOM_R9 BV29
+#define ROOM_R10 BV30
+#define ROOM_R11 BV31
+
+/* for exits */
+#define EX_ISDOOR BV00
+#define EX_CLOSED BV01
+#define EX_LOCKED BV02
+#define EX_SECRET BV03
+#define EX_PICKPROOF BV04
+#define EX_FLY BV05
+#define EX_CLIMB BV06
+#define EX_DIG BV07
+#define EX_EATKEY BV08
+#define EX_NOPASSDOOR BV09
+#define EX_HIDDEN BV10
+#define EX_PASSAGE BV11
+#define EX_PORTAL BV12
+#define EX_RES1 BV13
+#define EX_RES2 BV14
+#define EX_xCLIMB BV15
+#define EX_xENTER BV16
+#define EX_xLEAVE BV17
+#define EX_xSEARCHABLE BV18
+#define EX_BASHED BV19
+#define EX_BASHPROOF BV20
+#define EX_NOMOB BV21
+#define EX_WINDOW BV22
+#define EX_xLOOK BV23
+#define MAX_EXFLAG 23
+
+/* for items */
 #define ITEM_GLOW BV00
 #define ITEM_HUM BV01
 #define ITEM_DARK BV02
-#define ITEM_HUTT_SIZE BV03
-#define ITEM_CONTRABAND BV04
+#define ITEM_LOCK BV03
+#define ITEM_EVIL BV04
 #define ITEM_INVIS BV05
 #define ITEM_MAGIC BV06
 #define ITEM_NODROP BV07
@@ -899,537 +764,145 @@ typedef enum
 #define ITEM_ANTI_SOLDIER BV14
 #define ITEM_ANTI_THIEF BV15
 #define ITEM_ANTI_HUNTER BV16
-#define ITEM_ANTI_JEDI BV17
+#define ITEM_ANTI_PILOT BV17
 #define ITEM_SMALL_SIZE BV18
 #define ITEM_LARGE_SIZE BV19
 #define ITEM_DONATION BV20
 #define ITEM_CLANOBJECT BV21
-#define ITEM_ANTI_CITIZEN BV22
-#define ITEM_ANTI_SITH BV23
-#define ITEM_ANTI_PILOT BV24
-#define ITEM_HIDDEN BV25
-#define ITEM_POISONED BV26
-#define ITEM_COVERING BV27
-#define ITEM_DEATHROT BV28
-#define ITEM_BURRIED BV29
-#define ITEM_PROTOTYPE BV30
-#define ITEM_HUMAN_SIZE BV31
+#define ITEM_ANTI_SITH BV22
+#define ITEM_ANTI_JEDI BV23
+#define ITEM_HIDDEN BV24
+#define ITEM_POISONED BV25
+#define ITEM_COVERING BV26
+#define ITEM_DEATHROT BV27
+#define ITEM_BURRIED BV28 /* item is burried */
+#define ITEM_PROTOTYPE BV29
+#define ITEM_NODISARM BV30
+#define ITEM_NOPURGE BV31
+#define ITEM_REPAIRABLE BV32
+#define ITEM_UNBREAKABLE BV33
 
-/* Magic flags */
-#define ITEM_RETURNING BV00
-#define ITEM_BACKSTABBER BV01
-#define ITEM_BANE BV02
-#define ITEM_LOYAL BV03
-#define ITEM_HASTE BV04
-#define ITEM_DRAIN BV05
-#define ITEM_LIGHTNING_BLADE BV06
+/* for containers */
+#define CONT_CLOSEABLE BV01
+#define CONT_PICKPROOF BV02
+#define CONT_CLOSED BV03
+#define CONT_LOCKED BV04
 
-/* Blaster settings */
-#define BLASTER_NORMAL 0
-#define BLASTER_HALF 2
-#define BLASTER_FULL 5
-#define BLASTER_LOW 1
-#define BLASTER_STUN 3
-#define BLASTER_HIGH 4
+/* for liquids */
+#define LIQ_WATER 0
+#define LIQ_BEER 1
+#define LIQ_WINE 2
+#define LIQ_ALE 3
+#define LIQ_DARKALE 4
+#define LIQ_WHISKY 5
+#define LIQ_LEMONADE 6
+#define LIQ_FIREBRT 7
+#define LIQ_LOCALSPC 8
+#define LIQ_SLIME 9
+#define LIQ_MILK 10
+#define LIQ_TEA 11
+#define LIQ_COFFE 12
+#define LIQ_BLOOD 13
+#define LIQ_SALTWATER 14
+#define LIQ_CLEARWATER 15
+#define LIQ_COKE 16
+#define LIQ_ROOTBEER 17
+#define LIQ_CHOCOMILK 18
+#define LIQ_GRAPEJUICE 19
+#define LIQ_ORANGEJUICE 20
+#define LIQ_MOONSHINE 21
+#define LIQ_VODKA 22
+#define LIQ_CHAMPAGNE 23
+#define LIQ_RTAVIS 24
+#define LIQ_BLUEPUNCH 25
+#define LIQ_FRUITPUNCH 26
+#define LIQ_LEMONPUNCH 27
+#define LIQ_LIMESLUSH 28
+#define LIQ_CHERRYSODA 29
+#define LIQ_SLIMEMOLDJUICE 30
+#define LIQ_MAX 31
 
-/* Weapon Types */
-#define WEAPON_NONE 0
-#define WEAPON_VIBRO_AXE 1
-#define WEAPON_VIBRO_BLADE 2
-#define WEAPON_LIGHTSABER 3
-#define WEAPON_WHIP 4
-#define WEAPON_CLAW 5
-#define WEAPON_BLASTER 6
-#define WEAPON_BLUDGEON 8
-#define WEAPON_BOWCASTER 9
-#define WEAPON_FORCE_PIKE 11
-#define WEAPON_DUAL_LIGHTSABER 12
+/* for apply types */
+#define APPLY_NONE 0
+#define APPLY_STR 1
+#define APPLY_DEX 2
+#define APPLY_INT 3
+#define APPLY_WIS 4
+#define APPLY_CON 5
+#define APPLY_CHA 6
+#define APPLY_LCK 7
+#define APPLY_SEX 8
+#define APPLY_CLASS 9
+#define APPLY_LEVEL 10
+#define APPLY_AGE 11
+#define APPLY_HEIGHT 12
+#define APPLY_WEIGHT 13
+#define APPLY_MANA 14
+#define APPLY_HIT 15
+#define APPLY_MOVE 16
+#define APPLY_GOLD 17
+#define APPLY_EXP 18
+#define APPLY_AC 19
+#define APPLY_HITROLL 20
+#define APPLY_DAMROLL 21
+#define APPLY_SAVING_POISON 22
+#define APPLY_SAVING_ROD 23
+#define APPLY_SAVING_PARA 24
+#define APPLY_SAVING_BREATH 25
+#define APPLY_SAVING_SPELL 26
+#define APPLY_AFFECT 27
+#define APPLY_RESISTANT 28
+#define APPLY_IMMUNE 29
+#define APPLY_SUSCEPTIBLE 30
+#define APPLY_WEAPONSPELL 31
+#define APPLY_REMOVE 32
+#define APPLY_FULL 33
+#define APPLY_THIRST 34
+#define APPLY_DRUNK 35
+#define APPLY_BLOOD 36
+#define APPLY_STRIPSN 37
+#define APPLY_MENTALSTATE 38
+#define APPLY_EMOTION 39
+#define APPLY_CONTAGIOUS 40
+#define APPLY_ODOR 41
+#define APPLY_ROOMFLAG 42
+#define APPLY_SECTORTYPE 43
+#define APPLY_ROOMLIGHT 44
+#define APPLY_TELEVNUM 45
+#define APPLY_TELEDELAY 46
+#define APPLY_ABSORB 47
+#define APPLY_FRC 48
+#define APPLY_SAVING_FORCE 49
+#define APPLY_SAVING_FIRE 50
+#define APPLY_SAVING_COLD 51
+#define APPLY_SAVING_ENERGY 52
+#define APPLY_SAVING_ACID 53
+#define APPLY_SAVING_MAGIC 54
+#define APPLY_SAVING_NONMAGIC 55
+#define APPLY_SAVING_POISON 56
+#define APPLY_SAVING_ILLUSION 57
+#define APPLY_SAVING_MENTAL 58
+#define APPLY_SAVING_PHYSICAL 59
+#define APPLY_ATTACK 60
+#define APPLY_DEFENSE 61
+#define APPLY_CARRY_NUMBER 62
+#define APPLY_CARRY_WEIGHT 63
+#define APPLY_MAX_STR 64
+#define APPLY_MAX_DEX 65
+#define APPLY_MAX_INT 66
+#define APPLY_MAX_WIS 67
+#define APPLY_MAX_CON 68
+#define APPLY_MAX_CHA 69
+#define APPLY_MAX_LCK 70
+#define APPLY_MAX_FRC 71
+#define APPLY_ALL 72
 
-/* Lever/dial/switch/button/pullchain flags */
-#define TRIG_UP BV00
-#define TRIG_UNLOCK BV01
-#define TRIG_LOCK BV02
-#define TRIG_D_NORTH BV03
-#define TRIG_D_SOUTH BV04
-#define TRIG_D_EAST BV05
-#define TRIG_D_WEST BV06
-#define TRIG_D_UP BV07
-#define TRIG_D_DOWN BV08
-#define TRIG_DOOR BV09
-#define TRIG_CONTAINER BV10
-#define TRIG_OPEN BV11
-#define TRIG_CLOSE BV12
-#define TRIG_PASSAGE BV13
-#define TRIG_OLOAD BV14
-#define TRIG_MLOAD BV15
-#define TRIG_TELEPORT BV16
-#define TRIG_TELEPORTALL BV17
-#define TRIG_TELEPORTPLUS BV18
-#define TRIG_DEATH BV19
-#define TRIG_CAST BV20
-#define TRIG_FAKEBLADE BV21
-#define TRIG_RAND4 BV22
-#define TRIG_RAND6 BV23
-#define TRIG_TRAPDOOR BV24
-#define TRIG_ANOTHEROOM BV25
-#define TRIG_USEDIAL BV26
-#define TRIG_ABSOLUTEVNUM BV27
-#define TRIG_SHOWROOMDESC BV28
-#define TRIG_AUTORETURN BV29
+/* for mobprogs */
+#define MP_MOB BV00
+#define MP_ROOM BV01
+#define MP_OBJ BV02
 
-#define TELE_SHOWDESC BV00
-#define TELE_TRANSALL BV01
-#define TELE_TRANSALLPLUS BV02
-
-/* drug types */
-#define SPICE_GLITTERSTIM 0
-#define SPICE_CARSANUM 1
-#define SPICE_RYLL 2
-#define SPICE_ANDRIS 3
-
-/* crystal types */
-#define GEM_NON_ADEGEN 0
-#define GEM_KATHRACITE 1
-#define GEM_RELACITE 2
-#define GEM_DANITE 3
-#define GEM_MEPHITE 4
-#define GEM_PONITE 5
-#define GEM_ILLUM 6
-#define GEM_CORUSCA 7
-
-/* Wear flags */
-#define ITEM_TAKE BV00
-#define ITEM_WEAR_FINGER BV01
-#define ITEM_WEAR_NECK BV02
-#define ITEM_WEAR_BODY BV03
-#define ITEM_WEAR_HEAD BV04
-#define ITEM_WEAR_LEGS BV05
-#define ITEM_WEAR_FEET BV06
-#define ITEM_WEAR_HANDS BV07
-#define ITEM_WEAR_ARMS BV08
-#define ITEM_WEAR_SHIELD BV09
-#define ITEM_WEAR_ABOUT BV10
-#define ITEM_WEAR_WAIST BV11
-#define ITEM_WEAR_WRIST BV12
-#define ITEM_WIELD BV13
-#define ITEM_HOLD BV14
-#define ITEM_DUAL_WIELD BV15
-#define ITEM_WEAR_EARS BV16
-#define ITEM_WEAR_EYES BV17
-#define ITEM_MISSILE_WIELD BV18
-#define ITEM_WEAR_BACK BV19
-#define ITEM_WEAR_HOLSTER1 BV20
-#define ITEM_WEAR_HOLSTER2 BV21
-#define ITEM_WEAR_BOTHWRISTS BV22
-
-/* Apply types (for affects) */
-typedef enum
-{
-   APPLY_NONE,
-   APPLY_STR,
-   APPLY_DEX,
-   APPLY_INT,
-   APPLY_WIS,
-   APPLY_CON,
-   APPLY_SEX,
-   APPLY_NULL,
-   APPLY_LEVEL,
-   APPLY_AGE,
-   APPLY_HEIGHT,
-   APPLY_WEIGHT,
-   APPLY_MANA,
-   APPLY_HIT,
-   APPLY_MOVE,
-   APPLY_GOLD,
-   APPLY_EXP,
-   APPLY_AC,
-   APPLY_HITROLL,
-   APPLY_DAMROLL,
-   APPLY_SAVING_POISON,
-   APPLY_SAVING_ROD,
-   APPLY_SAVING_PARA,
-   APPLY_SAVING_BREATH,
-   APPLY_SAVING_SPELL,
-   APPLY_CHA,
-   APPLY_AFFECT,
-   APPLY_RESISTANT,
-   APPLY_IMMUNE,
-   APPLY_SUSCEPTIBLE,
-   APPLY_WEAPONSPELL,
-   APPLY_LCK,
-   APPLY_BACKSTAB,
-   APPLY_PICK,
-   APPLY_TRACK,
-   APPLY_STEAL,
-   APPLY_SNEAK,
-   APPLY_HIDE,
-   APPLY_PALM,
-   APPLY_DETRAP,
-   APPLY_DODGE,
-   APPLY_PEEK,
-   APPLY_SCAN,
-   APPLY_GOUGE,
-   APPLY_SEARCH,
-   APPLY_MOUNT,
-   APPLY_DISARM,
-   APPLY_KICK,
-   APPLY_PARRY,
-   APPLY_BASH,
-   APPLY_STUN,
-   APPLY_PUNCH,
-   APPLY_CLIMB,
-   APPLY_GRIP,
-   APPLY_SCRIBE,
-   APPLY_COVER_TRAIL,
-   APPLY_WEARSPELL,
-   APPLY_REMOVESPELL,
-   APPLY_EMOTION,
-   APPLY_MENTALSTATE,
-   APPLY_STRIPSN,
-   APPLY_REMOVE,
-   APPLY_DIG,
-   APPLY_FULL,
-   APPLY_THIRST,
-   APPLY_DRUNK,
-   APPLY_BLOOD,
-   MAX_APPLY_TYPE
-} apply_types;
-
-/* Values for containers (value[1]) */
-#define CONT_CLOSEABLE 1
-#define CONT_PICKPROOF 2
-#define CONT_CLOSED 4
-#define CONT_LOCKED 8
-
-/* Room flags */
-#define ROOM_DARK BV00
-#define ROOM_NO_MOB BV02
-#define ROOM_INDOORS BV03
-#define ROOM_CAN_LAND BV04
-#define ROOM_CAN_FLY BV05
-#define ROOM_NO_DRIVING BV06
-#define ROOM_NO_MAGIC BV07
-#define ROOM_BANK BV08
-#define ROOM_PRIVATE BV09
-#define ROOM_SAFE BV10
-#define ROOM_SOLITARY BV11
-#define ROOM_PET_SHOP BV12
-#define ROOM_NO_RECALL BV13
-#define ROOM_DONATION BV14
-#define ROOM_NODROPALL BV15
-#define ROOM_SILENCE BV16
-#define ROOM_LOGSPEECH BV17
-#define ROOM_NODROP BV18
-#define ROOM_CLANSTOREROOM BV19
-#define ROOM_PLR_HOME BV20
-#define ROOM_EMPTY_HOME BV21
-#define ROOM_TELEPORT BV22
-#define ROOM_HOTEL BV23
-#define ROOM_NOFLOOR BV24
-#define ROOM_REFINERY BV25
-#define ROOM_FACTORY BV26
-#define ROOM_R_RECRUIT BV27
-#define ROOM_E_RECRUIT BV28
-#define ROOM_SPACECRAFT BV29
-#define ROOM_PROTOTYPE BV30
-#define ROOM_AUCTION BV31
-
-/* Second Set of Room Flags */
-#define ROOM_EMPTY_SHOP BV00
-#define ROOM_PLR_SHOP BV01
-#define ROOM_SHIPYARD BV02
-#define ROOM_GARAGE BV03
-#define ROOM_BARRACKS BV04
-#define ROOM_CONTROL BV05
-#define ROOM_CLANLAND BV06
-#define ROOM_ARENA BV07
-#define ROOM_CLANJAIL BV08
-#define ROOM_BLACKMARKET BV09
-#define ROOM_HIDDENPAD BV10
-
-/* Directions */
-typedef enum
-{
-   DIR_NORTH,
-   DIR_EAST,
-   DIR_SOUTH,
-   DIR_WEST,
-   DIR_UP,
-   DIR_DOWN,
-   DIR_NORTHEAST,
-   DIR_NORTHWEST,
-   DIR_SOUTHEAST,
-   DIR_SOUTHWEST,
-   DIR_SOMEWHERE
-} dir_types;
-
-/* Exit flags */
-#define EX_ISDOOR BV00
-#define EX_CLOSED BV01
-#define EX_LOCKED BV02
-#define EX_SECRET BV03
-#define EX_SWIM BV04
-#define EX_PICKPROOF BV05
-#define EX_FLY BV06
-#define EX_CLIMB BV07
-#define EX_DIG BV08
-#define EX_RES1 BV09
-#define EX_NOPASSDOOR BV10
-#define EX_HIDDEN BV11
-#define EX_PASSAGE BV12
-#define EX_PORTAL BV13
-#define EX_RES2 BV14
-#define EX_RES3 BV15
-#define EX_xCLIMB BV16
-#define EX_xENTER BV17
-#define EX_xLEAVE BV18
-#define EX_xAUTO BV19
-#define EX_RES4 BV20
-#define EX_xSEARCHABLE BV21
-#define EX_BASHED BV22
-#define EX_BASHPROOF BV23
-#define EX_NOMOB BV24
-#define EX_WINDOW BV25
-#define EX_xLOOK BV26
-
-/* Sector types */
-typedef enum
-{
-   SECT_INSIDE,
-   SECT_CITY,
-   SECT_FIELD,
-   SECT_FOREST,
-   SECT_HILLS,
-   SECT_MOUNTAIN,
-   SECT_WATER_SWIM,
-   SECT_WATER_NOSWIM,
-   SECT_UNDERWATER,
-   SECT_AIR,
-   SECT_DESERT,
-   SECT_DUNNO,
-   SECT_OCEANFLOOR,
-   SECT_UNDERGROUND,
-   SECT_SCRUB,
-   SECT_ROCKY,
-   SECT_SAVANNA,
-   SECT_TUNDRA,
-   SECT_GLACIAL,
-   SECT_RAINFOREST,
-   SECT_JUNGLE,
-   SECT_SWAMP,
-   SECT_WETLANDS,
-   SECT_BRUSH,
-   SECT_STEPPE,
-   SECT_FARMLAND,
-   SECT_VOLCANIC,
-   SECT_MAX
-} sector_types;
-
-/* Equipment wear locations */
-typedef enum
-{
-   WEAR_NONE = -1,
-   WEAR_LIGHT = 0,
-   WEAR_FINGER_L,
-   WEAR_FINGER_R,
-   WEAR_NECK_1,
-   WEAR_NECK_2,
-   WEAR_BODY,
-   WEAR_HEAD,
-   WEAR_LEGS,
-   WEAR_FEET,
-   WEAR_HANDS,
-   WEAR_ARMS,
-   WEAR_SHIELD,
-   WEAR_ABOUT,
-   WEAR_WAIST,
-   WEAR_WRIST_L,
-   WEAR_WRIST_R,
-   WEAR_WIELD,
-   WEAR_HOLD,
-   WEAR_DUAL_WIELD,
-   WEAR_EARS,
-   WEAR_EYES,
-   WEAR_MISSILE_WIELD,
-   WEAR_BACK,
-   WEAR_HOLSTER_L,
-   WEAR_HOLSTER_R,
-   WEAR_BOTH_WRISTS,
-   MAX_WEAR
-} wear_locations;
-
-/* Board Types */
-typedef enum
-{
-   BOARD_NOTE,
-   BOARD_MAIL
-} board_types;
-
-/* Auth Flags */
-#define FLAG_WRAUTH 1
-#define FLAG_AUTH 2
-
-/* Conditions */
-typedef enum
-{
-   COND_DRUNK,
-   COND_FULL,
-   COND_THIRST,
-   COND_BLOODTHIRST,
-   MAX_CONDS
-} conditions;
-
-/* Positions */
-typedef enum
-{
-   POS_DEAD,
-   POS_MORTAL,
-   POS_INCAP,
-   POS_STUNNED,
-   POS_SLEEPING,
-   POS_RESTING,
-   POS_SITTING,
-   POS_FIGHTING,
-   POS_STANDING,
-   POS_MOUNTED,
-   POS_SHOVE,
-   POS_DRAG
-} positions;
-
-/* ACT bits for players */
-#define PLR_IS_NPC BV00
-#define PLR_EXEMPT BV01
-#define PLR_SHOVEDRAG BV02
-#define PLR_AUTOEXIT BV03
-#define PLR_AUTOLOOT BV04
-#define PLR_AUTOSAC BV05
-#define PLR_BLANK BV06
-#define PLR_OUTCAST BV07
-#define PLR_BRIEF BV08
-#define PLR_COMBINE BV09
-#define PLR_PROMPT BV10
-#define PLR_TELNET_GA BV11
-#define PLR_HOLYLIGHT BV12
-#define PLR_WIZINVIS BV13
-#define PLR_ROOMVNUM BV14
-#define PLR_SILENCE BV15
-#define PLR_NO_EMOTE BV16
-#define PLR_ATTACKER BV17
-#define PLR_NO_TELL BV18
-#define PLR_LOG BV19
-#define PLR_DENY BV20
-#define PLR_FREEZE BV21
-#define PLR_KILLER BV22
-#define PLR_WHOINVIS BV23
-#define PLR_LITTERBUG BV24
-#define PLR_ANSI BV25
-#define PLR_SOUND BV26
-#define PLR_NICE BV27
-#define PLR_FLEE BV28
-#define PLR_AUTOGOLD BV29
-#define PLR_SLOG BV30
-#define PLR_AFK BV31
-
-/* Bits for pc_data->flags. */
-#define PCFLAG_R1 BV00
-#define PCFLAG_UNAUTHED BV02
-#define PCFLAG_NORECALL BV03
-#define PCFLAG_NOINTRO BV04
-#define PCFLAG_GAG BV05
-#define PCFLAG_RETIRED BV06
-#define PCFLAG_GUEST BV07
-#define PCFLAG_HASSLUG BV08
-#define PCFLAG_PAGERON BV09
-#define PCFLAG_NOTITLE BV10
-#define PCFLAG_ROOM BV11
-
-typedef enum
-{
-   TIMER_NONE,
-   TIMER_RECENTFIGHT,
-   TIMER_SHOVEDRAG,
-   TIMER_DO_FUN,
-   TIMER_APPLIED,
-   TIMER_PKILLED
-} timer_types;
-
-/* Channel bits */
-#define CHANNEL_AUCTION BV00
-#define CHANNEL_CHAT BV01
-#define CHANNEL_QUEST BV02
-#define CHANNEL_IMMTALK BV03
-#define CHANNEL_MUSIC BV04
-#define CHANNEL_ASK BV05
-#define CHANNEL_SHOUT BV06
-#define CHANNEL_YELL BV07
-#define CHANNEL_MONITOR BV08
-#define CHANNEL_LOG BV09
-#define CHANNEL_104 BV10
-#define CHANNEL_CLAN BV11
-#define CHANNEL_BUILD BV12
-#define CHANNEL_105 BV13
-#define CHANNEL_AVTALK BV14
-#define CHANNEL_PRAY BV15
-#define CHANNEL_COUNCIL BV16
-#define CHANNEL_GUILD BV17
-#define CHANNEL_COMM BV18
-#define CHANNEL_TELLS BV19
-#define CHANNEL_ORDER BV20
-#define CHANNEL_NEWBIE BV21
-#define CHANNEL_WARTALK BV22
-#define CHANNEL_OOC BV23
-#define CHANNEL_SHIP BV24
-#define CHANNEL_SYSTEM BV25
-#define CHANNEL_SPACE BV26
-#define CHANNEL_103 BV27
-#define CHANNEL_SPORTS BV28
-#define CHANNEL_HOLONET BV31
-#define CHANNEL_CLANTALK CHANNEL_CLAN
-
-/* Area defines */
-#define AREA_DELETED BV00
-#define AREA_LOADED BV01
-
-/* Area flags */
-#define AFLAG_NOPKILL BV00
-#define AFLAG_PROTOTYPE BV01
-
-/* Target types. */
-typedef enum
-{
-   TAR_IGNORE,
-   TAR_CHAR_OFFENSIVE,
-   TAR_CHAR_DEFENSIVE,
-   TAR_CHAR_SELF,
-   TAR_OBJ_INV
-} target_types;
-
-typedef enum
-{
-   SKILL_UNKNOWN,
-   SKILL_SPELL,
-   SKILL_SKILL,
-   SKILL_WEAPON,
-   SKILL_TONGUE,
-   SKILL_HERB
-} skill_types;
-
-/* RIS for get_affect */
-#define RIS_000 BV00
-#define RIS_R00 BV01
-#define RIS_0I0 BV02
-#define RIS_RI0 BV03
-#define RIS_00S BV04
-#define RIS_R0S BV05
-#define RIS_0IS BV06
-#define RIS_RIS BV07
-#define GA_AFFECTED BV09
-#define GA_RESISTANT BV10
-#define GA_IMMUNE BV11
-#define GA_SUSCEPTIBLE BV12
-#define GA_RIS BV30
-
-/* mud prog defines */
+/* for obj programs */
 #define ERROR_PROG -1
 #define IN_FILE_PROG 0
 #define ACT_PROG BV00
@@ -1470,36 +943,18 @@ typedef enum
 #define SCRIPT_PROG BV30
 #define USE_PROG BV31
 
-/* Defines for the command flags */
+/* for roomprog */
+#define OPROG_ACT_TRIGGER
+#define RPROG_ACT_TRIGGER
+
+/* for cmd flags */
 #define CMD_POSSESS BV00
-#define CMD_ACTION BV01
-#define CMD_MUDPROG BV02
-#define CMD_NOFORCE BV03
+#define CMD_ACTION BV01  /* Samson 7-7-00 */
+#define CMD_MUDPROG BV02 /* Command is only used by mudprogs. Prevents display on help/commands. Samson 11-26-03 */
+#define CMD_NOFORCE BV03 /* Command can't be forced using either the force command or mpforce - Samson 3-3-04 */
 #define CMD_OOC BV04
 #define CMD_BUILD BV05
 #define CMD_PLR_ONLY BV06
-#define CMD_FULLNAME BV07
-#define CMD_SOCIAL BV08
-#define CMD_WIZONLY BV09
-#define CMD_DEITY BV10
-#define CMD_GUEST BV11
-#define CMD_NOGHOST BV12
-#define CMD_NOSUMMON BV13
-#define CMD_OLC BV14
-#define CMD_LOG BV15
-#define CMD_NOALIAS BV16
-#define CMD_NOSHOW BV17
-#define CMD_NOPRAC BV18
-#define CMD_NOQUEST BV19
-#define CMD_NOSNEAK BV20
-#define CMD_NOMOUNT BV21
-#define CMD_NOLOOT BV22
-#define CMD_NOSLAG BV23
-#define CMD_NOCLAN BV24
-#define CMD_KEEPTARGET BV25
-#define CMD_NOCHANS BV26
-#define CMD_NOSTORE BV27
-#define CMD_NODISARM BV28
-#define CMD_NOLOCKPICK BV29
-#define CMD_NOFORAGE BV30
-#define CMD_NODRIVE BV31
+#define CMD_FULLNAME BV07 // You have to use the fullname of the command
+
+#endif // MUD_FLAGS_HPP
