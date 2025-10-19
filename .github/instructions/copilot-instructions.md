@@ -22,11 +22,11 @@ Modernize this **multi-file, multi-module legacy codebase** (AetheriaMUD, with A
 - No dry, corporate messages allowed\!
 - Use puns, jokes, or cheeky commentary.
 - **Examples:**
-  - "Made the code less buggy than a Tatooine cantina"
-  - "Refactored attributes—now with extra Force alignment"
-  - "Banished legacy pointers to the Sarlacc pit"
-  - "Renamed stuff so even Yoda would approve"
-  - "Fixed a bug—Han shot first"
+  - "Made the code less buggy than a cheap roach motel"
+  - "Refactored attributes—now with extra Aether alignment"
+  - "Banished legacy pointers to the gomba pit"
+  - "Renamed stuff so even Maskai would approve"
+  - "Fixed a bug—Rax shot first"
 - If unsure, err on the side of humor and fun.
 
 ---
@@ -35,7 +35,7 @@ Modernize this **multi-file, multi-module legacy codebase** (AetheriaMUD, with A
 
 ### Project Context
 
-AetheriaMUD is a C++ MUD server based on the SMAUG/SWR codebase with a Star Wars Rebellion theme. It features space combat, force powers, clan systems, and cyberpunk elements blending physical and digital realms. **The primary goal is transitioning to C++23 compliance.**
+AetheriaMUD is a C++ MUD server based on the SMAUG/SWR codebase with a Cyberspace/Cyberpunk theme. It features gridspace combat, hacking abilities, clan systems, and cyberpunk elements blending physical and digital realms. **The primary goal is transitioning to C++23 compliance.**
 
 ### Core Components
 
@@ -47,6 +47,7 @@ AetheriaMUD is a C++ MUD server based on the SMAUG/SWR codebase with a Star Wars
 - **clans.cpp**: Faction/guild management, territory control
 - **planets.cpp**: Planetary systems, resource management
 - **password.cpp/.hpp**: Modern Argon2-based password hashing system (replaces crypt())
+- **mud.hpp**: The main brains of it all
 
 ### Key Data Structures
 
