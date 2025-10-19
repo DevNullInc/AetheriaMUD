@@ -45,6 +45,9 @@
  *********************************************************************************************************************************/
 #ifndef MUD_FUNCTIONS_HPP
 #define MUD_FUNCTIONS_HPP
+#pragma once
+#include "mud.hpp"
+
 
 typedef void DO_FUN(CHAR_DATA *ch, const char *argument);
 typedef bool SPEC_FUN(CHAR_DATA *ch);

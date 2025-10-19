@@ -131,7 +131,7 @@ const short BERR = 255;
    (fp) = NULL;
 
 /*
- * Structure types.
+ * Structure types. Move to mud_structs.hpp
  */
 typedef struct affect_data AFFECT_DATA;
 typedef struct area_data AREA_DATA;
@@ -196,7 +196,7 @@ typedef struct membersort_data MS_DATA; /* List for sorted roster list */
 typedef struct specfun_list SPEC_LIST;
 
 /*
- * Function types.
+ * Function types. Move to mud_functions.hpp
  */
 typedef void DO_FUN(CHAR_DATA *ch, const char *argument);
 typedef bool SPEC_FUN(CHAR_DATA *ch);
@@ -240,7 +240,7 @@ typedef ch_ret SPELL_FUN(int sn, int level, CHAR_DATA *ch, void *vo);
 /* 32 USED! DO NOT ADD MORE! SB */
 
 /*
- * String and memory management parameters.
+ * String and memory management parameters. Stays in mud.hpp
  */
 #define MAX_KEY_HASH 2048
 #define MAX_STRING_LENGTH 4096 /* buf */
@@ -263,6 +263,7 @@ typedef ch_ret SPELL_FUN(int sn, int level, CHAR_DATA *ch, void *vo);
  * Game parameters.
  * Increase the max'es if you add more of something.
  * Adjust the pulse numbers to suit yourself.
+ * Stays in mud.hpp
  */
 #define MAX_EXP_WORTH 500000
 #define MIN_EXP_WORTH 25
@@ -499,7 +500,7 @@ extern FORCE_HELP *last_force_help;
 #define ECHOTAR_PC 1
 #define ECHOTAR_IMM 2
 
-/* short cut crash bug fix provided by gfinello@mail.karmanet.it*/
+/* short cut crash bug fix */
 typedef enum
 {
    relMSET_ON,
@@ -931,7 +932,7 @@ struct repairshop_data
    short close_hour;        /* First closing hour      */
 };
 
-/* Mob program structures */
+/* Mob program structures move to mud_structs.hpp */
 
 /* Mob program structures and defines */
 /* Moved these defines here from mud_prog.c as I need them -rkb */

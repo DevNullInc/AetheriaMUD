@@ -1,8 +1,10 @@
 #ifndef MUD_MACROS_HPP
 #define MUD_MACROS_HPP
+#pragma once
+#include "mud.hpp"
 
-#define CODENAME "SWFotEFUSS"
-#define CODEVERSION "1.5.3"
+#define CODENAME "AetheriaMUD"
+#define CODEVERSION "1.1.1"
 
 // Backward compatibility for snippets and such.
 #define mudstrlcpy strlcpy
