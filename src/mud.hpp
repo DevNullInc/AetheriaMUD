@@ -441,11 +441,6 @@ struct help_data
    char *text;
 };
 
-/*
- * Shop types.
- */
-#define MAX_TRADE 5
-
 struct shop_data
 {
    SHOP_DATA *next;           /* Next shop in list    */
@@ -457,10 +452,6 @@ struct shop_data
    short open_hour;           /* First opening hour      */
    short close_hour;          /* First closing hour      */
 };
-
-#define MAX_FIX 3
-#define SHOP_FIX 1
-#define SHOP_RECHARGE 2
 
 struct repairshop_data
 {
@@ -477,14 +468,6 @@ struct repairshop_data
 /* Mob program structures */
 
 /* Mob program structures and defines */
-/* Moved these defines here from mud_prog.c as I need them -rkb */
-#define MAX_IFS 20 /* should always be generous */
-#define IN_IF 0
-#define IN_ELSE 1
-#define DO_IF 2
-#define DO_ELSE 3
-
-#define MAX_PROG_NEST 20
 
 struct act_prog_data
 {
@@ -650,9 +633,6 @@ typedef enum
    HEAVY_ROCKET,
    HEAVY_BOMB
 } missile_types;
-
-#define LASER_DAMAGED -1
-#define LASER_READY 0
 
 struct planet_data
 {
@@ -825,8 +805,6 @@ struct senate_data
    SENATE_DATA *prev;
    char *name;
 };
-
-#define PLANET_NOCAPTURE BV00
 
 struct clan_data
 {
@@ -1172,80 +1150,6 @@ struct smaug_affect
  *                   (Start of section ... start here)                     *
  *                                                                         *
  ***************************************************************************/
-
-/*
- * Well known mob virtual numbers.
- * Defined in #MOBILES.
- */
-#define MOB_VNUM_ANIMATED_CORPSE 5
-#define MOB_VNUM_POLY_WOLF 10
-
-#define MOB_VNUM_STORMTROOPER 20
-#define MOB_VNUM_IMP_GUARD 21
-#define MOB_VNUM_NR_GUARD 22
-#define MOB_VNUM_NR_TROOPER 23
-#define MOB_VNUM_MERCINARY 24
-#define MOB_VNUM_BOUNCER 25
-#define MOB_VNUM_IMP_ELITE 26
-#define MOB_VNUM_IMP_PATROL 27
-#define MOB_VNUM_IMP_FORCES 28
-#define MOB_VNUM_NR_ELITE 29
-#define MOB_VNUM_NR_PATROL 30
-#define MOB_VNUM_NR_FORCES 31
-#define MOB_VNUM_MERC_ELITE 32
-#define MOB_VNUM_MERC_PATROL 33
-#define MOB_VNUM_MERC_FORCES 34
-#define MOB_VNUM_SHIP_GUARD 35
-#define MOB_VNUM_SUPERMOB 3
-
-/* Ship Flags */
-#define SHIP_NOHIJACK BV00
-#define SHIP_SHIELD_BOOST BV01
-#define SHIP_TORP_BOOST BV02
-#define SHIP_CHAFF_BOOST BV03
-#define SHIP_HULL_BOOST BV04
-#define SHIP_LASER_BOOST BV05
-#define SHIP_MISSILE_BOOST BV06
-#define SHIP_ROCKET_BOOST BV07
-#define SHIP_SIMULATOR BV08
-#define SHIP_NODESTROY BV09
-#define SHIP_NOSLICER BV10
-#define XSHIP_ION_LASERS BV11
-#define XSHIP_ION_DRIVE BV12
-#define XSHIP_ION_ION BV13
-#define XSHIP_ION_TURRET1 BV14
-#define XSHIP_ION_TURRET2 BV15
-#define XSHIP_ION_TURRET3 BV16
-#define XSHIP_ION_TURRET4 BV17
-#define XSHIP_ION_TURRET5 BV18
-#define XSHIP_ION_TURRET6 BV19
-#define XSHIP_ION_TURRET7 BV20
-#define XSHIP_ION_TURRET8 BV21
-#define XSHIP_ION_TURRET9 BV22
-#define XSHIP_ION_TURRET10 BV23
-#define SHIP_RESPAWN BV24
-#define XSHIP_ION_HYPER BV25
-#define XSHIP_ION_MISSILES BV26
-#define SHIP_CLOAK BV27
-
-#define SHIP_DAMAGE_DRIVE BV00
-#define SHIP_DAMAGE_HYPERDRIVE BV01
-#define SHIP_DAMAGE_LASER BV02
-#define SHIP_DAMAGE_ION BV03
-#define SHIP_DAMAGE_TURRET1 BV04
-#define SHIP_DAMAGE_TURRET2 BV05
-#define SHIP_DAMAGE_TURRET3 BV06
-#define SHIP_DAMAGE_TURRET4 BV07
-#define SHIP_DAMAGE_TURRET5 BV08
-#define SHIP_DAMAGE_TURRET6 BV09
-#define SHIP_DAMAGE_TURRET7 BV10
-#define SHIP_DAMAGE_TURRET8 BV11
-#define SHIP_DAMAGE_TURRET9 BV12
-#define SHIP_DAMAGE_TURRET10 BV13
-#define SHIP_DAMAGE_SHIELD BV14
-#define SHIP_DAMAGE_PLASMASHIELD BV15
-#define SHIP_DAMAGE_LIFESUPPORT BV16
-#define SHIP_DAMAGE_MISSILE BV17
 
 /*
  * ACT bits for mobs.
