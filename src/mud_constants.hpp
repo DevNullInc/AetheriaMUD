@@ -156,3 +156,19 @@ Version 3: Stock 1.8 areas.
 // This value has been reset due to the new KEY/Value based area format.
 // It will not conflict with the above former area file versions.
 #define AREA_VERSION_WRITE 1
+
+#define MAX_FORCE_SKILL 24
+
+#define MAX_FORCE_ALIGN 100
+#define MIN_FORCE_ALIGN -100
+
+/* Echo types for echo_to_all */
+#define ECHOTAR_ALL 0
+#define ECHOTAR_PC 1
+#define ECHOTAR_IMM 2
+
+/* defines for new do_who */
+#define WT_MORTAL 0
+#define WT_IMM 2
+#define WT_AVATAR 1
+#define WT_NEWBIE 3
