@@ -61,7 +61,7 @@
 namespace {
     // Argon2id configuration constants
     constexpr uint32_t Argon2TimeCost = 3;        // iterations
-    constexpr uint32_t Argon2MemoryCost = 1 << 16; // memory in KiB (64 MiB)
+    constexpr uint32_t Argon2MemoryCost = 1 << 12; // memory in KiB (4 MiB - Was 64.  Too much for MUD usage.)
     constexpr uint32_t Argon2Parallelism = 1;       // lanes
     constexpr size_t SaltLength = 16;               // 128-bit salt
     constexpr size_t HashLength = 32;               // 256-bit hash
